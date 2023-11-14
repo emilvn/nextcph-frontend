@@ -1,11 +1,33 @@
+import {
+    ClerkProvider,
+    SignedIn,
+    SignedOut,
+} from "@clerk/clerk-react";
 import Login from "./containers/Login.tsx";
 
-function App() {
-    return (
-        <div>
-            <Login/>
-        </div>
-    )
+
+if (!import.meta.env.VITE_APP_CLERK_PUBLISHABLE_KEY) {
+    throw "Missing Publishable Key"
 }
 
-export default App
+const clerkPubKey = import.meta.env.VITE_APP_CLERK_PUBLISHABLE_KEY;
+
+function App() {
+    console.log(clerkPubKey)
+    return (
+        <ClerkProvider publishableKey={clerkPubKey}>
+            <SignedIn>
+                <Welcome/>
+            </SignedIn>
+            <SignedOut>
+                <Login/>
+            </SignedOut>
+        </ClerkProvider>
+    );
+}
+
+function Welcome() {
+    return <div>Hello you are signed in</div>;
+}
+
+export default App;
