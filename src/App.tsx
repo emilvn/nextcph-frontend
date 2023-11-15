@@ -13,7 +13,6 @@ if (!import.meta.env.VITE_APP_CLERK_PUBLISHABLE_KEY) {
 const clerkPubKey = import.meta.env.VITE_APP_CLERK_PUBLISHABLE_KEY;
 
 function App() {
-    console.log(clerkPubKey)
     return (
         <ClerkProvider publishableKey={clerkPubKey}>
             <SignedIn>
