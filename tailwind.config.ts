@@ -7,7 +7,8 @@ export default {
             colors: {
                 "next-orange": "#FA7D4F",
                 "next-darker-orange": "#F96B4C",
-                "next-blue": "#010E2B"
+                "next-blue": "#010E2B",
+                "background": "linear-gradient(to bottom, #f96b4c, #010e2b)"
             },
             fontFamily: {},
         },
