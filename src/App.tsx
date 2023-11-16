@@ -1,7 +1,7 @@
 import {
     ClerkProvider,
     SignedIn,
-    SignedOut,
+    SignedOut, UserButton,
 } from "@clerk/clerk-react";
 import Login from "./containers/Login.tsx";
 
@@ -26,7 +26,10 @@ function App() {
 }
 
 function Welcome() {
-    return <div>Hello you are signed in</div>;
+    return <>
+        <div>Hello you are signed in</div>
+        <UserButton/>
+    </>;
 }
 
 export default App;

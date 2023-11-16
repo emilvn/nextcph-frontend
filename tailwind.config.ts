@@ -6,9 +6,9 @@ export default {
         extend: {
             colors: {
                 "next-orange": "#FA7D4F",
-                "next-darker-orange": "#F96B4C",
+                "next-dark-orange": "#F96B4C",
                 "next-blue": "#010E2B",
-                "background": "linear-gradient(to bottom, #f96b4c, #010e2b)"
+                "next-darker-orange": "#FF7151"
             },
             fontFamily: {},
         },
