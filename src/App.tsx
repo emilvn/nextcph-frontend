@@ -1,9 +1,9 @@
 import {
-    ClerkProvider,
+    ClerkProvider, RedirectToSignIn,
     SignedIn,
-    SignedOut, UserButton,
+    SignedOut,
 } from "@clerk/clerk-react";
-import Login from "./containers/Login.tsx";
+import {AdminOrUserPage} from "./containers/AdminOrUserPage.tsx";
 
 
 if (!import.meta.env.VITE_APP_CLERK_PUBLISHABLE_KEY) {
@@ -16,20 +16,14 @@ function App() {
     return (
         <ClerkProvider publishableKey={clerkPubKey}>
             <SignedIn>
-                <Welcome/>
+                <AdminOrUserPage/>
             </SignedIn>
             <SignedOut>
-                <Login/>
+                <RedirectToSignIn/>
             </SignedOut>
         </ClerkProvider>
     );
 }
 
-function Welcome() {
-    return <>
-        <div>Hello you are signed in</div>
-        <UserButton/>
-    </>;
-}
 
 export default App;
