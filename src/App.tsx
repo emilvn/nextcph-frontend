@@ -1,9 +1,10 @@
 import {
-    ClerkProvider, RedirectToSignIn,
+    ClerkProvider,
     SignedIn,
     SignedOut,
 } from "@clerk/clerk-react";
 import {AdminOrUserPage} from "./containers/AdminOrUserPage.tsx";
+import Login from "./containers/Login.tsx";
 
 
 if (!import.meta.env.VITE_APP_CLERK_PUBLISHABLE_KEY) {
@@ -19,7 +20,7 @@ function App() {
                 <AdminOrUserPage/>
             </SignedIn>
             <SignedOut>
-                <RedirectToSignIn/>
+                <Login/>
             </SignedOut>
         </ClerkProvider>
     );
