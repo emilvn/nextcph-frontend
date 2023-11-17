@@ -1,4 +1,5 @@
-import {ChannelType} from "./channel.types.ts";
+import type {ChannelType} from "./channel.types.ts";
+import type {ICategory} from "./categories.types.ts";
 
 interface IProduct {
 	id: string;
