@@ -1,5 +1,5 @@
 const LoadingPage = () => (
- 	 <div className="absolute top-0 right-0 w-screen h-screen flex justify-center items-center">
+	<div className="absolute top-0 right-0 w-screen h-screen flex justify-center items-center">
 		<LoadingSpinner size={60}/>
 	</div>
 );
