@@ -9,8 +9,7 @@ function App() {
 
   const { isLoaded, isSignedIn } = useUser();
   if (!isLoaded) return <Loading.LoadingPage />;
-  if(!isSignedIn) return <div>Login</div> 
-  // if (!isSignedIn) return <Login />;
+  // if (!isSignedIn) return <Login />; // giver fejl, da den ikke er defineret endnu
 
   return (
     <div>
