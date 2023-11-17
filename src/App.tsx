@@ -6,8 +6,6 @@ import {AdminPage} from "./containers/AdminPage.tsx";
 import UserPage from "./containers/UserPage.tsx";
 import UserNavbar from "./components/UserNavbar.tsx";
 import AdminNavbar from "./components/AdminNavbar.tsx";
-import adminNavbar from "./components/AdminNavbar.tsx";
-
 
 function App() {
     const {user, isLoaded, isSignedIn} = useUser();
@@ -53,6 +51,4 @@ function AdminRoutes() {
 }
 
 export default App;
-/*<Route path="/" element={<Navigate to={isAdmin ? "/admin" : "/user"}/>}/>
-<Route path="/admin" element={<AdminPage/>}/>
-<Route path="/user" element={<UserPage/>}/>*/
+
