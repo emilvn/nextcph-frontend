@@ -33,7 +33,7 @@ class ProductApi extends Api<IProduct, INewProduct> {
 		return response.data;
 	}
 
-	public async updateById(data: IUpdateProduct): Promise<IProduct> {
+	public async update(data: IUpdateProduct): Promise<IProduct> {
 		const response = await axios.put(this.url + "/" + data.id, data);
 		if(response.status !== 200 || !response.data) {
 			throw new Error("Failed to update");

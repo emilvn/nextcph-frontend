@@ -21,7 +21,7 @@ function useSalesAdmin(channel:ChannelType){
 		}
 
 		loadSales().then(() => setIsLoading(false));
-	});
+	}, []);
 
 	const create = async (sale:INewSale) => {
 		try{

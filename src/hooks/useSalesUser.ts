@@ -21,7 +21,7 @@ function useSalesUser(channel:ChannelType, user_id:string){
 		}
 
 		loadSales().then(() => setIsLoading(false));
-	});
+	}, []);
 
 	const create = async (sale:INewSale) => {
 		try{

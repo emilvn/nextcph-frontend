@@ -11,18 +11,13 @@ function useProducts(channel:ChannelType){
 	const api = new ProductApi();
 
 	useEffect(() => {
-		async function loadProducts() {
-			try{
-				const products = await api.getByChannel(channel);
-				setProducts(products);
-			}
-			catch (e) {
-				console.error(e);
-			}
-		}
-
-		loadProducts().then(() => setIsLoading(false));
-	});
+		api.getByChannel(channel).then((products) => {
+			setProducts(products);
+			setIsLoading(false);
+		}).catch((e) => {
+			console.error(e);
+		});
+	}, []);
 
 	const create = async (product:INewProduct) => {
 		try{
@@ -36,7 +31,7 @@ function useProducts(channel:ChannelType){
 
 	const update = async (product:IUpdateProduct) => {
 		try{
-			const updatedProduct = await api.updateById(product);
+			const updatedProduct = await api.update(product);
 			const index = products.findIndex((p) => p.id === updatedProduct.id);
 			products[index] = updatedProduct;
 			setProducts([...products]);
