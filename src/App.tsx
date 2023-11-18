@@ -1,34 +1,40 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import React from 'react'
+import NavBarUser from "./components/NavBarUser"
+import NavBarAdmin from './components/NavBarAdmin'
+import { BrowserRouter as Router, Routes, Route}  from 'react-router-dom'
+import Products from './containers/Products'
+import ProductHistory from './containers/ProductHistory'
+import Dashboard from './containers/Dashboard'
+import ProductOverview from './containers/ProductOverview'
+import { ClerkProvider } from "@clerk/clerk-react";
+import {SignUp} from "@clerk/clerk-react";
+import './styles/globals.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+function App(){
+  if (!import.meta.env.VITE_REACT_APP_CLERK_PUBLISHABLE_KEY) {
+    throw new Error("Missing Publishable Key")
+  } 
+
+  const clerkPubKey:string = import.meta.env.VITE_REACT_APP_CLERK_PUBLISHABLE_KEY;
 
   return (
-    <>
+    <ClerkProvider publishableKey={clerkPubKey}>
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <Router>
+          <NavBarUser />
+            <div className="mt-20 mr-20">
+              <Routes>
+                <Route path="/SignUp/*"element={<SignUp routing="path" path="/SignUp" />}/>
+                <Route path="/Products" element={<Products />} />
+                <Route path="/ProductHistory" element={<ProductHistory />} />
+                <Route path="/Dashboard" element={<Dashboard />} />
+                <Route path="/ProductOverview" element={<ProductOverview />} />
+              </Routes>
+            </div>
+        </Router>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </ClerkProvider>
   )
 }
 
-export default App
+export default App;
