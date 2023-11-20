@@ -1,10 +1,8 @@
 import {
-  ClerkProvider,
   SignedIn,
   SignedOut,
   SignInButton,
   UserButton,} from '@clerk/clerk-react';
-import React from 'react'
 import {Link} from 'react-router-dom'
 
 function NavBarUser() {
@@ -19,7 +17,7 @@ function NavBarUser() {
               </div>
               <div className=" top-0 h-20 w-20 mx-0 px-0 right-0 flex items-center">
                 <SignedIn>
-                  <UserButton />
+                  <UserButton afterSignOutUrl="/"/>
                 </SignedIn>
                 <SignedOut>
                   <SignInButton mode={"modal"}  />
