@@ -1,40 +1,54 @@
-import React from 'react'
-import NavBarUser from "./components/NavBarUser"
-import NavBarAdmin from './components/NavBarAdmin'
-import { BrowserRouter as Router, Routes, Route}  from 'react-router-dom'
-import Products from './containers/Products'
-import ProductHistory from './containers/ProductHistory'
-import Dashboard from './containers/Dashboard'
-import ProductOverview from './containers/ProductOverview'
-import { ClerkProvider } from "@clerk/clerk-react";
-import {SignUp} from "@clerk/clerk-react";
-import './styles/globals.css'
+import {useUser} from "@clerk/clerk-react";
+import Login from "./containers/Login.tsx";
+import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
+import {AdminPage} from "./containers/AdminPage.tsx";
+import UserPage from "./containers/UserPage.tsx";
+import NavBarAdmin from "./components/NavBarAdmin.tsx"
+import NavBarUser from "./components/NavBarUser.tsx"
+import Loading from "./components/Loading";
 
-function App(){
-  if (!import.meta.env.VITE_APP_CLERK_PUBLISHABLE_KEY) {
-    throw new Error("Missing Publishable Key")
-  } 
+function App() {
+    const {user, isLoaded, isSignedIn} = useUser();
 
-  const clerkPubKey:string = import.meta.env.VITE_APP_CLERK_PUBLISHABLE_KEY;
+    if (!isLoaded) return (<Loading.LoadingPage/>)
 
-  return (
-    <ClerkProvider publishableKey={clerkPubKey}>
-      <div>
-        <Router>
-          <NavBarUser />
-            <div className="mt-20 mr-20">
-              <Routes>
-                <Route path="/sign-up/*"element={<SignUp routing="path" path="/sign-up" />}/>
-                <Route path="/products" element={<Products />} />
-                <Route path="/ProductHistory" element={<ProductHistory />} />
-                <Route path="/Dashboard" element={<Dashboard />} />
-                <Route path="/ProductOverview" element={<ProductOverview />} />
-              </Routes>
-            </div>
-        </Router>
-      </div>
-    </ClerkProvider>
-  )
+    if (!isSignedIn) return (<Login/>)
+
+    const isAdmin = user?.organizationMemberships?.[0].role === "admin";
+    return (
+        <>
+            <BrowserRouter>
+                {isAdmin ? <AdminRoutes/> : <UserRoutes/>}
+            </BrowserRouter>
+        </>
+    );
+
+}
+
+
+function UserRoutes() {
+    return (
+        <>
+            <NavBarUser/>
+            <Routes>
+                <Route path="/" element={<Navigate to={"/user"}/>}/>
+                <Route path="/user" element={<UserPage/>}/>
+            </Routes>
+        </>
+    )
+}
+
+function AdminRoutes() {
+    return (
+        <>
+            <NavBarAdmin/>
+            <Routes>
+                <Route path="/" element={<Navigate to={"/admin"}/>}/>
+                <Route path="/admin" element={<AdminPage/>}/>
+            </Routes>
+        </>
+    )
 }
 
 export default App;
+
