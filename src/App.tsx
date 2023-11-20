@@ -1,16 +1,16 @@
 import {useUser} from "@clerk/clerk-react";
 import Login from "./containers/Login.tsx";
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
-import Loading from "./containers/Loading.tsx";
 import {AdminPage} from "./containers/AdminPage.tsx";
 import UserPage from "./containers/UserPage.tsx";
 import UserNavbar from "./components/UserNavbar.tsx";
 import AdminNavbar from "./components/AdminNavbar.tsx";
+import Loading from "./components/Loading";
 
 function App() {
     const {user, isLoaded, isSignedIn} = useUser();
 
-    if (!isLoaded) return (<Loading/>)
+    if (!isLoaded) return (<Loading.LoadingPage/>)
 
     if (!isSignedIn) return (<Login/>)
 
