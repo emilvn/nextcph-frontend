@@ -22,7 +22,7 @@ function NavBarAdmin() {
                   <UserButton />
                 </SignedIn>
                 <SignedOut>
-                  <SignInButton />
+                  <SignInButton mode={"modal"} />
                 </SignedOut>
             </div>
             </div>
