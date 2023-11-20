@@ -8,7 +8,7 @@ function UserPage() {
         <>
             <h1>User page</h1>
             <p>the Organization role is {organizationRole}</p>
-            <UserButton/>
+            <UserButton afterSignOutUrl="/"/>
         </>
     )
 }

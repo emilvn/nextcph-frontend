@@ -8,7 +8,7 @@ export function AdminPage() {
         <>
             <h1>Admin page</h1>
             <p>the Organization role is {organizationRole}</p>
-            <UserButton/>
+            <UserButton afterSignOutUrl="/"/>
         </>
     )
 }
