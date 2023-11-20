@@ -1,11 +1,12 @@
 import {useUser} from "@clerk/clerk-react";
 import Login from "./containers/Login.tsx";
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
-import {AdminPage} from "./containers/AdminPage.tsx";
-import UserPage from "./containers/UserPage.tsx";
-import NavBarAdmin from "./components/NavBarAdmin.tsx"
-import NavBarUser from "./components/NavBarUser.tsx"
-import Loading from "./components/Loading";
+import {NavBarAdmin, NavBarUser} from "./components/nav.tsx";
+import Loading from "./components/loading.tsx";
+import Products from "./containers/User/Products.tsx";
+import SaleHistory from "./containers/User/SaleHistory.tsx";
+import Dashboard from "./containers/Admin/Dashboard.tsx";
+import ProductOverview from "./containers/Admin/ProductOverview.tsx";
 
 function App() {
     const {user, isLoaded, isSignedIn} = useUser();
@@ -14,7 +15,7 @@ function App() {
 
     if (!isSignedIn) return (<Login/>)
 
-    const isAdmin = user?.organizationMemberships?.[0].role === "admin";
+    const isAdmin = user?.organizationMemberships?.[0]?.role === "admin";
     return (
         <>
             <BrowserRouter>
@@ -31,8 +32,9 @@ function UserRoutes() {
         <>
             <NavBarUser/>
             <Routes>
-                <Route path="/" element={<Navigate to={"/user"}/>}/>
-                <Route path="/user" element={<UserPage/>}/>
+                <Route path="/*" element={<Navigate to={"/user/products"}/>}/>
+                <Route path="/user/products" element={<Products/>}/>
+                <Route path="/user/history" element={<SaleHistory/>}/>
             </Routes>
         </>
     )
@@ -43,8 +45,9 @@ function AdminRoutes() {
         <>
             <NavBarAdmin/>
             <Routes>
-                <Route path="/" element={<Navigate to={"/admin"}/>}/>
-                <Route path="/admin" element={<AdminPage/>}/>
+                <Route path="/*" element={<Navigate to={"/admin/dashboard"}/>}/>
+                <Route path="/admin/dashboard" element={<Dashboard/>}/>
+                <Route path="/admin/products" element={<ProductOverview/>}/>
             </Routes>
         </>
     )

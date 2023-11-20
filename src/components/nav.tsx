@@ -1,0 +1,65 @@
+import {
+	SignedIn,
+	SignedOut,
+	SignInButton,
+	UserButton,} from '@clerk/clerk-react';
+import type {PropsWithChildren} from "react";
+import {Link} from "react-router-dom";
+
+interface NavLinkProps extends PropsWithChildren {
+	href: string;
+}
+function NavLink({ href, children }:NavLinkProps) {
+	return (
+		<Link to={href} className="h-full flex p-4 items-center hover:bg-next-darker-orange hover:text-next-white">
+			{children}
+		</Link>
+	);
+}
+
+function NavBar({children}:PropsWithChildren) {
+	return (
+		<>
+			<nav className="z-10 fixed top-0 w-full h-20 bg-next-white flex items-center text-next-grey justify-between">
+					<div className="font-mono font-bold text-5xl text-next-blue select-none mr-5">vem<span className='text-next-orange'>c</span></div>
+					<div className="flex w-full h-full">
+						{children}
+					</div>
+					<div className="flex-shrink-0 h-full w-20 flex items-center justify-center bg-next-blue hover:bg-next-darker-orange cursor-pointer">
+						<SignedIn>
+							<UserButton afterSignOutUrl="/"/>
+						</SignedIn>
+						<SignedOut>
+							<SignInButton mode={"modal"}>
+								Log ind
+							</SignInButton>
+						</SignedOut>
+					</div>
+			</nav>
+			<nav className="z-10 fixed right-0 top-20 h-screen w-20 bg-next-white"></nav>
+		</>
+	);
+}
+
+
+function NavBarAdmin() {
+	return (
+		<NavBar>
+			<NavLink href="/admin/dashboard">Dashboard</NavLink>
+			<NavLink href="/admin/products">Produkter</NavLink>
+		</NavBar>
+	);
+
+}
+
+function NavBarUser() {
+	return (
+		<NavBar>
+			<NavLink href="/user/products">Produkter</NavLink>
+			<NavLink href="/user/history">Historik</NavLink>
+		</NavBar>
+	);
+
+}
+
+export {NavBarUser, NavBarAdmin, NavBar}
