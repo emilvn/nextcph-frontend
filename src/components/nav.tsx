@@ -20,7 +20,8 @@ function NavLink({ href, children }:NavLinkProps) {
 function NavBar({children}:PropsWithChildren) {
 	return (
 		<>
-			<nav className="z-10 fixed top-0 w-full h-20 bg-next-white flex items-center text-next-grey justify-between">
+			<nav className="z-20 fixed left-0 top-0 h-screen w-20 bg-next-white"></nav>
+			<nav className="z-20 fixed top-0 left-20 w-[calc(100%-80px)] h-20 bg-next-white flex items-center text-next-grey justify-between">
 					<div className="font-mono font-bold text-5xl text-next-blue select-none mr-5">vem<span className='text-next-orange'>c</span></div>
 					<div className="flex w-full h-full">
 						{children}
@@ -36,7 +37,7 @@ function NavBar({children}:PropsWithChildren) {
 						</SignedOut>
 					</div>
 			</nav>
-			<nav className="z-10 fixed right-0 top-20 h-screen w-20 bg-next-white"></nav>
+			<nav className="z-20 fixed right-0 top-20 h-screen w-20 bg-next-white"></nav>
 		</>
 	);
 }
