@@ -1,9 +1,12 @@
 import PageLayout from "../../components/layout.tsx";
+import type {ChannelType} from "../../types/channel.types.ts";
 
-function SaleHistory() {
-  return (
-    <PageLayout>SaleHistory</PageLayout>
-  )
+function SaleHistory({channel}:{channel:ChannelType}) {
+	return (
+		<PageLayout>
+			SaleHistory - {channel}
+		</PageLayout>
+	);
 }
 
 export default SaleHistory

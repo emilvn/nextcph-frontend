@@ -1,9 +1,10 @@
 import PageLayout from "../../components/layout.tsx";
+import {ChannelType} from "../../types/channel.types.ts";
 
-function Dashboard() {
+function Dashboard({channel}:{channel:ChannelType}) {
   return (
     <PageLayout>
-      Dashboard
+      Dashboard - {channel}
     </PageLayout>
   )
 }
