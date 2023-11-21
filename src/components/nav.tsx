@@ -54,6 +54,7 @@ function NavBarAdmin() {
 		<NavBar>
 			<NavLink href="/admin/dashboard">Dashboard</NavLink>
 			<NavLink href="/admin/products">Produkter</NavLink>
+			<NavLink href="/">Skift afdeling</NavLink>
 		</NavBar>
 	);
 
@@ -64,6 +65,7 @@ function NavBarUser() {
 		<NavBar>
 			<NavLink href="/user/products">Produkter</NavLink>
 			<NavLink href="/user/history">Historik</NavLink>
+			<NavLink href="/">Skift afdeling</NavLink>
 		</NavBar>
 	);
 
