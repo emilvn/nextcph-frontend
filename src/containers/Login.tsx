@@ -12,13 +12,13 @@ function Login() {
                     <div className="flex flex-col gap-8 justify-center items-center overflow-clip h-80 w-80 bg-next-grey bg-opacity-50 rounded-xl backdrop-blur-lg">
                             <SignUpButton mode={"modal"}>
                                 <button
-                                    className="bg-next-blue text-next-white rounded-2xl p-4 text-2xl w-60 hover:bg-slate-950">
+                                    className="bg-next-blue text-next-white rounded-2xl p-4 text-2xl w-60 hover:bg-slate-950 transition-colors">
                                     Opret bruger
                                 </button>
                             </SignUpButton>
                             <SignInButton mode={"modal"}>
                                 <button
-                                    className="bg-next-orange text-next-white rounded-2xl p-4 text-2xl w-60 hover:bg-next-darker-orange">
+                                    className="bg-next-orange text-next-white rounded-2xl p-4 text-2xl w-60 hover:bg-next-darker-orange transition-colors">
                                     Log ind
                                 </button>
                             </SignInButton>

@@ -13,7 +13,7 @@ interface NavLinkProps extends PropsWithChildren {
 }
 function NavLink({ href, children }:NavLinkProps) {
 	return (
-		<Link to={href} className="text-xs h-full flex p-4 items-center hover:bg-next-darker-orange hover:text-next-white text-next-darker-orange font-semibold">
+		<Link to={href} className="text-xs h-full flex p-4 items-center hover:bg-next-darker-orange hover:text-next-white text-next-darker-orange font-semibold transition-colors">
 			{children}
 		</Link>
 	);
@@ -29,7 +29,7 @@ function NavBar({children}:PropsWithChildren) {
 				<div className="flex w-full h-full">
 					{children}
 				</div>
-				<div className="flex-shrink-0 h-full w-20 flex items-center justify-center bg-next-blue text-next-darker-orange hover:bg-next-darker-orange hover:text-next-blue cursor-pointer">
+				<div className="transition-colors flex-shrink-0 h-full w-20 flex items-center justify-center bg-next-blue text-next-darker-orange hover:bg-next-darker-orange hover:text-next-blue cursor-pointer">
 					<SignedIn>
 						<UserButton afterSignOutUrl="/"/>
 					</SignedIn>
