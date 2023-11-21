@@ -10,12 +10,24 @@ interface SelectChannelProps {
 function SelectChannelUser({setChannel}: SelectChannelProps) {
 	return (
 		<PageLayout>
-			<div className="flex justify-center items-center bg-[url('/images/Admin.png')] w-full min-h-screen bg-cover bg-center">
-				<Link to={"user/products"} onClick={()=> setChannel("COSMETIC")}>
-					Kosmetiker
+			<div className="flex items-center bg-[url('/images/Admin.png')] w-full min-h-screen bg-cover bg-center justify-between">
+				<Link
+					to={"user/products"}
+					onClick={()=> setChannel("COSMETIC")}
+					className="hover:bg-opacity-0 hover:backdrop-blur-0 transition-colors text-2xl lg:text-5xl w-full flex justify-center items-center bg-next-blue min-h-screen bg-opacity-50 backdrop-blur-sm"
+				>
+					<div className="p-4 bg-next-blue rounded text-next-darker-orange font-bold">
+						KOSMETIKERE
+					</div>
 				</Link>
-				<Link to={"/user/products"}>
-					Frisør
+				<Link
+					to={"/user/products"}
+					onClick={() => setChannel("HAIR_CARE")}
+					className="hover:bg-opacity-0 hover:backdrop-blur-0 transition-colors text-2xl lg:text-5xl w-full flex justify-center items-center bg-next-blue min-h-screen bg-opacity-50 backdrop-blur-sm"
+				>
+					<div className="p-4 bg-next-blue rounded text-next-darker-orange font-bold">
+						FRISØRER
+					</div>
 				</Link>
 			</div>
 		</PageLayout>
