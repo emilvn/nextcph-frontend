@@ -63,9 +63,9 @@ function NavBarAdmin() {
 function NavBarUser() {
 	return (
 		<NavBar>
-			<NavLink href="/user/products">Produkter</NavLink>
-			<NavLink href="/user/history">Historik</NavLink>
-			<NavLink href="/">Skift afdeling</NavLink>
+			<NavLink href="/user/products">PRODUKTER</NavLink>
+			<NavLink href="/user/history">HISTORIK</NavLink>
+			<NavLink href="/">AFDELING</NavLink>
 		</NavBar>
 	);
 
