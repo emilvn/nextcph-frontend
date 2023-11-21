@@ -25,7 +25,7 @@ function NavBar({children}:PropsWithChildren) {
 		<>
 			<nav className="z-20 fixed left-0 top-0 h-screen w-20 bg-next-white"></nav>
 			<nav className="z-20 fixed top-0 left-20 w-[calc(100%-80px)] h-20 bg-next-white flex items-center justify-between">
-				<div className="font-mono font-bold text-5xl text-next-blue select-none mr-5">vemc<span className='text-next-orange'>&gt;</span></div>
+				<div className="font-bold text-5xl text-next-blue select-none mr-3">vemc<span className='text-next-orange'>&gt;</span></div>
 				<div className="flex w-full h-full">
 					{children}
 				</div>
