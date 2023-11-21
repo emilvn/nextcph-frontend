@@ -13,7 +13,7 @@ interface NavLinkProps extends PropsWithChildren {
 }
 function NavLink({ href, children }:NavLinkProps) {
 	return (
-		<Link to={href} className="h-full flex p-4 items-center hover:bg-next-darker-orange hover:text-next-white">
+		<Link to={href} className="text-xs h-full flex p-4 items-center hover:bg-next-darker-orange hover:text-next-white text-next-darker-orange font-semibold">
 			{children}
 		</Link>
 	);
@@ -24,8 +24,8 @@ function NavBar({children}:PropsWithChildren) {
 	return (
 		<>
 			<nav className="z-20 fixed left-0 top-0 h-screen w-20 bg-next-white"></nav>
-			<nav className="z-20 fixed top-0 left-20 w-[calc(100%-80px)] h-20 bg-next-white flex items-center text-next-grey justify-between">
-				<div className="font-mono font-bold text-5xl text-next-blue select-none mr-5">vem<span className='text-next-orange'>c</span></div>
+			<nav className="z-20 fixed top-0 left-20 w-[calc(100%-80px)] h-20 bg-next-white flex items-center justify-between">
+				<div className="font-mono font-bold text-5xl text-next-blue select-none mr-5">vemc<span className='text-next-orange'>&gt;</span></div>
 				<div className="flex w-full h-full">
 					{children}
 				</div>
@@ -52,9 +52,9 @@ function NavBar({children}:PropsWithChildren) {
 function NavBarAdmin() {
 	return (
 		<NavBar>
-			<NavLink href="/admin/dashboard">Dashboard</NavLink>
-			<NavLink href="/admin/products">Produkter</NavLink>
-			<NavLink href="/">Skift afdeling</NavLink>
+			<NavLink href="/admin/dashboard">DASHBOARD</NavLink>
+			<NavLink href="/admin/products">PRODUKTER</NavLink>
+			<NavLink href="/">AFDELING</NavLink>
 		</NavBar>
 	);
 
