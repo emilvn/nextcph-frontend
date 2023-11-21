@@ -5,6 +5,8 @@ import {
 	UserButton,} from '@clerk/clerk-react';
 import type {PropsWithChildren} from "react";
 import {Link} from "react-router-dom";
+import {FaLock, FaUnlock} from "react-icons/fa";
+import {useState} from "react";
 
 interface NavLinkProps extends PropsWithChildren {
 	href: string;
@@ -18,6 +20,7 @@ function NavLink({ href, children }:NavLinkProps) {
 }
 
 function NavBar({children}:PropsWithChildren) {
+	const [locked, setLocked] = useState<boolean>(true);
 	return (
 		<>
 			<nav className="z-20 fixed left-0 top-0 h-screen w-20 bg-next-white"></nav>
@@ -26,13 +29,16 @@ function NavBar({children}:PropsWithChildren) {
 					<div className="flex w-full h-full">
 						{children}
 					</div>
-					<div className="flex-shrink-0 h-full w-20 flex items-center justify-center bg-next-blue hover:bg-next-darker-orange cursor-pointer">
+					<div className="flex-shrink-0 h-full w-20 flex items-center justify-center bg-next-blue text-next-darker-orange hover:bg-next-darker-orange hover:text-next-blue cursor-pointer">
 						<SignedIn>
 							<UserButton afterSignOutUrl="/"/>
 						</SignedIn>
 						<SignedOut>
 							<SignInButton mode={"modal"}>
-								Log ind
+								<div className="h-full w-full flex justify-center items-center" onMouseEnter={()=> setLocked(false)} onMouseLeave={() => setLocked(true)}>
+									{!!locked && <FaLock/>}
+									{!locked && <FaUnlock/>}
+								</div>
 							</SignInButton>
 						</SignedOut>
 					</div>
