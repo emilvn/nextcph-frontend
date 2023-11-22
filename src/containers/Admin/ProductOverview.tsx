@@ -1,48 +1,46 @@
-import {useState, useEffect} from 'react';
 import PageLayout from '../../components/layout.tsx';
 import {ChannelType} from '../../types/channel.types.ts';
-import SetFetchApi from '../../utils/helper/SetFetchApi.tsx';
-import CosmeticProductsTable from '../../components/CosmeticProductsTable.tsx';
-import HairCareProductsTable from '../../components/HairCareProductsTable.tsx';
+import useProducts from "../../hooks/useProducts.ts";
+import {IProduct} from "../../types/products.types.ts";
+import loading from "../../components/loading.tsx";
+
 
 function ProductOverview({channel}: { channel: ChannelType }) {
-    const [cosmeticData, setCosmeticData] = useState<any>(null);
-    const [hairCareData, setHairCareData] = useState<any>(null);
+    const {products, isLoading, create, update, destroy} = useProducts(channel)
 
-    useEffect(() => {
-        const getCosmetic = async () => {
-            try {
-                const apiUrl = 'http://localhost:3000/products?channel=COSMETIC';
-                const responseData = await SetFetchApi(apiUrl);
-                setCosmeticData(responseData);
-            } catch (error) {
-            }
-        };
 
-        const getHair = async () => {
-            try {
-                const apiUrl = 'http://localhost:3000/products?channel=HAIR_CARE';
-                const responseData = await SetFetchApi(apiUrl);
-                setHairCareData(responseData);
-            } catch (error) {
-            }
-        };
-
-        if (channel === 'COSMETIC') {
-            getCosmetic();
-        } else if (channel === 'HAIR_CARE') {
-            getHair();
-        }
-    }, [channel]);
+    const handleDelete = (product: IProduct) => {
+        void destroy(product)
+    };
 
     return (
         <PageLayout>
-            <div>
-                {channel === 'COSMETIC' && cosmeticData && (
-                    <CosmeticProductsTable products={cosmeticData}/>
-                )}
-                {channel === 'HAIR_CARE' && hairCareData && (
-                    <HairCareProductsTable products={hairCareData}/>
+            <div className="my-4">
+                <h2 className="text-2xl font-bold mb-2">Product List:</h2>
+                {isLoading ? (<loading.LoadingSpinner/>) : (
+                    <table className="min-w-full">
+                        <thead>
+                        <tr>
+                            <th className="text-left">Name</th>
+                            <th className="text-left">Price</th>
+                            <th className="text-left">Stock</th>
+                            <th className="text-left">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {products &&
+                            products.map((product) => (
+                                <tr key={product.id} className="border-b">
+                                    <td className="py-2">{product.name}</td>
+                                    <td className="py-2">{product.price}</td>
+                                    <td className="py-2">{product.stock}</td>
+                                    <td>
+                                        <button onClick={() => handleDelete(product)}>Delete</button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 )}
             </div>
         </PageLayout>
