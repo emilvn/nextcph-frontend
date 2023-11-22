@@ -1,23 +1,31 @@
+// ProductOverview.tsx
 import PageLayout from '../../components/layout.tsx';
-import {ChannelType} from '../../types/channel.types.ts';
-import useProducts from "../../hooks/useProducts.ts";
-import {IProduct} from "../../types/products.types.ts";
-import loading from "../../components/loading.tsx";
-
-
-function ProductOverview({channel}: { channel: ChannelType }) {
-    const {products, isLoading, create, update, destroy} = useProducts(channel)
-
+import { ChannelType } from '../../types/channel.types.ts';
+import useProducts from '../../hooks/useProducts.ts';
+import { IProduct, INewProduct } from '../../types/products.types.ts';
+import loading from '../../components/loading.tsx';
+import { useState } from 'react';
+function ProductOverview({ channel }: { channel: ChannelType }) {
+    const { products, isLoading, destroy, create } = useProducts(channel);
+    const [showModal, setShowModal] = useState(false);
 
     const handleDelete = (product: IProduct) => {
-        void destroy(product)
+        void destroy(product);
+    };
+
+    const handleCreate = async (newProduct: INewProduct) => {
+        await create(newProduct, INewProduct);
+        setShowModal(false);
     };
 
     return (
         <PageLayout>
             <div className="my-4">
                 <h2 className="text-2xl font-bold mb-2">Product List:</h2>
-                {isLoading ? (<loading.LoadingSpinner/>) : (
+                <button onClick={() => setShowModal(true)}>Create Product</button>
+                {isLoading ? (
+                    <loading.LoadingSpinner />
+                ) : (
                     <table className="min-w-full">
                         <thead>
                         <tr>
@@ -43,6 +51,18 @@ function ProductOverview({channel}: { channel: ChannelType }) {
                     </table>
                 )}
             </div>
+
+            {showModal && (
+                <div className="modal">
+                    <div className="modal-content">
+            <span className="close" onClick={() => setShowModal(false)}>
+              &times;
+            </span>
+                        <h2>Create New Product</h2>
+                        <button onClick={() => handleCreate({/* pass product details here */})}>Create</button>
+                    </div>
+                </div>
+            )}
         </PageLayout>
     );
 }
