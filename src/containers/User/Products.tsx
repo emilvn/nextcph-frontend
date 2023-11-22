@@ -5,6 +5,7 @@ import Loading from "../../components/loading.tsx";
 import {IProduct} from "../../types/products.types.ts";
 import {IoSearchOutline } from "react-icons/io5";
 import {getCategories, getProductsWithCategory} from "../../helpers/categories.ts";
+import {FaMinus, FaPlus} from "react-icons/fa";
 
 const channelDict = {
 	"HAIR_CARE": "FRISØR",
@@ -26,7 +27,7 @@ function NavCategory({category}:{category:string}) {
 	return (
 		<a
 			href={`#${category}`}
-			className="text-next-darker-orange cursor-pointer border p-2 border-next-darker-orange hover:bg-next-darker-orange hover:text-next-blue w-full"
+			className="font-semibold text-next-darker-orange cursor-pointer border p-2 border-next-darker-orange hover:bg-next-darker-orange hover:text-next-blue w-full"
 		>
 			{category}
 		</a>
@@ -58,8 +59,8 @@ interface IHeaderProps {
 function Header({channel, products}:IHeaderProps) {
 
 	return (
-		<div className="fixed left-20 right-20 top-20">
-			<div className="bg-next-blue flex items-center justify-between gap-8 p-5">
+		<div className="fixed left-20 right-20 top-20 z-20">
+			<div className="bg-next-blue flex items-center justify-between gap-8 p-5 h-[79px]">
 				<h2 className="text-next-orange text-3xl font-bold">{channelDict[channel]} PRODUKTER</h2>
 			</div>
 			<SearchAndFilter products={products}/>
@@ -69,8 +70,22 @@ function Header({channel, products}:IHeaderProps) {
 
 function Product({product}:{product:IProduct}) {
 	return(
-		<div>
-			<h3>{product.name}</h3>
+		<div className="p-4 w-[calc(100%-1px)] bg-next-white flex flex-col gap-4">
+			<div className="flex justify-between">
+				<div className="flex flex-col text-lg font-semibold">
+					<h3 className="text-2xl font-bold">{product.name}</h3>
+					<p>LAGER: {product.stock} stk.</p>
+					<p>Pris: {product.price},-</p>
+				</div>
+				<div className="flex flex-col gap-2">
+					<button className="border border-next-blue p-2 text-next-blue text-xl font-semibold hover:bg-next-blue hover:text-next-darker-orange transition-colors">
+						<FaPlus className="text-xl inline-block"/> Tilføj til salg
+					</button>
+					<button className="border border-next-blue p-2 text-next-blue text-xl font-semibold hover:bg-next-blue hover:text-next-darker-orange transition-colors">
+						<FaMinus className="text-xl inline-block"/> Fjern fra salg
+					</button>
+				</div>
+			</div>
 		</div>
 	);
 }
@@ -78,9 +93,10 @@ function Product({product}:{product:IProduct}) {
 function Category({category, products}:{category:string, products:IProduct[]}) {
 	return(
 		<div id={category} className="scroll-mt-40">
-			<h2 className="text-2xl">{category}</h2>
-
-			{products.map((product:IProduct) => (<Product product={product}/>))}
+			<h2 className="text-2xl p-4 font-bold bg-next-blue mb-[1px] w-full text-next-darker-orange text-center">{category}</h2>
+			<div className="flex flex-wrap w-full gap-[1px]">
+				{products.map((product:IProduct) => (<Product product={product}/>))}
+			</div>
 		</div>
 	);
 }
@@ -94,13 +110,16 @@ function Products({channel}:{channel:ChannelType}) {
 	return (
         <PageLayout>
 			<Header channel={channel} products={products}/>
-			<div className="mt-40">
-				{categories.map((category) => (
-					<Category
-						category={category}
-						products={getProductsWithCategory(products, category)}
-					/>
-					))}
+			<div className="mt-40 flex w-full">
+				<div className="flex flex-col gap-[1px]">
+					{categories.map((category) => (
+						<Category
+							category={category}
+							products={getProductsWithCategory(products, category)}
+						/>
+						))}
+				</div>
+				<div className="w-[392px] flex-shrink-0"></div>
 			</div>
         </PageLayout>
     );
