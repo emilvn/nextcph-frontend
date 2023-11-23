@@ -1,13 +1,44 @@
 import PageLayout from '../../components/layout.tsx';
 import {ChannelType} from '../../types/channel.types.ts';
 import useProducts from '../../hooks/useProducts.ts';
-import {IProduct} from '../../types/products.types.ts';
+import {IProduct, INewProduct} from '../../types/products.types.ts';
 import loading from '../../components/loading.tsx';
-import {useState} from 'react';
+import React, {useState} from 'react';
 
 function ProductOverview({channel}: { channel: ChannelType }) {
     const {products, isLoading, destroy, create} = useProducts(channel);
     const [showModal, setShowModal] = useState(false);
+    const [newProductData, setNewProductData] = useState({
+        name: '',
+        price: 0,
+        stock: 0,
+    });
+
+    const handleFormInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const inputField: string = e.target.name
+        const inputFieldValue: string = e.target.value
+        console.log(inputField, inputFieldValue)
+    }
+
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+
+        const newProduct: INewProduct = {
+            name: newProductData.name,
+            price: newProductData.price,
+            stock: newProductData.stock
+        }
+
+        try {
+            await create(newProduct);
+            setShowModal(false);
+            // Clear the form after successful creation
+            setNewProductData({name: '', price: 0, stock: 0});
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     const handleDelete = (product: IProduct) => {
         void destroy(product);
@@ -30,15 +61,16 @@ function ProductOverview({channel}: { channel: ChannelType }) {
                         <div className="bg-white p-8 rounded-md relative z-10">
                             <form>
                                 <label className="block mb-4">
-                                    Name: <input className="border border-gray-300 p-2 w-full" type="text" name="name"/>
+                                    Name: <input className="border border-gray-300 p-2 w-full" type="text" name="name"
+                                                 onChange={handleFormInput}/>
                                 </label>
                                 <label className="block mb-4">
                                     Price: <input className="border border-gray-300 p-2 w-full" type="number"
-                                                  name="price"/>
+                                                  name="price" onChange={handleFormInput}/>
                                 </label>
                                 <label className="block mb-4">
                                     Stock: <input className="border border-gray-300 p-2 w-full" type="number"
-                                                  name="stock"/>
+                                                  name="stock" onChange={handleFormInput}/>
                                 </label>
 
                                 <button
@@ -67,6 +99,7 @@ function ProductOverview({channel}: { channel: ChannelType }) {
                             <th className="text-left">Name</th>
                             <th className="text-left">Price</th>
                             <th className="text-left">Stock</th>
+                            <th className="text-left">Category</th>
                             <th className="text-left">Actions</th>
                         </tr>
                         </thead>
@@ -77,6 +110,13 @@ function ProductOverview({channel}: { channel: ChannelType }) {
                                     <td className="py-2">{product.name}</td>
                                     <td className="py-2">{product.price}</td>
                                     <td className="py-2">{product.stock}</td>
+                                    <td className="py-2">
+                                        <ul>
+                                            {product.categories.map((category) => (
+                                                <li key={category.category.id}>{category.category.name}</li>
+                                            ))}
+                                        </ul>
+                                    </td>
                                     <td>
                                         <button
                                             className="bg-red-500 text-white py-1 px-2 rounded hover:bg-red-600"
