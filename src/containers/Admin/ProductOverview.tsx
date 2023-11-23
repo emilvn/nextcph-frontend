@@ -5,7 +5,9 @@ import {IProduct, INewProduct} from '../../types/products.types.ts';
 import loading from '../../components/loading.tsx';
 import React, {useState} from 'react';
 
-function ProductOverview({channel}: { channel: ChannelType }) {
+function ProductOverview({channel}: {
+    channel: ChannelType
+}) {
     const {products, isLoading, destroy, create} = useProducts(channel);
     const [showModal, setShowModal] = useState(false);
     const [newProductData, setNewProductData] = useState({
@@ -14,12 +16,19 @@ function ProductOverview({channel}: { channel: ChannelType }) {
         stock: 0,
     });
 
-    const handleFormInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const inputField: string = e.target.name
-        const inputFieldValue: string = e.target.value
-        console.log(inputField, inputFieldValue)
-    }
+    //det er den originale
+    /*  const handleFormInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+          const inputField: string = e.target.name
+          const inputFieldValue: string = e.target.value
+          console.log(inputFieldValue)
+      }
+  */
 
+    //det her er den nye
+    const handleFormInput = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedCategories = Array.from(e.target.selectedOptions, option => option.value);
+        console.log("Selected Categories:", selectedCategories);
+    }
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -61,17 +70,56 @@ function ProductOverview({channel}: { channel: ChannelType }) {
                         <div className="bg-white p-8 rounded-md relative z-10">
                             <form>
                                 <label className="block mb-4">
-                                    Name: <input className="border border-gray-300 p-2 w-full" type="text" name="name"
+                                    Name: <input className="border border-gray-300 p-2 w-full"
+                                                 type="text"
+                                                 name="name"
                                                  onChange={handleFormInput}/>
                                 </label>
                                 <label className="block mb-4">
-                                    Price: <input className="border border-gray-300 p-2 w-full" type="number"
-                                                  name="price" onChange={handleFormInput}/>
+                                    Price: <input className="border border-gray-300 p-2 w-full"
+                                                  type="number"
+                                                  name="price"
+                                                  onChange={handleFormInput}/>
                                 </label>
                                 <label className="block mb-4">
-                                    Stock: <input className="border border-gray-300 p-2 w-full" type="number"
-                                                  name="stock" onChange={handleFormInput}/>
+                                    Stock: <input className="border border-gray-300 p-2 w-full"
+                                                  type="number"
+                                                  name="stock"
+                                                  onChange={handleFormInput}/>
                                 </label>
+                                {/*   <label className="block mb-4">
+                                    Categories: <input className="border border-gray-300 p-2 w-full"
+                                                       type="string"
+                                                       name="category"
+                                                       list="category"
+                                                       multiple={true}
+                                                       onChange={handleFormInput}/>
+                                    <datalist id="category">
+                                        {Array.from(new Set(products.flatMap(product => product.categories.map(category => category.category.name))))
+                                            .map((categoryName, index) => (
+                                                <option key={index} value={categoryName}/>
+                                            ))
+                                        }
+                                    </datalist>
+                                </label>*/}
+
+                                {/*det er den nye jf*/}
+                                <label className="block mb-4">
+                                    Categories:
+                                    <select
+                                        className="border border-gray-300 p-2 w-full"
+                                        name="categories"
+                                        onChange={handleFormInput}
+                                        multiple={true}
+                                    >
+                                        {Array.from(new Set(products.flatMap(product => product.categories.map(category => category.category.name))))
+                                            .map((categoryName, index) => (
+                                                <option key={index} value={categoryName}>{categoryName}</option>
+                                            ))
+                                        }
+                                    </select>
+                                </label>
+
 
                                 <button
                                     className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
