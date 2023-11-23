@@ -1,9 +1,9 @@
-import {useEffect, useState} from "react";
-import type {INewSale, ISale} from "../types/sales.types.ts";
-import type {ChannelType} from "../types/channel.types.ts";
+import { useEffect, useState } from "react";
+import type { INewSale, ISale } from "../types/sales.types.ts";
+import type { ChannelType } from "../types/channel.types.ts";
 import SaleApi from "../utils/SaleApi.ts";
 
-function useSalesUser(channel:ChannelType, user_id:string){
+function useSalesUser(channel: ChannelType) {
 	const [sales, setSales] = useState<ISale[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 
@@ -11,8 +11,8 @@ function useSalesUser(channel:ChannelType, user_id:string){
 
 	useEffect(() => {
 		async function loadSales() {
-			try{
-				const sales = await api.getByUserId(user_id, channel);
+			try {
+				const sales = await api.getByChannel(channel);
 				setSales(sales);
 			}
 			catch (e) {
@@ -23,17 +23,17 @@ function useSalesUser(channel:ChannelType, user_id:string){
 		loadSales().then(() => setIsLoading(false));
 	}, []);
 
-	const create = async (sale:INewSale) => {
-		try{
+	const create = async (sale: INewSale) => {
+		try {
 			const newSale = await api.create(sale);
 			const newSales = [...sales, newSale];
 			setSales(newSales);
-		}catch(e){
+		} catch (e) {
 			console.error(e);
 		}
 	}
 
-	return {sales, isLoading, create};
+	return { sales: sales, isLoading, create };
 }
 
 export default useSalesUser;
