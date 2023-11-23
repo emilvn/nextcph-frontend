@@ -4,31 +4,37 @@ import useProducts from '../../hooks/useProducts.ts';
 import {IProduct, INewProduct} from '../../types/products.types.ts';
 import loading from '../../components/loading.tsx';
 import React, {useState} from 'react';
+import Creatable from 'react-select/creatable';
 
-function ProductOverview({channel}: {
-    channel: ChannelType
-}) {
+function ProductOverview({channel}: { channel: ChannelType }) {
     const {products, isLoading, destroy, create} = useProducts(channel);
     const [showModal, setShowModal] = useState(false);
     const [newProductData, setNewProductData] = useState({
         name: '',
         price: 0,
         stock: 0,
+        categories: []
     });
+    const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
-    //det er den originale
-    /*  const handleFormInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-          const inputField: string = e.target.name
-          const inputFieldValue: string = e.target.value
-          console.log(inputFieldValue)
-      }
-  */
+
+    const handleFormInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const inputField: string = e.target.name
+        const inputFieldValue: string = e.target.value
+        console.log(inputFieldValue)
+    }
+
+    const handleCategoryChange = (newValue: any, actionMeta: any) => {
+        if (actionMeta.action === 'select-option' || actionMeta.action === 'create-option') {
+            setSelectedCategories(newValue.map((option: any) => option.value));
+        }
+    };
 
     //det her er den nye
-    const handleFormInput = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    /*const handleFormInput = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedCategories = Array.from(e.target.selectedOptions, option => option.value);
         console.log("Selected Categories:", selectedCategories);
-    }
+    }*/
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -36,7 +42,8 @@ function ProductOverview({channel}: {
         const newProduct: INewProduct = {
             name: newProductData.name,
             price: newProductData.price,
-            stock: newProductData.stock
+            stock: newProductData.stock,
+            categories: selectedCategories,
         }
 
         try {
@@ -106,18 +113,15 @@ function ProductOverview({channel}: {
                                 {/*det er den nye jf*/}
                                 <label className="block mb-4">
                                     Categories:
-                                    <select
-                                        className="border border-gray-300 p-2 w-full"
-                                        name="categories"
-                                        onChange={handleFormInput}
-                                        multiple={true}
-                                    >
-                                        {Array.from(new Set(products.flatMap(product => product.categories.map(category => category.category.name))))
-                                            .map((categoryName, index) => (
-                                                <option key={index} value={categoryName}>{categoryName}</option>
-                                            ))
-                                        }
-                                    </select>
+                                    <Creatable
+                                        isMulti={true}
+                                        onChange={handleCategoryChange}
+                                        options={Array.from(new Set(products.flatMap(product => product.categories.map(category => category.category.name))))
+                                            .map((categoryName, index) => ({
+                                                value: categoryName,
+                                                label: categoryName,
+                                                key: index
+                                            }))}/>
                                 </label>
 
 
