@@ -5,6 +5,7 @@ import {IProduct, INewProduct, IUpdateProduct} from '../../types/products.types.
 import loading from '../../components/loading.tsx';
 import React, {useState} from 'react';
 import Creatable from 'react-select/creatable';
+import toast, {Toaster} from 'react-hot-toast';
 
 function ProductOverview({channel}: {
     channel: ChannelType
@@ -24,6 +25,10 @@ function ProductOverview({channel}: {
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
     const [productToDelete, setProductToDelete] = useState<IProduct | null>(null);
 
+    //------------------ toast message ------------------//
+
+    const notifySuccess = (message: string) => toast.success(message)
+    const notifyError = (message: string) => toast.error(message)
 
     //------------------ update ------------------//
 
@@ -57,6 +62,7 @@ function ProductOverview({channel}: {
             setNewProductData({name: '', price: 0, stock: 0, categories: [], channel: channel});
             setSelectedCategories([]);
             setSelectedProduct(null);
+            notifySuccess('Produktet er redigeret')
         } catch (e) {
             console.error(e);
         }
@@ -98,8 +104,10 @@ function ProductOverview({channel}: {
             await create(newProduct);
             setShowCreateModal(false);
             setNewProductData({name: '', price: 0, stock: 0, categories: [], channel: channel});
+            notifySuccess('Produkt oprettet')
         } catch (e) {
             console.error(e);
+            notifyError('fejl ved oprettelse af produkt')
         }
     }
 
@@ -124,6 +132,9 @@ function ProductOverview({channel}: {
         if (productToDelete) {
             await destroy(productToDelete);
             closeDeleteConfirmation();
+            notifySuccess('Produktet er slettet')
+        } else {
+            notifyError('fejl ved sletning af produkt')
         }
     };
 
@@ -317,6 +328,7 @@ function ProductOverview({channel}: {
                     </table>
                 )}
             </div>
+            <Toaster position="bottom-center" reverseOrder={false}/>
         </PageLayout>
     );
 }
