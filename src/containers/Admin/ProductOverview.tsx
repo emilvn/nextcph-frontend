@@ -13,6 +13,7 @@ function ProductOverview({channel}: { channel: ChannelType }) {
         name: '',
         price: 0,
         stock: 0,
+        channel: channel,
         categories: []
     });
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
@@ -21,7 +22,7 @@ function ProductOverview({channel}: { channel: ChannelType }) {
     const handleFormInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         const inputField: string = e.target.name
         const inputFieldValue: string = e.target.value
-        console.log(inputFieldValue)
+        console.log(inputFieldValue, inputField)
     }
 
     const handleCategoryChange = (newValue: any, actionMeta: any) => {
@@ -43,6 +44,7 @@ function ProductOverview({channel}: { channel: ChannelType }) {
             name: newProductData.name,
             price: newProductData.price,
             stock: newProductData.stock,
+            channel: newProductData.channel,
             categories: selectedCategories,
         }
 
@@ -50,7 +52,7 @@ function ProductOverview({channel}: { channel: ChannelType }) {
             await create(newProduct);
             setShowModal(false);
             // Clear the form after successful creation
-            setNewProductData({name: '', price: 0, stock: 0});
+            setNewProductData({name: '', price: 0, stock: 0, categories: [], channel: channel});
         } catch (error) {
             console.error(error);
         }
