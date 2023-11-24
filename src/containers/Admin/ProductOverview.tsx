@@ -20,10 +20,16 @@ function ProductOverview({channel}: { channel: ChannelType }) {
 
 
     const handleFormInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const inputField: string = e.target.name
-        const inputFieldValue: string = e.target.value
-        console.log(inputFieldValue, inputField)
-    }
+        const inputField: string = e.target.name;
+        const inputFieldValue: string | number = e.target.type === 'number'
+            ? Number(e.target.value)
+            : e.target.value;
+
+        setNewProductData((prevData) => ({
+            ...prevData,
+            [inputField]: inputFieldValue,
+        }));
+    };
 
     const handleCategoryChange = (newValue: any, actionMeta: any) => {
         if (actionMeta.action === 'select-option' || actionMeta.action === 'create-option') {
@@ -31,13 +37,7 @@ function ProductOverview({channel}: { channel: ChannelType }) {
         }
     };
 
-    //det her er den nye
-    /*const handleFormInput = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const selectedCategories = Array.from(e.target.selectedOptions, option => option.value);
-        console.log("Selected Categories:", selectedCategories);
-    }*/
-
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault()
 
         const newProduct: INewProduct = {
@@ -51,10 +51,9 @@ function ProductOverview({channel}: { channel: ChannelType }) {
         try {
             await create(newProduct);
             setShowModal(false);
-            // Clear the form after successful creation
             setNewProductData({name: '', price: 0, stock: 0, categories: [], channel: channel});
-        } catch (error) {
-            console.error(error);
+        } catch (e) {
+            console.error(e);
         }
     }
 
@@ -72,12 +71,11 @@ function ProductOverview({channel}: { channel: ChannelType }) {
                 >
                     Create Product
                 </button>
-
                 {showModal && (
                     <div className="fixed inset-0 flex items-center justify-center">
                         <div className="bg-black bg-opacity-50 absolute inset-0 backdrop-blur-md"></div>
                         <div className="bg-white p-8 rounded-md relative z-10">
-                            <form>
+                            <form onSubmit={handleSubmit}>
                                 <label className="block mb-4">
                                     Name: <input className="border border-gray-300 p-2 w-full"
                                                  type="text"
@@ -96,37 +94,19 @@ function ProductOverview({channel}: { channel: ChannelType }) {
                                                   name="stock"
                                                   onChange={handleFormInput}/>
                                 </label>
-                                {/*   <label className="block mb-4">
-                                    Categories: <input className="border border-gray-300 p-2 w-full"
-                                                       type="string"
-                                                       name="category"
-                                                       list="category"
-                                                       multiple={true}
-                                                       onChange={handleFormInput}/>
-                                    <datalist id="category">
-                                        {Array.from(new Set(products.flatMap(product => product.categories.map(category => category.category.name))))
-                                            .map((categoryName, index) => (
-                                                <option key={index} value={categoryName}/>
-                                            ))
-                                        }
-                                    </datalist>
-                                </label>*/}
-
-                                {/*det er den nye jf*/}
                                 <label className="block mb-4">
                                     Categories:
                                     <Creatable
                                         isMulti={true}
                                         onChange={handleCategoryChange}
-                                        options={Array.from(new Set(products.flatMap(product => product.categories.map(category => category.category.name))))
+                                        options={Array.from(new Set(products.flatMap(product =>
+                                            product.categories.map(category => category.category.name))))
                                             .map((categoryName, index) => ({
                                                 value: categoryName,
                                                 label: categoryName,
                                                 key: index
                                             }))}/>
                                 </label>
-
-
                                 <button
                                     className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
                                     type="submit"
