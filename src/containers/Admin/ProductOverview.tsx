@@ -25,6 +25,8 @@ function ProductOverview({channel}: {
     const [productToDelete, setProductToDelete] = useState<IProduct | null>(null);
 
 
+    //------------------ update ------------------//
+
     const handleEdit = (product: IProduct) => {
         setSelectedProduct(product);
         setNewProductData({
@@ -60,6 +62,8 @@ function ProductOverview({channel}: {
         }
     };
 
+    //------------------ handle all form input both for create and update ------------------//
+
     const handleFormInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         const inputField: string = e.target.name;
         const inputFieldValue: string | number = e.target.type === 'number'
@@ -72,6 +76,7 @@ function ProductOverview({channel}: {
         }));
     };
 
+    //------------------ create ------------------//
     const handleCategoryChange = (newValue: any, actionMeta: any) => {
         if (actionMeta.action === 'select-option' || actionMeta.action === 'create-option') {
             setSelectedCategories(newValue.map((option: any) => option.value));
@@ -98,6 +103,8 @@ function ProductOverview({channel}: {
         }
     }
 
+    //------------------ delete ------------------//
+
     const openDeleteConfirmation = (product: IProduct) => {
         setProductToDelete(product);
         setShowDeleteConfirmation(true);
@@ -120,11 +127,12 @@ function ProductOverview({channel}: {
         }
     };
 
+    //------------------ return ------------------//
 
     return (
         <PageLayout>
             <div className="my-4">
-                <h2 className="text-3xl font-bold text-indigo-600 mb-4">Product List:</h2>
+                <h2 className="text-3xl font-bold text-indigo-600 mb-4">Produkt Liste:</h2>
                 <button
                     className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
                     onClick={() => setShowCreateModal(true)}
