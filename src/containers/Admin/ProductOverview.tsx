@@ -6,6 +6,8 @@ import loading from '../../components/loading.tsx';
 import React, {useState} from 'react';
 import Creatable from 'react-select/creatable';
 import toast, {Toaster} from 'react-hot-toast';
+import {FaCheck} from "react-icons/fa";
+import {IoCloseSharp} from "react-icons/io5";
 
 function ProductOverview({channel}: {
     channel: ChannelType
@@ -143,9 +145,9 @@ function ProductOverview({channel}: {
     return (
         <PageLayout>
             <div className="my-4">
-                <h2 className="text-3xl font-bold text-indigo-600 mb-4">Produkt Liste:</h2>
+                <h2 className="text-3xl font-bold text-black mb-4">Produkt Liste</h2>
                 <button
-                    className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
+                    className="bg-next-blue text-next-orange font-bold py-2 px-4 rounded hover:bg-next-darker-orange hover:text-next-blue mb-4"
                     onClick={() => setShowCreateModal(true)}
                 >
                     Opret Product
@@ -186,19 +188,21 @@ function ProductOverview({channel}: {
                                                 key: index
                                             }))}/>
                                 </label>
-                                <button
-                                    className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-                                    type="submit"
-                                >
-                                    Opret
-                                </button>
+                                <div className="flex justify-around mt-20">
+                                    <button
+                                        className="bg-next-darker-orange text-next-blue py-2 px-4 rounded hover:bg-next-blue hover:text-next-orange"
+                                        type="submit"
+                                    >
+                                        <FaCheck size={25}/>
+                                    </button>
+                                    <button
+                                        className="bg-next-blue text-next-orange py-2 px-4 rounded hover:bg-next-darker-orange hover:text-next-blue ml-4"
+                                        onClick={() => setShowCreateModal(false)}
+                                    >
+                                        <IoCloseSharp size={25}/>
+                                    </button>
+                                </div>
                             </form>
-                            <button
-                                className="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 mt-4"
-                                onClick={() => setShowCreateModal(false)}
-                            >
-                                Luk
-                            </button>
                         </div>
                     </div>
                 )}
@@ -242,40 +246,45 @@ function ProductOverview({channel}: {
                                                 key: index
                                             }))}/>
                                 </label>
-                                <button
-                                    className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-                                    type="submit"
+                                <div className="flex justify-around mt-20">
+                                    <button
+                                        className="bg-next-darker-orange text-next-blue py-2 px-4 rounded hover:bg-next-blue hover:text-next-orange"
+                                        type="submit"
+                                    >
+                                        <FaCheck size={25}/>
+                                    </button>
+                                    <button
+                                        className="bg-next-blue text-next-orange py-2 px-4 rounded hover:bg-next-darker-orange hover:text-next-blue ml-4"
+                                        onClick={() => setShowUpdateModal(false)}
+                                    >
+                                        <IoCloseSharp size={25}/>
+                                    </button>
+                                </div>
 
-                                >
-                                    Update
-                                </button>
                             </form>
-                            <button
-                                className="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 mt-4"
-                                onClick={() => setShowUpdateModal(false)}
-                            >
-                                Close
-                            </button>
                         </div>
                     </div>
                 )}
+
                 {showDeleteConfirmation && (
                     <div className="fixed inset-0 flex items-center justify-center">
                         <div className="bg-black bg-opacity-50 absolute inset-0 backdrop-blur-md"></div>
                         <div className="bg-white p-8 rounded-md relative z-10">
-                            <p className="mb-4">Er du sikker på, at du vil slette dette produkt?</p>
-                            <button
-                                className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 mr-2"
-                                onClick={confirmDelete}
-                            >
-                                Ja
-                            </button>
-                            <button
-                                className="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600"
-                                onClick={closeDeleteConfirmation}
-                            >
-                                Nej
-                            </button>
+                            <h3 className="mb-4">Er du sikker på, at du vil slette dette produkt?</h3>
+                            <div className="flex justify-around mt-10">
+                                <button
+                                    className="bg-next-darker-orange text-next-blue py-2 px-4 rounded hover:bg-next-blue hover:text-next-orange"
+                                    onClick={confirmDelete}
+                                >
+                                    <FaCheck size={25}/>
+                                </button>
+                                <button
+                                    className="bg-next-blue text-next-orange py-2 px-4 rounded hover:bg-next-darker-orange hover:text-next-blue ml-4"
+                                    onClick={() => closeDeleteConfirmation()}
+                                >
+                                    <IoCloseSharp size={25}/>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 )}
@@ -287,11 +296,12 @@ function ProductOverview({channel}: {
                     <table className="min-w-full">
                         <thead>
                         <tr>
-                            <th className="text-left">Name</th>
-                            <th className="text-left">Price</th>
-                            <th className="text-left">Stock</th>
-                            <th className="text-left">Category</th>
-                            <th className="text-left">Actions</th>
+                            <th className="text-left text-2xl">Navn</th>
+                            <th className="text-left text-2xl">Pris</th>
+                            <th className="text-left text-2xl">Lager</th>
+                            <th className="text-left text-2xl">Kategori</th>
+                            <th className="text-left text-2xl">Opdatere</th>
+                            <th className="text-left text-2xl">Slet</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -310,13 +320,15 @@ function ProductOverview({channel}: {
                                     </td>
                                     <td>
                                         <button
-                                            className="bg-green-500 text-white py-1 px-2 rounded hover:bg-green-600"
+                                            className="bg-next-darker-orange font-bold text-next-blue py-1 px-2 rounded hover:bg-next-blue hover:text-next-orange"
                                             onClick={() => handleEdit(product)}
                                         >
                                             Rediger
                                         </button>
+                                    </td>
+                                    <td>
                                         <button
-                                            className="bg-red-500 text-white py-1 px-2 rounded hover:bg-red-600"
+                                            className="bg-next-blue text-next-orange font-bold py-1 px-2 rounded hover:bg-next-darker-orange hover:text-next-blue"
                                             onClick={() => handleDelete(product)}
                                         >
                                             Slet
@@ -328,7 +340,28 @@ function ProductOverview({channel}: {
                     </table>
                 )}
             </div>
-            <Toaster position="bottom-center" reverseOrder={false}/>
+            <Toaster
+                reverseOrder={false}
+                toastOptions={{
+                    position: "bottom-center",
+                    success: {
+                        style: {
+                            border: '2px solid black',
+                            padding: '16px',
+                            background: '#F96B4C',
+                            color: "white"
+                        },
+                    },
+                    error: {
+                        style: {
+                            border: '2px solid black',
+                            padding: '16px',
+                            background: '#F96B4C',
+                            color: 'white'
+                        },
+                    },
+                }}
+            />
         </PageLayout>
     );
 }
