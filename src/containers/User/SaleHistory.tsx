@@ -110,17 +110,6 @@ function SaleHistory({ channel }: { channel: ChannelType }) {
 			</div>
 		</PageLayout>
 	)
-
-	// return (
-	// 	<PageLayout>
-	// 		<Header />
-	// 		<div>
-	// 			{sales.map((sale) => (
-	// 				<Sale key={sale.id} sale={sale} />
-	// 			))}
-	// 		</div>
-	// 	</PageLayout>
-	// );
 }
 
 export default SaleHistory
