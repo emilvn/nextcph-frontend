@@ -37,7 +37,7 @@ export interface INewSaleProduct {
 
 interface ISaleProduct {
 	product: IProduct;
-	quantity: number;
+	product_quantity: number;
 }
 
 export type { ISaleProduct, IUpdateProduct, INewProduct, IProduct };
