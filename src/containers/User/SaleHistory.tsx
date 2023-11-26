@@ -3,17 +3,9 @@ import type { ChannelType } from "../../types/channel.types.ts";
 import useSalesUser from "../../hooks/useSalesUser.ts";
 import Loading from "../../components/loading.tsx";
 import { ISale } from "../../types/sales.types.ts";
-import { IProduct } from "../../types/products.types.ts";
-
-function GenerateSaleHistory({ sales }: { sales: ISale[] }) {
-
-	const groupedSales: { [key: string]: ISale[] } = groupedSalesByDate({ sales });
-	console.log(groupedSales);
-	for (const group in groupedSales) {
-		console.log(group);
-	}
-	return <div>123</div>
-}
+import { ISaleProduct } from "../../types/products.types.ts";
+import { useUser } from "@clerk/clerk-react";
+import { useState, useEffect } from "react";
 
 function groupedSalesByDate({ sales }: { sales: ISale[] }) {
 	const groupedSales: { [key: string]: ISale[] } = {};
@@ -31,22 +23,22 @@ function groupedSalesByDate({ sales }: { sales: ISale[] }) {
 }
 
 function Sale({ sale }: { sale: ISale }) {
-	console.log(sale.products);
 	return (
 		<div>
 			<div>{convertToDanishTime(sale.created_at)}</div>
 			{sale.products.map((product) => (
-				<Product key={product.product.id} product={product.product} />
+				<Product key={product.product.id} product={product} />
 			))}
 		</div>
 	)
 }
 
-function Product({ product }: { product: IProduct }) {
+function Product({ product }: { product: ISaleProduct }) {
+	console.log(product)
 	return (
 		<div>
 			<ul>
-				<li>{product.name} {product.price},-</li>
+				<li>{product.product_quantity}x {product.product.name} {calculateProductTotalPrice(product.product.price, product.product_quantity)},-</li>
 			</ul>
 
 		</div>)
@@ -87,11 +79,27 @@ function convertToDanishTime(utcTimestamp: string): string {
 
 function SaleHistory({ channel }: { channel: ChannelType }) {
 	const { sales, isLoading } = useSalesUser(channel);
+	const { user } = useUser();
+
+	const [currentSales, setCurrentSales] = useState<{ sales: ISale[] }>({ sales });
+	useEffect(() => {
+		setCurrentSales(({ sales }));
+	}, [sales]);
+
 	if (isLoading) return (<Loading.LoadingPage />);
 	if (!sales || sales.length === 0) return (<PageLayout>No sales found...</PageLayout>);
 
-	const groupedSales: { [key: string]: ISale[] } = groupedSalesByDate({ sales });
-	console.log(groupedSales);
+	const groupedSales: { [key: string]: ISale[] } = groupedSalesByDate(currentSales);
+
+	function handleChange(e: React.ChangeEvent<HTMLInputElement>, userId: string, { sales }: { sales: ISale[] }) {
+		if (e.target.checked) {
+			let filteredSales: ISale[];
+			filteredSales = sales.filter((sale) => sale.user_id === userId);
+			setCurrentSales({ sales: filteredSales });
+		} else {
+			setCurrentSales({ sales });
+		}
+	}
 
 	return (
 		<PageLayout>
@@ -107,6 +115,7 @@ function SaleHistory({ channel }: { channel: ChannelType }) {
 						</ul>
 					</div>
 				))}
+				<input type="checkbox" onChange={(e) => handleChange(e, (user?.id) ? user.id : "", { sales })} />
 			</div>
 		</PageLayout>
 	)

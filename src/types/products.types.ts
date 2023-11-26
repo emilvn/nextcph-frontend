@@ -1,5 +1,5 @@
-import type {ChannelType} from "./channel.types.ts";
-import type {ICategory} from "./categories.types.ts";
+import type { ChannelType } from "./channel.types.ts";
+import type { ICategory } from "./categories.types.ts";
 
 interface IProduct {
 	id: string;
@@ -37,6 +37,7 @@ export interface INewSaleProduct {
 
 interface ISaleProduct {
 	product: IProduct;
+	quantity: number;
 }
 
-export type {ISaleProduct, IUpdateProduct, INewProduct, IProduct};
+export type { ISaleProduct, IUpdateProduct, INewProduct, IProduct };
