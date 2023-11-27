@@ -1,13 +1,61 @@
 import PageLayout from "../../components/layout.tsx";
 import type { ChannelType } from "../../types/channel.types.ts";
-import useSalesUser from "../../hooks/useSalesUser.ts";
+import useSales from "../../hooks/useSales.ts";
 import Loading from "../../components/loading.tsx";
 import { ISale } from "../../types/sales.types.ts";
 import { ISaleProduct } from "../../types/products.types.ts";
 import { useUser } from "@clerk/clerk-react";
-import { useState, useEffect } from "react";
-import { convertToDanishDate, convertToDanishTime } from "../../helpers/dateTime.ts";
+import { UserResource } from "@clerk/types";
+import { useState, useEffect, Dispatch, SetStateAction } from "react";
+import { convertToDanishTime } from "../../helpers/dateTime.ts";
+import { groupSalesByDate } from "../../helpers/groupSalesByDate.ts";
+import { calculateProductsTotalPrice } from "../../helpers/CalculateProductPrice.ts";
+import { isElementOfType } from "react-dom/test-utils";
 
+
+interface ButtonFilterSalesProps {
+	setCurrentSales: Dispatch<SetStateAction<ISale[]>>;
+	sales: ISale[];
+	user: UserResource | null | undefined
+}
+
+function ButtonFilterSales({ setCurrentSales, sales, user }: ButtonFilterSalesProps) {
+	const [isMySalesToggleClicked, setMySalesToggleClicked] = useState(false);
+	const [buttonText, setButtonText] = useState("Mine salg");
+
+	function toggleMySales() {
+		if (!!isMySalesToggleClicked) {
+			setCurrentSales(sales);
+			setButtonText("Mine salg");
+		} else {
+			const filteredSales: ISale[] = sales.filter((sale) => sale.user_id === user?.id);
+			setCurrentSales(filteredSales);
+			setButtonText("Alle salg");
+		}
+		setMySalesToggleClicked(!isMySalesToggleClicked);
+	}
+	return (
+		<button onClick={toggleMySales} className="w-48 h-20 fixed top-24 right-24 bg-next-blue border-[1.5px] border-next-darker-orange text-next-darker-orange font-bold text-2xl hover:bg-next-darker-orange hover:text-next-blue transition-colors md:ml-8">{buttonText}</button>
+	)
+}
+
+function SaleList({ sales }: { sales: ISale[] }) {
+	const groupedSales: { [key: string]: ISale[] } = groupSalesByDate({ sales });
+	return (
+		<div>
+			{Object.entries(groupedSales).map(([group, salesInGroup]) => (
+				<div key={group}>
+					<h1 className="pt-10 text-2xl font-semibold">{group}</h1>
+					<ul>
+						{salesInGroup.map((sale) => (
+							<Sale key={sale.id} sale={sale} />
+						))}
+					</ul>
+				</div>
+			))}
+		</div>
+	)
+}
 
 function Sale({ sale }: { sale: ISale }) {
 	return (
@@ -28,49 +76,17 @@ function Product({ product }: { product: ISaleProduct }) {
 		</div>)
 }
 
-function calculateProductsTotalPrice(price: number, qty: number): number {
-	const totalPrice: number = price * qty;
-	return totalPrice;
-}
-
-function groupedSalesByDate({ sales }: { sales: ISale[] }) {
-	const groupedSales: { [key: string]: ISale[] } = {};
-	sales.forEach((sale) => {
-		const date = convertToDanishDate(sale.created_at);
-
-		if (!groupedSales[date]) {
-			groupedSales[date] = [];
-		}
-
-		groupedSales[date].push(sale);
-	});
-
-	return groupedSales;
-}
-
 function SaleHistory({ channel }: { channel: ChannelType }) {
-	const { sales, isLoading } = useSalesUser(channel);
+	const { sales, isLoading } = useSales(channel);
 	const { user } = useUser();
 
-	const [currentSales, setCurrentSales] = useState<{ sales: ISale[] }>({ sales });
+	const [currentSales, setCurrentSales] = useState<ISale[]>([]);
 	useEffect(() => {
-		setCurrentSales(({ sales }));
+		setCurrentSales((sales));
 	}, [sales]);
 
 	if (isLoading) return (<Loading.LoadingPage />);
 	if (!sales || sales.length === 0) return (<PageLayout>No sales found...</PageLayout>);
-
-	const groupedSales: { [key: string]: ISale[] } = groupedSalesByDate(currentSales);
-
-	function handleChange(e: React.ChangeEvent<HTMLInputElement>, userId: string, { sales }: { sales: ISale[] }) {
-		if (e.target.checked) {
-			let filteredSales: ISale[];
-			filteredSales = sales.filter((sale) => sale.user_id === userId);
-			setCurrentSales({ sales: filteredSales });
-		} else {
-			setCurrentSales({ sales });
-		}
-	}
 
 	return (
 		<div className="bg-next-blue">
@@ -78,22 +94,9 @@ function SaleHistory({ channel }: { channel: ChannelType }) {
 				<div className="bg-next-blue text-next-darker-orange p-3 flex justify-between">
 					<div>
 						<h1 className="text-4xl font-bold">Salgshistorik</h1>
-						<div>
-							{Object.entries(groupedSales).map(([group, salesInGroup]) => (
-								<div key={group}>
-									<h1 className="pt-10 text-2xl font-semibold">{group}</h1>
-									<ul>
-										{salesInGroup.map((sale) => (
-											<Sale key={sale.id} sale={sale} />
-										))}
-									</ul>
-								</div>
-							))}
-						</div>
+						<SaleList sales={currentSales} />
 					</div>
-					<div className="pr-10">
-						<label>Mine salg: <input type="checkbox" onChange={(e) => handleChange(e, (user?.id) ? user.id : "", { sales })} /></label>
-					</div>
+					<ButtonFilterSales setCurrentSales={setCurrentSales} sales={sales} user={user} />
 				</div>
 			</PageLayout>
 		</div>
@@ -101,4 +104,3 @@ function SaleHistory({ channel }: { channel: ChannelType }) {
 }
 
 export default SaleHistory
-

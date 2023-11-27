@@ -3,7 +3,7 @@ import type { INewSale, ISale } from "../types/sales.types.ts";
 import type { ChannelType } from "../types/channel.types.ts";
 import SaleApi from "../utils/SaleApi.ts";
 
-function useSalesUser(channel: ChannelType) {
+function useSales(channel: ChannelType) {
 	const [sales, setSales] = useState<ISale[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 
@@ -33,7 +33,18 @@ function useSalesUser(channel: ChannelType) {
 		}
 	}
 
-	return { sales: sales, isLoading, create };
+	const destroy = async (sale: ISale) => {
+		try {
+			await api.deleteById(sale.id);
+			const index = sales.findIndex((s) => s.id === sale.id);
+			sales.splice(index, 1);
+			setSales([...sales]);
+		} catch (e) {
+			console.error(e);
+		}
+	}
+
+	return { sales, isLoading, create, destroy };
 }
 
-export default useSalesUser;
+export default useSales;
