@@ -37,9 +37,11 @@ function ProductOverview({channel}: {
 
     const handleEdit = (product: IProduct) => {
         setSelectedProduct(product);
+        const nameWithoutAmount = product.name.split(',')[0].trim(); // Extract name without amount
+        const amount = product.name.split(',')[1] ? product.name.split(',')[1].trim() : ''; // Extract amount if present
         setNewProductData({
-            name: product.name,
-            amount: product.name,
+            name: nameWithoutAmount,
+            amount: amount,
             price: product.price,
             stock: product.stock,
             channel: channel,
@@ -86,7 +88,9 @@ function ProductOverview({channel}: {
         }));
     };
 
+
     //------------------ create ------------------//
+
     const handleCategoryChange = (newValue: any, actionMeta: any) => {
         if (actionMeta.action === 'select-option' || actionMeta.action === 'create-option') {
             setSelectedCategories(newValue.map((option: any) => option.value));
@@ -223,14 +227,14 @@ function ProductOverview({channel}: {
                                     Name: <input className="border border-gray-300 p-2 w-full"
                                                  type="text"
                                                  name="name"
-                                                 value={newProductData.name ? newProductData.name.split(",")[0] : 'N/A'}
+                                                 value={newProductData.name}
                                                  onChange={handleFormInput}/>
                                 </label>
                                 <label className="block mb-4">
                                     Mængde: <input className="border border-gray-300 p-2 w-full"
                                                    type="text"
                                                    name="amount"
-                                                   value={newProductData.name && newProductData.name.split(",")[1] ? newProductData.name.split(",")[1].trim() : 'N/A'}
+                                                   value={newProductData.amount}
                                                    onChange={handleFormInput}/>
                                 </label>
                                 <label className="block mb-4">
