@@ -152,7 +152,7 @@ function ProductOverview({channel}: {
                     className="bg-next-blue text-next-orange font-bold py-2 px-4 rounded hover:bg-next-darker-orange hover:text-next-blue mb-4"
                     onClick={() => setShowCreateModal(true)}
                 >
-                    Opret Product
+                    Opret Produkt
                 </button>
                 {showCreateModal && (
                     <div className="fixed inset-0 flex items-center justify-center">
@@ -223,14 +223,14 @@ function ProductOverview({channel}: {
                                     Name: <input className="border border-gray-300 p-2 w-full"
                                                  type="text"
                                                  name="name"
-                                                 value={newProductData.name.split(",")[0].trim()}
+                                                 value={newProductData.name ? newProductData.name.split(",")[0] : 'N/A'}
                                                  onChange={handleFormInput}/>
                                 </label>
                                 <label className="block mb-4">
                                     Mængde: <input className="border border-gray-300 p-2 w-full"
                                                    type="text"
                                                    name="amount"
-                                                   value={newProductData.amount.split(",")[1].trim()}
+                                                   value={newProductData.name && newProductData.name.split(",")[1] ? newProductData.name.split(",")[1].trim() : 'N/A'}
                                                    onChange={handleFormInput}/>
                                 </label>
                                 <label className="block mb-4">
@@ -324,8 +324,8 @@ function ProductOverview({channel}: {
                         {products &&
                             products.map((product) => (
                                 <tr key={product.id} className="border-b">
-                                    <td className="py-2">{product.name.split(",")[0]}</td>
-                                    <td className="py-2">{product.name.split(",")[1].trim()}</td>
+                                    <td className="py-2">{product.name ? product.name.split(",")[0] : 'N/A'}</td>
+                                    <td className="py-2">{product.name && product.name.split(",")[1] ? product.name.split(",")[1].trim() : 'N/A'}</td>
                                     <td className="py-2">{product.price}</td>
                                     <td className="py-2">{product.stock}</td>
                                     <td className="py-2">
