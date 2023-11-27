@@ -151,7 +151,7 @@ function ProductOverview({channel}: {
     return (
         <PageLayout>
             <div className="my-4">
-                <h2 className="text-3xl font-bold text-black mb-4">Produkt Liste</h2>
+                <h2 className="text-3xl font-bold text-black mb-4">Produkter</h2>
                 <button
                     className="bg-next-blue text-next-orange font-bold py-2 px-4 rounded hover:bg-next-darker-orange hover:text-next-blue mb-4"
                     onClick={() => setShowCreateModal(true)}
@@ -238,21 +238,21 @@ function ProductOverview({channel}: {
                                                    onChange={handleFormInput}/>
                                 </label>
                                 <label className="block mb-4">
-                                    Price: <input className="border border-gray-300 p-2 w-full"
-                                                  type="number"
-                                                  name="price"
-                                                  value={newProductData.price}
-                                                  onChange={handleFormInput}/>
+                                    Pris: <input className="border border-gray-300 p-2 w-full"
+                                                 type="number"
+                                                 name="price"
+                                                 value={newProductData.price}
+                                                 onChange={handleFormInput}/>
                                 </label>
                                 <label className="block mb-4">
-                                    Stock: <input className="border border-gray-300 p-2 w-full"
+                                    Lager: <input className="border border-gray-300 p-2 w-full"
                                                   type="number"
                                                   name="stock"
                                                   value={newProductData.stock}
                                                   onChange={handleFormInput}/>
                                 </label>
                                 <label className="block mb-4">
-                                    Categories:
+                                    Kategorier:
                                     <Creatable
                                         isMulti={true}
                                         value={selectedCategories.map(category => ({value: category, label: category}))}
