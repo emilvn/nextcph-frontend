@@ -10,7 +10,6 @@ import { useState, useEffect, Dispatch, SetStateAction } from "react";
 import { convertToDanishTime } from "../../helpers/dateTime.ts";
 import { groupSalesByDate } from "../../helpers/groupSalesByDate.ts";
 import { calculateProductsTotalPrice } from "../../helpers/CalculateProductPrice.ts";
-import { isElementOfType } from "react-dom/test-utils";
 
 
 interface ButtonFilterSalesProps {
