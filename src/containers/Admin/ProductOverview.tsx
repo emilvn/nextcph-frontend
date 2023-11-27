@@ -17,6 +17,7 @@ function ProductOverview({channel}: {
     const [showUpdateModal, setShowUpdateModal] = useState(false)
     const [newProductData, setNewProductData] = useState({
         name: '',
+        amount: "",
         price: 0,
         stock: 0,
         channel: channel,
@@ -38,6 +39,7 @@ function ProductOverview({channel}: {
         setSelectedProduct(product);
         setNewProductData({
             name: product.name,
+            amount: product.name,
             price: product.price,
             stock: product.stock,
             channel: channel,
@@ -52,7 +54,7 @@ function ProductOverview({channel}: {
 
         const updatedProduct: IUpdateProduct = {
             id: selectedProduct?.id || '',
-            name: newProductData.name,
+            name: newProductData.name + ", " + newProductData.amount,
             price: newProductData.price,
             stock: newProductData.stock,
             channel: newProductData.channel
@@ -61,7 +63,7 @@ function ProductOverview({channel}: {
         try {
             await update(updatedProduct);
             setShowUpdateModal(false);
-            setNewProductData({name: '', price: 0, stock: 0, categories: [], channel: channel});
+            setNewProductData({name: '', amount: "", price: 0, stock: 0, categories: [], channel: channel});
             setSelectedCategories([]);
             setSelectedProduct(null);
             notifySuccess('Produktet er redigeret')
@@ -95,7 +97,7 @@ function ProductOverview({channel}: {
         e.preventDefault()
 
         const newProduct: INewProduct = {
-            name: newProductData.name,
+            name: newProductData.name + ", " + newProductData.amount,
             price: newProductData.price,
             stock: newProductData.stock,
             channel: newProductData.channel,
@@ -105,7 +107,7 @@ function ProductOverview({channel}: {
         try {
             await create(newProduct);
             setShowCreateModal(false);
-            setNewProductData({name: '', price: 0, stock: 0, categories: [], channel: channel});
+            setNewProductData({name: '', amount: "", price: 0, stock: 0, categories: [], channel: channel});
             notifySuccess('Produkt oprettet')
         } catch (e) {
             console.error(e);
@@ -164,6 +166,12 @@ function ProductOverview({channel}: {
                                                  onChange={handleFormInput}/>
                                 </label>
                                 <label className="block mb-4">
+                                    Mængde: <input className="border border-gray-300 p-2 w-full"
+                                                   type="text"
+                                                   name="amount"
+                                                   onChange={handleFormInput}/>
+                                </label>
+                                <label className="block mb-4">
                                     Pris: <input className="border border-gray-300 p-2 w-full"
                                                  type="number"
                                                  name="price"
@@ -215,8 +223,15 @@ function ProductOverview({channel}: {
                                     Name: <input className="border border-gray-300 p-2 w-full"
                                                  type="text"
                                                  name="name"
-                                                 value={newProductData.name}
+                                                 value={newProductData.name.split(",")[0].trim()}
                                                  onChange={handleFormInput}/>
+                                </label>
+                                <label className="block mb-4">
+                                    Mængde: <input className="border border-gray-300 p-2 w-full"
+                                                   type="text"
+                                                   name="amount"
+                                                   value={newProductData.amount.split(",")[1].trim()}
+                                                   onChange={handleFormInput}/>
                                 </label>
                                 <label className="block mb-4">
                                     Price: <input className="border border-gray-300 p-2 w-full"
@@ -297,6 +312,7 @@ function ProductOverview({channel}: {
                         <thead>
                         <tr>
                             <th className="text-left text-2xl">Navn</th>
+                            <th className="text-left text-2xl">Mængde</th>
                             <th className="text-left text-2xl">Pris</th>
                             <th className="text-left text-2xl">Lager</th>
                             <th className="text-left text-2xl">Kategori</th>
@@ -308,7 +324,8 @@ function ProductOverview({channel}: {
                         {products &&
                             products.map((product) => (
                                 <tr key={product.id} className="border-b">
-                                    <td className="py-2">{product.name}</td>
+                                    <td className="py-2">{product.name.split(",")[0]}</td>
+                                    <td className="py-2">{product.name.split(",")[1].trim()}</td>
                                     <td className="py-2">{product.price}</td>
                                     <td className="py-2">{product.stock}</td>
                                     <td className="py-2">
