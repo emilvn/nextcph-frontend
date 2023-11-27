@@ -22,13 +22,13 @@ function Sale({ sale }: { sale: ISale }) {
 
 function Product({ product }: { product: ISaleProduct }) {
 	return (
-		<div className="flex justify-between w-96">
+		<div className="flex justify-between w-96 text-white">
 			<div className="pr-1">{product.product_quantity}x {product.product.name}</div>
-			<div>{calculateProductTotalPrice(product.product.price, product.product_quantity)},-</div>
+			<div>{calculateProductsTotalPrice(product.product.price, product.product_quantity)},-</div>
 		</div>)
 }
 
-function calculateProductTotalPrice(price: number, qty: number): number {
+function calculateProductsTotalPrice(price: number, qty: number): number {
 	const totalPrice: number = price * qty;
 	return totalPrice;
 }
