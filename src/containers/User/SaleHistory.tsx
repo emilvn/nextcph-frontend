@@ -9,8 +9,8 @@ import { UserResource } from "@clerk/types";
 import { useState, useEffect, Dispatch, SetStateAction } from "react";
 import { convertToDanishTime } from "../../helpers/dateTime.ts";
 import { groupSalesByDate } from "../../helpers/groupSalesByDate.ts";
+import { sortSalesByDate } from "../../helpers/sortSalesByDate.ts";
 import { calculateProductsTotalPrice } from "../../helpers/CalculateProductPrice.ts";
-
 
 interface ButtonFilterSalesProps {
 	setCurrentSales: Dispatch<SetStateAction<ISale[]>>;
@@ -81,7 +81,7 @@ function SaleHistory({ channel }: { channel: ChannelType }) {
 
 	const [currentSales, setCurrentSales] = useState<ISale[]>([]);
 	useEffect(() => {
-		setCurrentSales((sales));
+		setCurrentSales(sortSalesByDate({ sales }));
 	}, [sales]);
 
 	if (isLoading) return (<Loading.LoadingPage />);
