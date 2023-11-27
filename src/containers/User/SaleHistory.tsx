@@ -6,6 +6,32 @@ import { ISale } from "../../types/sales.types.ts";
 import { ISaleProduct } from "../../types/products.types.ts";
 import { useUser } from "@clerk/clerk-react";
 import { useState, useEffect } from "react";
+import { convertToDanishDate, convertToDanishTime } from "../../helpers/dateTime.ts";
+
+
+function Sale({ sale }: { sale: ISale }) {
+	return (
+		<div>
+			<div className="pt-4 text-lg font-semibold">{convertToDanishTime(sale.created_at)}</div>
+			{sale.products.map((product) => (
+				<Product key={product.product.id} product={product} />
+			))}
+		</div>
+	)
+}
+
+function Product({ product }: { product: ISaleProduct }) {
+	return (
+		<div className="flex justify-between w-96">
+			<div className="pr-1">{product.product_quantity}x {product.product.name}</div>
+			<div>{calculateProductTotalPrice(product.product.price, product.product_quantity)},-</div>
+		</div>)
+}
+
+function calculateProductTotalPrice(price: number, qty: number): number {
+	const totalPrice: number = price * qty;
+	return totalPrice;
+}
 
 function groupedSalesByDate({ sales }: { sales: ISale[] }) {
 	const groupedSales: { [key: string]: ISale[] } = {};
@@ -21,61 +47,6 @@ function groupedSalesByDate({ sales }: { sales: ISale[] }) {
 
 	return groupedSales;
 }
-
-function Sale({ sale }: { sale: ISale }) {
-	return (
-		<div>
-			<div>{convertToDanishTime(sale.created_at)}</div>
-			{sale.products.map((product) => (
-				<Product key={product.product.id} product={product} />
-			))}
-		</div>
-	)
-}
-
-function Product({ product }: { product: ISaleProduct }) {
-	console.log(product)
-	return (
-		<div>
-			<ul>
-				<li>{product.product_quantity}x {product.product.name} {calculateProductTotalPrice(product.product.price, product.product_quantity)},-</li>
-			</ul>
-
-		</div>)
-}
-
-function Header() {
-	return <h1>Sales History</h1>
-}
-
-function calculateProductTotalPrice(price: number, qty: number): number {
-	const totalPrice: number = price * qty;
-	return totalPrice;
-}
-
-function convertToDanishDate(utcTimestamp: string): string {
-	const date = new Date(utcTimestamp);
-
-	const danishDate = date.toLocaleString('da-DK', {
-		year: 'numeric',
-		month: '2-digit',
-		day: '2-digit',
-	});
-
-	return danishDate;
-}
-
-function convertToDanishTime(utcTimestamp: string): string {
-	const date = new Date(utcTimestamp);
-
-	const danishDate = date.toLocaleString('da-DK', {
-		hour: '2-digit',
-		minute: '2-digit',
-	});
-
-	return danishDate;
-}
-
 
 function SaleHistory({ channel }: { channel: ChannelType }) {
 	const { sales, isLoading } = useSalesUser(channel);
@@ -102,22 +73,30 @@ function SaleHistory({ channel }: { channel: ChannelType }) {
 	}
 
 	return (
-		<PageLayout>
-			<Header />
-			<div>
-				{Object.entries(groupedSales).map(([group, salesInGroup]) => (
-					<div key={group}>
-						<h1>{group}</h1>
-						<ul>
-							{salesInGroup.map((sale) => (
-								<Sale key={sale.id} sale={sale} />
+		<div className="bg-next-blue">
+			<PageLayout>
+				<div className="bg-next-blue text-next-darker-orange p-3 flex justify-between">
+					<div>
+						<h1 className="text-4xl font-bold">Salgshistorik</h1>
+						<div>
+							{Object.entries(groupedSales).map(([group, salesInGroup]) => (
+								<div key={group}>
+									<h1 className="pt-10 text-2xl font-semibold">{group}</h1>
+									<ul>
+										{salesInGroup.map((sale) => (
+											<Sale key={sale.id} sale={sale} />
+										))}
+									</ul>
+								</div>
 							))}
-						</ul>
+						</div>
 					</div>
-				))}
-				<input type="checkbox" onChange={(e) => handleChange(e, (user?.id) ? user.id : "", { sales })} />
-			</div>
-		</PageLayout>
+					<div className="pr-10">
+						<label>Mine salg: <input type="checkbox" onChange={(e) => handleChange(e, (user?.id) ? user.id : "", { sales })} /></label>
+					</div>
+				</div>
+			</PageLayout>
+		</div>
 	)
 }
 
