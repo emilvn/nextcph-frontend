@@ -20,7 +20,7 @@ function App() {
 
     if (!isSignedIn) return (<Login />)
 
-    const isAdmin = user?.organizationMemberships?.[0]?.role !== "admin";
+    const isAdmin = user?.organizationMemberships?.[0]?.role === "admin";
     return (
         <>
             <BrowserRouter>
