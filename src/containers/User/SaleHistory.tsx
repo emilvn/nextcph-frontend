@@ -99,7 +99,7 @@ function SaleHistory({ channel }: { channel: ChannelType }) {
 	}, [sales]);
 
 	if (isLoading) return (<Loading.LoadingPage />);
-	if (!sales || sales.length === 0) return (<PageLayout>Salg ikke fundet...</PageLayout>);
+	if (!sales || sales.length === 0) return (<PageLayout><div className="p-4 text-next-blue text-xl">Ingen salg endnu...</div></PageLayout>);
 
 	return (
 		<PageLayout>
