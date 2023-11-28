@@ -1,12 +1,12 @@
 import PageLayout from "../../components/layout.tsx";
-import {ChannelType} from "../../types/channel.types.ts";
+import type {ChannelType} from "../../types/channel.types.ts";
 import useProducts from "../../hooks/useProducts.ts";
 import Loading from "../../components/loading.tsx";
-import {IProduct} from "../../types/products.types.ts";
+import type {IProduct} from "../../types/products.types.ts";
 import {IoSearchOutline } from "react-icons/io5";
 import {getCategories, getProductsWithCategory} from "../../helpers/categories.ts";
 import {FaMinus, FaPlus} from "react-icons/fa";
-import {Dispatch, SetStateAction, useState} from "react";
+import {type Dispatch, type SetStateAction, useState} from "react";
 
 const channelDict = {
 	"HAIR_CARE": "FRISØR",
