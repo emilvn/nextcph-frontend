@@ -1,8 +1,6 @@
 import type {IProduct} from "../../../types/products.types.ts";
 import type {Dispatch, SetStateAction} from "react";
 import type {INewProduct, IUpdateProduct} from "../../../types/products.types.ts";
-import {FaCheck} from "react-icons/fa";
-import {IoCloseSharp} from "react-icons/io5";
 import Modal from "../../../components/Modal.tsx";
 import toast from "react-hot-toast";
 
