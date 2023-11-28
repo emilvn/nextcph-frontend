@@ -22,6 +22,8 @@ function ButtonFilterSales({ setCurrentSales, sales, user }: ButtonFilterSalesPr
 	const [isMySalesToggleClicked, setMySalesToggleClicked] = useState(false);
 	const [buttonText, setButtonText] = useState("Mine salg");
 
+	if (!user) return <div>No User</div>
+
 	function toggleMySales() {
 		if (!!isMySalesToggleClicked) {
 			setCurrentSales(sales);
