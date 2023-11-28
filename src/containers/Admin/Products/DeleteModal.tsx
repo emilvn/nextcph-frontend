@@ -28,29 +28,31 @@ function DeleteModal(props: IDeleteModalProps) {
 	};
 	const confirmDelete = async () => {
 		if (productState.productToDelete) {
-			await productState.destroy(productState.productToDelete);
+			void productState.destroy(productState.productToDelete);
 			closeDeleteConfirmation();
-			toast.success('Produktet er slettet')
+			toast.success('Produktet er slettet');
 		} else {
-			toast.error('Fejl ved sletning af produkt')
+			toast.error('Fejl ved sletning af produkt');
 		}
 	};
 
 	return (
 		<Modal>
-			<h3 className="mb-4">Er du sikker på, at du vil slette dette produkt?</h3>
+			<h3 className="text-next-blue text-xl font-semibold">Er du sikker på, at du vil slette dette produkt?</h3>
 			<div className="flex justify-around mt-10">
 				<button
-					className="bg-next-darker-orange text-next-blue py-2 px-4 rounded hover:bg-next-blue hover:text-next-orange"
+					//erstat hele denne style med btn-orange, pånær py-2 px-4
+					className="bg-next-darker-orange text-next-blue border-[1.5px] border-next-blue hover:bg-next-blue hover:text-next-darker-orange transition-colors font-semibold py-2 px-4"
 					onClick={confirmDelete}
 				>
-					<FaCheck size={25}/>
+					JA, SLET
 				</button>
 				<button
-					className="bg-next-blue text-next-orange py-2 px-4 rounded hover:bg-next-darker-orange hover:text-next-blue ml-4"
+					//erstat hele denne style med btn-blue
+					className="bg-next-blue text-next-darker-orange border-[1.5px] border-next-darker-orange hover:bg-next-darker-orange hover:text-next-blue transition-colors font-semibold py-2 px-4"
 					onClick={() => closeDeleteConfirmation()}
 				>
-					<IoCloseSharp size={25}/>
+					NEJ, ANNULLÉR
 				</button>
 			</div>
 		</Modal>
