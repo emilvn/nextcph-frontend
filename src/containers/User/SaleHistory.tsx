@@ -46,7 +46,7 @@ function SaleList({ sales }: { sales: ISale[] }) {
 		<div className="mt-16 flex flex-col gap-[1px]">
 			{Object.entries(groupedSales).map(([group, salesInGroup]) => (
 				<div key={group}>
-					<h1 className="pt-10 text-3xl font-bold">{group}</h1>
+					<h1 className="pt-10 text-3xl font-bold text-next-blue">{group}</h1>
 					<ul className="flex flex-col gap-[1px] bg-white">
 						{salesInGroup.map((sale) => (
 							<Sale key={sale.id} sale={sale} />
@@ -92,8 +92,6 @@ function Product({ product }: { product: ISaleProduct }) {
 function SaleHistory({ channel }: { channel: ChannelType }) {
 	const { sales, isLoading } = useSales(channel);
 	const { user } = useUser();
-
-	console.log(user?.id);
 
 	const [currentSales, setCurrentSales] = useState<ISale[]>([]);
 	useEffect(() => {
