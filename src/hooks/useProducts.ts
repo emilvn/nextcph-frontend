@@ -2,6 +2,8 @@ import {useEffect, useState} from "react";
 import type {INewProduct, IProduct, IUpdateProduct} from "../types/products.types.ts";
 import ProductApi from "../utils/ProductApi.ts";
 import type {ChannelType} from "../types/channel.types.ts";
+import {AxiosError} from "axios";
+import toast from "react-hot-toast";
 
 function useProducts(channel: ChannelType) {
     const [products, setProducts] = useState<IProduct[]>([]);
@@ -14,8 +16,9 @@ function useProducts(channel: ChannelType) {
         api.getByChannel(channel).then((products) => {
             setProducts(products);
             setIsLoading(false);
-        }).catch((e) => {
-            console.error(e);
+        }).catch((e:unknown) => {
+            if(e instanceof AxiosError) console.error(e.response?.data || e.message);
+            toast.error("Kunne ikke hente produkter");
         });
     }, []);
 
@@ -24,8 +27,9 @@ function useProducts(channel: ChannelType) {
             const newProduct = await api.create(product);
             const newProducts = [...products, newProduct];
             setProducts(newProducts);
-        } catch (e) {
-            console.error(e);
+        } catch (e:unknown) {
+            if(e instanceof AxiosError) console.error(e.response?.data || e.message);
+            toast.error("Kunne ikke oprette produkt");
         }
     }
 
@@ -35,8 +39,9 @@ function useProducts(channel: ChannelType) {
             const index = products.findIndex((p) => p.id === updatedProduct.id);
             products[index] = updatedProduct;
             setProducts([...products]);
-        } catch (e) {
-            console.error(e);
+        } catch (e:unknown) {
+            if(e instanceof AxiosError) console.error(e.response?.data || e.message);
+            toast.error("Kunne ikke opdatere produkt");
         }
     }
 
@@ -46,8 +51,9 @@ function useProducts(channel: ChannelType) {
             const index = products.findIndex((p) => p.id === product.id);
             products.splice(index, 1);
             setProducts([...products]);
-        } catch (e) {
-            console.error(e);
+        } catch (e:unknown) {
+            if(e instanceof AxiosError) console.error(e.response?.data || e.message);
+            toast.error("Kunne ikke slette produkt");
         }
     }
 

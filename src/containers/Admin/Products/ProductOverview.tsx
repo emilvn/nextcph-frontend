@@ -1,9 +1,9 @@
 import PageLayout from '../../../components/layout.tsx';
 import type {ChannelType} from '../../../types/channel.types.ts';
 import useProducts from '../../../hooks/useProducts.ts';
-import type {INewProduct, IProduct, IUpdateProduct} from '../../../types/products.types.ts';
+import type {IProduct} from '../../../types/products.types.ts';
 import loading from '../../../components/loading.tsx';
-import {type Dispatch, type SetStateAction, useState} from 'react';
+import {useState} from 'react';
 import toast from 'react-hot-toast';
 import type {ActionMeta, Options} from "react-select"
 import UpdateModal from "./UpdateModal.tsx";
@@ -23,63 +23,6 @@ function Header(props: { onClick: () => void }) {
             Tilføj Produkt
         </button>
     </div>);
-}
-
-interface IModalsProps {
-    channel: ChannelType;
-    modalStates: {
-        isOpenCreate: boolean;
-        isOpenUpdate: boolean;
-        isOpenDelete: boolean;
-        setIsOpenCreate: Dispatch<SetStateAction<boolean>>;
-        setIsOpenUpdate: Dispatch<SetStateAction<boolean>>;
-        setIsOpenDelete: Dispatch<SetStateAction<boolean>>;
-    };
-    categoryState: {
-        selectedCategories: string[];
-        setSelectedCategories: Dispatch<SetStateAction<string[]>>;
-        handleCategoryChange: (newValue: Options<{ value: string }>, actionMeta: ActionMeta<{ value: string }>) => void;
-    };
-    notifiers: {
-        notifySuccess: (message: string) => string;
-        notifyError: (message: string) => string;
-    };
-    productState: {
-        products: IProduct[];
-        create: (product: INewProduct) => Promise<void>;
-        update: (product: IUpdateProduct) => Promise<void>;
-        destroy: (product: IProduct) => Promise<void>;
-        selectedProduct: IProduct | null;
-        setSelectedProduct: Dispatch<SetStateAction<IProduct | null>>;
-        productToDelete: IProduct | null;
-        setProductToDelete: Dispatch<SetStateAction<IProduct | null>>;
-    }
-}
-function Modals(props: IModalsProps) {
-    const {modalStates, categoryState, notifiers, productState, channel} = props;
-    return <>
-        {modalStates.isOpenCreate && (<CreateModal
-            categoryState={categoryState}
-            setIsOpenCreate={modalStates.setIsOpenCreate}
-            notifiers={notifiers}
-            create={productState.create}
-            products={productState.products}
-            channel={channel}
-        />)}
-        {modalStates.isOpenUpdate && !!productState.selectedProduct && (<UpdateModal
-                categoryState={categoryState}
-                setIsOpenUpdate={modalStates.setIsOpenUpdate}
-                notifiers={notifiers}
-                channel={channel}
-                productState={productState}
-            />
-        )}
-        {modalStates.isOpenDelete && (<DeleteModal
-            setIsOpenDelete={modalStates.setIsOpenDelete}
-            productState={productState}
-            notifiers={notifiers}
-        />)}
-    </>;
 }
 
 function ProductOverview({channel}: { channel: ChannelType }) {
@@ -127,13 +70,32 @@ function ProductOverview({channel}: { channel: ChannelType }) {
                     />
                 )}
             </div>
-            <Modals
-                modalStates={modalStates}
-                categoryState={categoryState}
-                notifiers={notifiers}
-                productState={productState}
-                channel={channel}
-            />
+            {isOpenCreate && (
+                <CreateModal
+                    categoryState={categoryState}
+                    setIsOpenCreate={setIsOpenCreate}
+                    notifiers={notifiers}
+                    create={create}
+                    products={products}
+                    channel={channel}
+                />)
+            }
+            {isOpenUpdate && !!productState.selectedProduct && (
+                <UpdateModal
+                    categoryState={categoryState}
+                    setIsOpenUpdate={setIsOpenUpdate}
+                    notifiers={notifiers}
+                    channel={channel}
+                    productState={productState}
+                />)
+            }
+            {isOpenDelete && (
+                <DeleteModal
+                    setIsOpenDelete={modalStates.setIsOpenDelete}
+                    productState={productState}
+                    notifiers={notifiers}
+                />)
+            }
             <StyledToaster/>
         </PageLayout>
     );
