@@ -6,7 +6,7 @@ import Loading from "./components/loading.tsx";
 import Products from "./containers/User/Products.tsx";
 import SaleHistory from "./containers/User/SaleHistory.tsx";
 import Dashboard from "./containers/Admin/Dashboard.tsx";
-import ProductOverview from "./containers/Admin/ProductOverview.tsx";
+import ProductOverview from "./containers/Admin/Products/ProductOverview.tsx";
 import {Dispatch, SetStateAction, useState} from "react";
 import {ChannelType} from "./types/channel.types.ts";
 import SelectChannelUser from "./containers/User/SelectChannelUser.tsx";
