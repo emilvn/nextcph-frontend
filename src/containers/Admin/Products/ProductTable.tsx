@@ -1,6 +1,5 @@
-import {IProduct} from "../../../types/products.types.ts";
-import {Dispatch, SetStateAction} from "react";
-import {ChannelType} from "../../../types/channel.types.ts";
+import type {INewProduct, IProduct, IUpdateProduct} from "../../../types/products.types.ts";
+import type {Dispatch, SetStateAction} from "react";
 
 function ProductTableHeader() {
 	return (
@@ -62,36 +61,49 @@ function ProductRow(props: IProductRowProps) {
 }
 
 interface IProductTableProps {
-	products: IProduct[];
-	setSelectedProduct: Dispatch<SetStateAction<IProduct | null>>;
-	channel: ChannelType;
+	productState: {
+		products: IProduct[];
+		create: (product: INewProduct) => Promise<void>;
+		update: (product: IUpdateProduct) => Promise<void>;
+		destroy: (product: IProduct) => Promise<void>;
+		selectedProduct: IProduct | null;
+		setSelectedProduct: Dispatch<SetStateAction<IProduct | null>>;
+		productToDelete: IProduct | null;
+		setProductToDelete: Dispatch<SetStateAction<IProduct | null>>;
+	};
+	modalStates: {
+		isOpenCreate: boolean;
+		isOpenUpdate: boolean;
+		isOpenDelete: boolean;
+		setIsOpenCreate: Dispatch<SetStateAction<boolean>>;
+		setIsOpenUpdate: Dispatch<SetStateAction<boolean>>;
+		setIsOpenDelete: Dispatch<SetStateAction<boolean>>;
+	};
 	setSelectedCategories: Dispatch<SetStateAction<string[]>>;
-	setShowUpdateModal: Dispatch<SetStateAction<boolean>>;
-	setProductToDelete: Dispatch<SetStateAction<IProduct | null>>;
-	setShowDeleteConfirmation: Dispatch<SetStateAction<boolean>>;
 }
 
 function ProductTable(props: IProductTableProps) {
+	const {modalStates, productState, setSelectedCategories} = props;
 	const handleEdit = (product: IProduct) => {
-		props.setSelectedProduct(product);
-		props.setSelectedCategories(product.categories.map(category => category.category.name));
-		props.setShowUpdateModal(true);
+		productState.setSelectedProduct(product);
+		setSelectedCategories(product.categories.map(category => category.category.name));
+		modalStates.setIsOpenUpdate(true);
+	};
+	const openDeleteConfirmation = (product: IProduct) => {
+		productState.setProductToDelete(product);
+		modalStates.setIsOpenDelete(true);
 	};
 
 	const handleDelete = (product: IProduct) => {
 		openDeleteConfirmation(product);
 	};
 
-	const openDeleteConfirmation = (product: IProduct) => {
-		props.setProductToDelete(product);
-		props.setShowDeleteConfirmation(true);
-	};
 
 	return (
 		<table className="w-full">
 			<ProductTableHeader/>
 			<tbody>
-			{props.products && props.products.map((product) => (
+			{productState.products && productState.products.map((product) => (
 				<ProductRow
 					key={product.id}
 					product={product}

@@ -93,9 +93,6 @@ function ProductOverview({channel}: { channel: ChannelType }) {
     const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
     const [productToDelete, setProductToDelete] = useState<IProduct | null>(null);
 
-
-    const notifySuccess = (message: string) => toast.success(message)
-    const notifyError = (message: string) => toast.error(message)
     const handleCategoryChange = (newValue: Options<{ value: string }>, actionMeta: ActionMeta<{ value: string }>) => {
         if (actionMeta.action === 'select-option' || actionMeta.action === 'create-option') {
             setSelectedCategories(newValue.map((option: { value: string }) => option.value));
@@ -113,23 +110,22 @@ function ProductOverview({channel}: { channel: ChannelType }) {
         selectedCategories, setSelectedCategories, handleCategoryChange
     }
     const notifiers = {
-        notifySuccess, notifyError
-    }
+        notifySuccess: (message: string) => toast.success(message),
+        notifyError: (message: string) => toast.error(message)
+    };
 
     return (
         <PageLayout>
             <Header onClick={() => setIsOpenCreate(true)}/>
             <div className="mt-40">
                 {isLoading && <loading.LoadingSpinner/>}
-                {!isLoading && (<ProductTable
-                    channel={channel}
-                    setSelectedProduct={setSelectedProduct}
-                    products={products}
-                    setSelectedCategories={setSelectedCategories}
-                    setShowUpdateModal={setIsOpenUpdate}
-                    setProductToDelete={setProductToDelete}
-                    setShowDeleteConfirmation={setIsOpenDelete}
-                />)}
+                {!isLoading && (
+                    <ProductTable
+                        productState={productState}
+                        modalStates={modalStates}
+                        setSelectedCategories={setSelectedCategories}
+                    />
+                )}
             </div>
             <Modals
                 modalStates={modalStates}
