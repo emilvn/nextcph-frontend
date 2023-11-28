@@ -10,7 +10,7 @@ import {FaCheck} from "react-icons/fa";
 import {IoCloseSharp} from "react-icons/io5";
 import type {ActionMeta, Options} from "react-select"
 
-interface INewProductData{
+interface INewProductData {
     name: string;
     amount: string;
     price: number;
@@ -18,20 +18,32 @@ interface INewProductData{
     channel: ChannelType;
     categories: string[]
 }
-interface ICreateModalProps{
+
+interface ICreateModalProps {
     selectedCategories: string[];
     setShowCreateModal: Dispatch<SetStateAction<boolean>>;
     setNewProductData: Dispatch<SetStateAction<INewProductData>>;
-    notifySuccess: (message:string) => string;
-    notifyError: (message:string) => string;
+    notifySuccess: (message: string) => string;
+    notifyError: (message: string) => string;
     newProductData: INewProductData;
-    create:  (product: INewProduct) => Promise<void>;
-    channel:ChannelType;
-    handleFormInput: (e:ChangeEvent<HTMLInputElement>) => void;
-    handleCategoryChange: (newValue:Options<{ value:string }>, actionMeta:ActionMeta<{ value:string }>) => void;
+    create: (product: INewProduct) => Promise<void>;
+    channel: ChannelType;
+    handleFormInput: (e: ChangeEvent<HTMLInputElement>) => void;
+    handleCategoryChange: (newValue: Options<{ value: string }>, actionMeta: ActionMeta<{ value: string }>) => void;
     products: IProduct[];
 }
-function CreateModal(props:ICreateModalProps){
+
+interface IDeleteModalProps {
+    destroy: (product: IProduct) => Promise<void>
+    setShowDeleteConfirmation: Dispatch<SetStateAction<boolean>>;
+    notifySuccess: (message: string) => string;
+    notifyError: (message: string) => string;
+    setProductToDelete: Dispatch<SetStateAction<IProduct | null>>;
+    productToDelete: IProduct | null
+    channel: ChannelType;
+}
+
+function CreateModal(props: ICreateModalProps) {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault()
 
@@ -116,6 +128,45 @@ function CreateModal(props:ICreateModalProps){
     );
 }
 
+function DeleteModal(props: IDeleteModalProps) {
+    const closeDeleteConfirmation = () => {
+        props.setProductToDelete(null);
+        props.setShowDeleteConfirmation(false);
+    };
+    const confirmDelete = async () => {
+        if (props.productToDelete) {
+            await props.destroy(props.productToDelete);
+            closeDeleteConfirmation();
+            props.notifySuccess('Produktet er slettet')
+        } else {
+            props.notifyError('fejl ved sletning af produkt')
+        }
+    };
+
+    return (
+        <div className="fixed inset-0 flex items-center justify-center">
+            <div className="bg-black bg-opacity-50 absolute inset-0 backdrop-blur-md"></div>
+            <div className="bg-white p-8 rounded-md relative z-10">
+                <h3 className="mb-4">Er du sikker på, at du vil slette dette produkt?</h3>
+                <div className="flex justify-around mt-10">
+                    <button
+                        className="bg-next-darker-orange text-next-blue py-2 px-4 rounded hover:bg-next-blue hover:text-next-orange"
+                        onClick={confirmDelete}
+                    >
+                        <FaCheck size={25}/>
+                    </button>
+                    <button
+                        className="bg-next-blue text-next-orange py-2 px-4 rounded hover:bg-next-darker-orange hover:text-next-blue ml-4"
+                        onClick={() => closeDeleteConfirmation()}
+                    >
+                        <IoCloseSharp size={25}/>
+                    </button>
+                </div>
+            </div>
+        </div>
+    )
+}
+
 function ProductOverview({channel}: {
     channel: ChannelType
 }) {
@@ -198,13 +249,12 @@ function ProductOverview({channel}: {
 
     //------------------ create ------------------//
 
-    const handleCategoryChange = (newValue: Options<{ value:string }>, actionMeta: ActionMeta<{value:string}>) => {
+    const handleCategoryChange = (newValue: Options<{ value: string }>, actionMeta: ActionMeta<{ value: string }>) => {
         if (actionMeta.action === 'select-option' || actionMeta.action === 'create-option') {
-            setSelectedCategories(newValue.map((option: {value:string}) => option.value));
+            setSelectedCategories(newValue.map((option: { value: string }) => option.value));
         }
     };
 
-    
 
     //------------------ delete ------------------//
 
@@ -213,24 +263,8 @@ function ProductOverview({channel}: {
         setShowDeleteConfirmation(true);
     };
 
-    const closeDeleteConfirmation = () => {
-        setProductToDelete(null);
-        setShowDeleteConfirmation(false);
-    };
-
-
     const handleDelete = (product: IProduct) => {
         openDeleteConfirmation(product);
-    };
-
-    const confirmDelete = async () => {
-        if (productToDelete) {
-            await destroy(productToDelete);
-            closeDeleteConfirmation();
-            notifySuccess('Produktet er slettet')
-        } else {
-            notifyError('fejl ved sletning af produkt')
-        }
     };
 
     //------------------ return ------------------//
@@ -325,30 +359,15 @@ function ProductOverview({channel}: {
                     </div>
                 )}
 
-                {showDeleteConfirmation && (
-                    <div className="fixed inset-0 flex items-center justify-center">
-                        <div className="bg-black bg-opacity-50 absolute inset-0 backdrop-blur-md"></div>
-                        <div className="bg-white p-8 rounded-md relative z-10">
-                            <h3 className="mb-4">Er du sikker på, at du vil slette dette produkt?</h3>
-                            <div className="flex justify-around mt-10">
-                                <button
-                                    className="bg-next-darker-orange text-next-blue py-2 px-4 rounded hover:bg-next-blue hover:text-next-orange"
-                                    onClick={confirmDelete}
-                                >
-                                    <FaCheck size={25}/>
-                                </button>
-                                <button
-                                    className="bg-next-blue text-next-orange py-2 px-4 rounded hover:bg-next-darker-orange hover:text-next-blue ml-4"
-                                    onClick={() => closeDeleteConfirmation()}
-                                >
-                                    <IoCloseSharp size={25}/>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-
+                {showDeleteConfirmation && (<DeleteModal
+                    setProductToDelete={setProductToDelete}
+                    setShowDeleteConfirmation={setShowDeleteConfirmation}
+                    destroy={destroy}
+                    productToDelete={productToDelete}
+                    notifySuccess={notifySuccess}
+                    notifyError={notifyError}
+                    channel={channel}
+                />)}
                 {isLoading ? (
                     <loading.LoadingSpinner/>
                 ) : (
