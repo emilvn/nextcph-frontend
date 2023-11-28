@@ -60,6 +60,18 @@ interface IUpdateModalProps {
     setShowUpdateModal: Dispatch<SetStateAction<boolean>>;
 }
 
+interface IProductTableBodyProps {
+    products: IProduct[];
+    setSelectedProduct: Dispatch<SetStateAction<IUpdateProduct | null>>;
+    setNewProductData: Dispatch<SetStateAction<INewProductData>>;
+    channel: ChannelType
+    setSelectedCategories: Dispatch<SetStateAction<string[]>>
+    setShowUpdateModal: Dispatch<SetStateAction<boolean>>;
+    setProductToDelete: Dispatch<SetStateAction<IProduct | null>>;
+    setShowDeleteConfirmation: Dispatch<SetStateAction<boolean>>;
+
+}
+
 function CreateModal(props: ICreateModalProps) {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault()
@@ -277,6 +289,86 @@ function UpdateModal(props: IUpdateModalProps) {
 
 }
 
+function ProductTableHeader() {
+    return (
+        <thead>
+        <tr>
+            <th className="text-left text-2xl">Navn</th>
+            <th className="text-left text-2xl">Mængde</th>
+            <th className="text-left text-2xl">Pris</th>
+            <th className="text-left text-2xl">Lager</th>
+            <th className="text-left text-2xl">Kategori</th>
+            <th className="text-left text-2xl">Opdatere</th>
+            <th className="text-left text-2xl">Slet</th>
+        </tr>
+        </thead>
+    )
+}
+
+function ProductTableBody(props: IProductTableBodyProps) {
+    const handleEdit = (product: IProduct) => {
+        props.setSelectedProduct(product);
+        const nameWithoutAmount = product.name.split(',')[0].trim(); // Extract name without amount
+        const amount = product.name.split(',')[1] ? product.name.split(',')[1].trim() : ''; // Extract amount if present
+        props.setNewProductData({
+            name: nameWithoutAmount,
+            amount: amount,
+            price: product.price,
+            stock: product.stock,
+            channel: props.channel,
+            categories: [] /*change?*/
+        });
+        props.setSelectedCategories(product.categories.map(category => category.category.name));
+        props.setShowUpdateModal(true);
+    };
+
+    const handleDelete = (product: IProduct) => {
+        openDeleteConfirmation(product);
+    };
+
+    const openDeleteConfirmation = (product: IProduct) => {
+        props.setProductToDelete(product);
+        props.setShowDeleteConfirmation(true);
+    };
+
+    return (
+        <tbody>
+        {props.products &&
+            props.products.map((product) => (
+                <tr key={product.id} className="border-b">
+                    <td className="py-2">{product.name ? product.name.split(",")[0] : 'N/A'}</td>
+                    <td className="py-2">{product.name && product.name.split(",")[1] ? product.name.split(",")[1].trim() : 'N/A'}</td>
+                    <td className="py-2">{product.price}</td>
+                    <td className="py-2">{product.stock}</td>
+                    <td className="py-2">
+                        <ul>
+                            {product.categories.map((category) => (
+                                <li key={category.category.id}>{category.category.name}</li>
+                            ))}
+                        </ul>
+                    </td>
+                    <td>
+                        <button
+                            className="bg-next-darker-orange font-bold text-next-blue py-1 px-2 rounded hover:bg-next-blue hover:text-next-orange"
+                            onClick={() => handleEdit(product)}
+                        >
+                            Rediger
+                        </button>
+                    </td>
+                    <td>
+                        <button
+                            className="bg-next-blue text-next-orange font-bold py-1 px-2 rounded hover:bg-next-darker-orange hover:text-next-blue"
+                            onClick={() => handleDelete(product)}
+                        >
+                            Slet
+                        </button>
+                    </td>
+                </tr>
+            ))}
+        </tbody>
+    )
+}
+
 function ProductOverview({channel}: {
     channel: ChannelType
 }) {
@@ -301,24 +393,6 @@ function ProductOverview({channel}: {
     const notifySuccess = (message: string) => toast.success(message)
     const notifyError = (message: string) => toast.error(message)
 
-    //------------------ update ------------------//
-
-    const handleEdit = (product: IProduct) => {
-        setSelectedProduct(product);
-        const nameWithoutAmount = product.name.split(',')[0].trim(); // Extract name without amount
-        const amount = product.name.split(',')[1] ? product.name.split(',')[1].trim() : ''; // Extract amount if present
-        setNewProductData({
-            name: nameWithoutAmount,
-            amount: amount,
-            price: product.price,
-            stock: product.stock,
-            channel: channel,
-            categories: [] /*change?*/
-        });
-        setSelectedCategories(product.categories.map(category => category.category.name));
-        setShowUpdateModal(true);
-    };
-
     //------------------ handle all form input both for create and update ------------------//
 
     const handleFormInput = (e: ChangeEvent<HTMLInputElement>) => {
@@ -339,17 +413,6 @@ function ProductOverview({channel}: {
         if (actionMeta.action === 'select-option' || actionMeta.action === 'create-option') {
             setSelectedCategories(newValue.map((option: { value: string }) => option.value));
         }
-    };
-
-    //------------------ delete ------------------//
-
-    const openDeleteConfirmation = (product: IProduct) => {
-        setProductToDelete(product);
-        setShowDeleteConfirmation(true);
-    };
-
-    const handleDelete = (product: IProduct) => {
-        openDeleteConfirmation(product);
     };
 
     //------------------ return ------------------//
@@ -407,51 +470,17 @@ function ProductOverview({channel}: {
                     <loading.LoadingSpinner/>
                 ) : (
                     <table className="min-w-full">
-                        <thead>
-                        <tr>
-                            <th className="text-left text-2xl">Navn</th>
-                            <th className="text-left text-2xl">Mængde</th>
-                            <th className="text-left text-2xl">Pris</th>
-                            <th className="text-left text-2xl">Lager</th>
-                            <th className="text-left text-2xl">Kategori</th>
-                            <th className="text-left text-2xl">Opdatere</th>
-                            <th className="text-left text-2xl">Slet</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {products &&
-                            products.map((product) => (
-                                <tr key={product.id} className="border-b">
-                                    <td className="py-2">{product.name ? product.name.split(",")[0] : 'N/A'}</td>
-                                    <td className="py-2">{product.name && product.name.split(",")[1] ? product.name.split(",")[1].trim() : 'N/A'}</td>
-                                    <td className="py-2">{product.price}</td>
-                                    <td className="py-2">{product.stock}</td>
-                                    <td className="py-2">
-                                        <ul>
-                                            {product.categories.map((category) => (
-                                                <li key={category.category.id}>{category.category.name}</li>
-                                            ))}
-                                        </ul>
-                                    </td>
-                                    <td>
-                                        <button
-                                            className="bg-next-darker-orange font-bold text-next-blue py-1 px-2 rounded hover:bg-next-blue hover:text-next-orange"
-                                            onClick={() => handleEdit(product)}
-                                        >
-                                            Rediger
-                                        </button>
-                                    </td>
-                                    <td>
-                                        <button
-                                            className="bg-next-blue text-next-orange font-bold py-1 px-2 rounded hover:bg-next-darker-orange hover:text-next-blue"
-                                            onClick={() => handleDelete(product)}
-                                        >
-                                            Slet
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
+                        <ProductTableHeader/>
+                        <ProductTableBody
+                            channel={channel}
+                            setSelectedProduct={setSelectedProduct}
+                            setNewProductData={setNewProductData}
+                            products={products}
+                            setSelectedCategories={setSelectedCategories}
+                            setShowUpdateModal={setShowUpdateModal}
+                            setProductToDelete={setProductToDelete}
+                            setShowDeleteConfirmation={setShowDeleteConfirmation}
+                        />
                     </table>
                 )}
             </div>
