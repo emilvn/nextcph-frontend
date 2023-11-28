@@ -81,6 +81,8 @@ function SaleHistory({ channel }: { channel: ChannelType }) {
 	const { sales, isLoading } = useSales(channel);
 	const { user } = useUser();
 
+	console.log(user?.id);
+
 	const [currentSales, setCurrentSales] = useState<ISale[]>([]);
 	useEffect(() => {
 		setCurrentSales(sortSalesByDate({ sales }));
@@ -90,18 +92,18 @@ function SaleHistory({ channel }: { channel: ChannelType }) {
 	if (!sales || sales.length === 0) return (<PageLayout>Salg ikke fundet...</PageLayout>);
 
 	return (
-		<div className="bg-next-blue">
-			<PageLayout>
-				<div className="bg-next-blue text-next-darker-orange p-3 flex justify-between">
-					<div>
+		<PageLayout>
+			<div className="bg-next-white text-next-darker-orange p-3 flex justify-between">
+				<div className="w-full p-4">
+					<div className="bg-next-blue p-4 fixed">
 						<h1 className="text-4xl font-bold">Salgshistorik</h1>
-						<SaleList sales={currentSales} />
+						<ButtonFilterSales setCurrentSales={setCurrentSales} sales={sales} user={user} />
 					</div>
-					<ButtonFilterSales setCurrentSales={setCurrentSales} sales={sales} user={user} />
+					<SaleList sales={currentSales} />
 				</div>
-			</PageLayout>
-		</div>
+			</div>
+		</PageLayout>
 	)
 }
 
-export default SaleHistory
+export default SaleHistory;
