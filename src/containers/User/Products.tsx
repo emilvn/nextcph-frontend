@@ -45,7 +45,7 @@ function NavCategory({category}:{category:string}) {
 
 function CategoriesNav({categories}:{categories:string[]}) {
 	return (
-		<div className="flex flex-col gap-4 items-start w-3/4 overflow-y-scroll">
+		<div className="flex flex-col gap-4 items-start w-3/4 overflow-y-auto">
 			{categories.map((category) => (<NavCategory key={category} category={category}/>))}
 		</div>
 	);
