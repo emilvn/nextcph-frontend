@@ -43,6 +43,23 @@ interface IDeleteModalProps {
     channel: ChannelType;
 }
 
+interface IUpdateModalProps {
+    selectedCategories: string[];
+    newProductData: INewProductData;
+    products: IProduct[];
+    handleCategoryChange: (newValue: Options<{ value: string }>, actionMeta: ActionMeta<{ value: string }>) => void;
+    channel: ChannelType;
+    notifySuccess: (message: string) => string;
+    notifyError: (message: string) => string;
+    update: (product: IUpdateProduct) => Promise<void>;
+    selectedProduct: IUpdateProduct | null
+    setSelectedProduct: Dispatch<SetStateAction<IUpdateProduct | null>>;
+    handleFormInput: (e: ChangeEvent<HTMLInputElement>) => void;
+    setNewProductData: Dispatch<SetStateAction<INewProductData>>;
+    setSelectedCategories: Dispatch<SetStateAction<string[]>>
+    setShowUpdateModal: Dispatch<SetStateAction<boolean>>;
+}
+
 function CreateModal(props: ICreateModalProps) {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault()
@@ -167,6 +184,99 @@ function DeleteModal(props: IDeleteModalProps) {
     )
 }
 
+function UpdateModal(props: IUpdateModalProps) {
+    const handleUpdate = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+        e.preventDefault();
+
+        const updatedProduct: IUpdateProduct = {
+            id: props.selectedProduct?.id || '',
+            name: `${props.newProductData?.name || ''}, ${props.newProductData?.amount || ''}`,
+            price: props.newProductData?.price || 0,
+            stock: props.newProductData?.stock || 0,
+            channel: props.newProductData?.channel || props.channel,
+        };
+
+        try {
+            await props.update(updatedProduct);
+            props.setShowUpdateModal(false);
+            props.setNewProductData({name: '', amount: "", price: 0, stock: 0, categories: [], channel: props.channel});
+            props.setSelectedCategories([]);
+            props.setSelectedProduct(null);
+            props.notifySuccess('Produktet er redigeret')
+        } catch (e) {
+            console.error(e);
+        }
+    };
+
+    return (
+        <div className="fixed inset-0 flex items-center justify-center">
+            <div className="bg-black bg-opacity-50 absolute inset-0 backdrop-blur-md"></div>
+            <div className="bg-white p-8 rounded-md relative z-10">
+                <form onSubmit={handleUpdate}>
+                    <label className="block mb-4">
+                        Name: <input className="border border-gray-300 p-2 w-full"
+                                     type="text"
+                                     name="name"
+                                     value={props.newProductData.name}
+                                     onChange={props.handleFormInput}/>
+                    </label>
+                    <label className="block mb-4">
+                        Mængde: <input className="border border-gray-300 p-2 w-full"
+                                       type="text"
+                                       name="amount"
+                                       value={props.newProductData.amount}
+                                       onChange={props.handleFormInput}/>
+                    </label>
+                    <label className="block mb-4">
+                        Pris: <input className="border border-gray-300 p-2 w-full"
+                                     type="number"
+                                     name="price"
+                                     value={props.newProductData.price}
+                                     onChange={props.handleFormInput}/>
+                    </label>
+                    <label className="block mb-4">
+                        Lager: <input className="border border-gray-300 p-2 w-full"
+                                      type="number"
+                                      name="stock"
+                                      value={props.newProductData.stock}
+                                      onChange={props.handleFormInput}/>
+                    </label>
+                    <label className="block mb-4">
+                        Kategorier:
+                        <Creatable
+                            isMulti={true}
+                            value={props.selectedCategories.map(category => ({value: category, label: category}))}
+                            onChange={props.handleCategoryChange}
+                            options={Array.from(new Set(props.products.flatMap(product =>
+                                product.categories.map(category => category.category.name))))
+                                .map((categoryName, index) => ({
+                                    value: categoryName,
+                                    label: categoryName,
+                                    key: index
+                                }))}/>
+                    </label>
+                    <div className="flex justify-around mt-20">
+                        <button
+                            className="bg-next-darker-orange text-next-blue py-2 px-4 rounded hover:bg-next-blue hover:text-next-orange"
+                            type="submit"
+                        >
+                            <FaCheck size={25}/>
+                        </button>
+                        <button
+                            className="bg-next-blue text-next-orange py-2 px-4 rounded hover:bg-next-darker-orange hover:text-next-blue ml-4"
+                            onClick={() => props.setShowUpdateModal(false)}
+                        >
+                            <IoCloseSharp size={25}/>
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    )
+
+}
+
 function ProductOverview({channel}: {
     channel: ChannelType
 }) {
@@ -209,29 +319,6 @@ function ProductOverview({channel}: {
         setShowUpdateModal(true);
     };
 
-    const handleUpdate = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
-        e.preventDefault();
-
-        const updatedProduct: IUpdateProduct = {
-            id: selectedProduct?.id || '',
-            name: newProductData.name + ", " + newProductData.amount,
-            price: newProductData.price,
-            stock: newProductData.stock,
-            channel: newProductData.channel
-        };
-
-        try {
-            await update(updatedProduct);
-            setShowUpdateModal(false);
-            setNewProductData({name: '', amount: "", price: 0, stock: 0, categories: [], channel: channel});
-            setSelectedCategories([]);
-            setSelectedProduct(null);
-            notifySuccess('Produktet er redigeret')
-        } catch (e) {
-            console.error(e);
-        }
-    };
-
     //------------------ handle all form input both for create and update ------------------//
 
     const handleFormInput = (e: ChangeEvent<HTMLInputElement>) => {
@@ -246,7 +333,6 @@ function ProductOverview({channel}: {
         }));
     };
 
-
     //------------------ create ------------------//
 
     const handleCategoryChange = (newValue: Options<{ value: string }>, actionMeta: ActionMeta<{ value: string }>) => {
@@ -254,7 +340,6 @@ function ProductOverview({channel}: {
             setSelectedCategories(newValue.map((option: { value: string }) => option.value));
         }
     };
-
 
     //------------------ delete ------------------//
 
@@ -292,73 +377,23 @@ function ProductOverview({channel}: {
                     handleCategoryChange={handleCategoryChange}
                     handleFormInput={handleFormInput}
                 />)}
-                {showUpdateModal && (
-                    <div className="fixed inset-0 flex items-center justify-center">
-                        <div className="bg-black bg-opacity-50 absolute inset-0 backdrop-blur-md"></div>
-                        <div className="bg-white p-8 rounded-md relative z-10">
-                            <form onSubmit={handleUpdate}>
-                                <label className="block mb-4">
-                                    Name: <input className="border border-gray-300 p-2 w-full"
-                                                 type="text"
-                                                 name="name"
-                                                 value={newProductData.name}
-                                                 onChange={handleFormInput}/>
-                                </label>
-                                <label className="block mb-4">
-                                    Mængde: <input className="border border-gray-300 p-2 w-full"
-                                                   type="text"
-                                                   name="amount"
-                                                   value={newProductData.amount}
-                                                   onChange={handleFormInput}/>
-                                </label>
-                                <label className="block mb-4">
-                                    Pris: <input className="border border-gray-300 p-2 w-full"
-                                                 type="number"
-                                                 name="price"
-                                                 value={newProductData.price}
-                                                 onChange={handleFormInput}/>
-                                </label>
-                                <label className="block mb-4">
-                                    Lager: <input className="border border-gray-300 p-2 w-full"
-                                                  type="number"
-                                                  name="stock"
-                                                  value={newProductData.stock}
-                                                  onChange={handleFormInput}/>
-                                </label>
-                                <label className="block mb-4">
-                                    Kategorier:
-                                    <Creatable
-                                        isMulti={true}
-                                        value={selectedCategories.map(category => ({value: category, label: category}))}
-                                        onChange={handleCategoryChange}
-                                        options={Array.from(new Set(products.flatMap(product =>
-                                            product.categories.map(category => category.category.name))))
-                                            .map((categoryName, index) => ({
-                                                value: categoryName,
-                                                label: categoryName,
-                                                key: index
-                                            }))}/>
-                                </label>
-                                <div className="flex justify-around mt-20">
-                                    <button
-                                        className="bg-next-darker-orange text-next-blue py-2 px-4 rounded hover:bg-next-blue hover:text-next-orange"
-                                        type="submit"
-                                    >
-                                        <FaCheck size={25}/>
-                                    </button>
-                                    <button
-                                        className="bg-next-blue text-next-orange py-2 px-4 rounded hover:bg-next-darker-orange hover:text-next-blue ml-4"
-                                        onClick={() => setShowUpdateModal(false)}
-                                    >
-                                        <IoCloseSharp size={25}/>
-                                    </button>
-                                </div>
-
-                            </form>
-                        </div>
-                    </div>
+                {showUpdateModal && (<UpdateModal
+                        update={update}
+                        notifySuccess={notifySuccess}
+                        notifyError={notifyError}
+                        channel={channel}
+                        selectedCategories={selectedCategories}
+                        setShowUpdateModal={setShowUpdateModal}
+                        newProductData={newProductData}
+                        products={products}
+                        handleCategoryChange={handleCategoryChange}
+                        selectedProduct={selectedProduct}
+                        setSelectedProduct={setSelectedProduct}
+                        handleFormInput={handleFormInput}
+                        setNewProductData={setNewProductData}
+                        setSelectedCategories={setSelectedCategories}
+                    />
                 )}
-
                 {showDeleteConfirmation && (<DeleteModal
                     setProductToDelete={setProductToDelete}
                     setShowDeleteConfirmation={setShowDeleteConfirmation}
