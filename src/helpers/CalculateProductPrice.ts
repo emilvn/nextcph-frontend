@@ -1,6 +1,5 @@
 function calculateProductsTotalPrice(price: number, qty: number): number {
-    const totalPrice: number = price * qty;
-    return totalPrice;
+    return price * qty;
 }
 
 export { calculateProductsTotalPrice }
