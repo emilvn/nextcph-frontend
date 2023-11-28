@@ -83,6 +83,13 @@ function ProductForm(props: IProductFormProps) {
 				isMulti={true}
 				onChange={props.handleCategoryChange}
 				value={props.selectedCategories?.map(category => ({value: category, label: category}))}
+				//brug getCategories fra helpers/categories.ts når merget til main
+				/*options={getCategories(props.products).map((categoryName, index) => ({
+					value: categoryName,
+					label: categoryName,
+					key: index
+				}))}
+				 */
 				options={Array.from(new Set(props.products.flatMap(product =>
 					product.categories.map(category => category.category.name))))
 					.map((categoryName, index) => ({
