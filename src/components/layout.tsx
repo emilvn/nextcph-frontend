@@ -27,7 +27,7 @@ function PageLayout({ children }:PropsWithChildren) {
 			<main className="mt-20 mr-20 ml-20 w-auto bg-white z-10 relative">
 				{children}
 			</main>
-			<div className="h-[calc(60vh-80px)]"></div>
+			<div className="h-[calc(60vh-80px)] bg-next-white"></div>
 			<Footer/>
 	</>
 	);
