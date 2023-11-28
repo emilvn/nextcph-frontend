@@ -19,7 +19,7 @@ interface IProductFormData {
 interface IProductFormProps {
 	onSubmit: SubmitHandler<IProductFormData>;
 	products: IProduct[];
-	setModal: Dispatch<SetStateAction<boolean>>;
+	setIsOpenModal: Dispatch<SetStateAction<boolean>>;
 	handleCategoryChange: (newValue: Options<{ value: string }>, actionMeta: ActionMeta<{ value: string }>) => void;
 	title: string;
 	selectedProduct?: IProduct | null;
@@ -42,7 +42,7 @@ function ProductForm(props: IProductFormProps) {
 	const submitForm: SubmitHandler<IProductFormData> = async (data) => {
 		data.categories = props.selectedCategories;
 		await props.onSubmit(data);
-		props.setModal(false);
+		props.setIsOpenModal(false);
 		reset();
 		props.setSelectedCategories([]);
 	}
@@ -100,7 +100,7 @@ function ProductForm(props: IProductFormProps) {
 				</button>
 				<button
 					className="border-[1.5px] border-next-darker-orange bg-next-blue text-next-orange py-2 px-4 hover:bg-next-darker-orange hover:text-next-blue ml-4"
-					onClick={() => props.setModal(false)}
+					onClick={() => props.setIsOpenModal(false)}
 				>
 					<IoCloseSharp size={25}/>
 				</button>

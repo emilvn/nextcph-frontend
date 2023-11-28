@@ -4,6 +4,7 @@ import ProductForm, {type IProductFormData} from "./ProductForm.tsx";
 import Modal from "../../../components/Modal.tsx";
 import type {ChannelType} from "../../../types/channel.types.ts";
 import type {ActionMeta, Options} from "react-select";
+import toast from "react-hot-toast";
 
 interface IModalProps {
 	channel: ChannelType;
@@ -11,10 +12,6 @@ interface IModalProps {
 		selectedCategories: string[];
 		setSelectedCategories: Dispatch<SetStateAction<string[]>>;
 		handleCategoryChange: (newValue: Options<{ value: string }>, actionMeta: ActionMeta<{ value: string }>) => void;
-	};
-	notifiers: {
-		notifySuccess: (message: string) => string;
-		notifyError: (message: string) => string;
 	};
 }
 
@@ -25,7 +22,7 @@ interface ICreateModalProps extends IModalProps {
 }
 
 function CreateModal(props: ICreateModalProps) {
-	const {categoryState, notifiers, create, setIsOpenCreate, channel, products} = props;
+	const {categoryState, create, setIsOpenCreate, channel, products} = props;
 	const handleSubmit = async (data: IProductFormData): Promise<void> => {
 		const newProduct: INewProduct = {
 			name: `${data.name || ''}, ${data.amount || ''}`,
@@ -36,7 +33,7 @@ function CreateModal(props: ICreateModalProps) {
 		}
 		void create(newProduct);
 		props.setIsOpenCreate(false);
-		notifiers.notifySuccess('Produkt oprettet');
+		toast.success('Produkt oprettet');
 		categoryState.setSelectedCategories([]);
 	}
 
@@ -49,7 +46,7 @@ function CreateModal(props: ICreateModalProps) {
 				handleCategoryChange={categoryState.handleCategoryChange}
 				onSubmit={handleSubmit}
 				products={products}
-				setModal={setIsOpenCreate}
+				setIsOpenModal={setIsOpenCreate}
 			/>
 		</Modal>
 	);

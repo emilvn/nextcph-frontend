@@ -1,9 +1,10 @@
 import type {IProduct} from "../../../types/products.types.ts";
 import type {Dispatch, SetStateAction} from "react";
+import type {INewProduct, IUpdateProduct} from "../../../types/products.types.ts";
 import {FaCheck} from "react-icons/fa";
 import {IoCloseSharp} from "react-icons/io5";
 import Modal from "../../../components/Modal.tsx";
-import {INewProduct, IUpdateProduct} from "../../../types/products.types.ts";
+import toast from "react-hot-toast";
 
 interface IDeleteModalProps {
 	productState: {
@@ -17,14 +18,10 @@ interface IDeleteModalProps {
 		setProductToDelete: Dispatch<SetStateAction<IProduct | null>>;
 	};
 	setIsOpenDelete: Dispatch<SetStateAction<boolean>>;
-	notifiers: {
-		notifySuccess: (message: string) => string;
-		notifyError: (message: string) => string;
-	};
 }
 
 function DeleteModal(props: IDeleteModalProps) {
-	const {productState, setIsOpenDelete, notifiers} = props;
+	const {productState, setIsOpenDelete} = props;
 	const closeDeleteConfirmation = () => {
 		productState.setProductToDelete(null);
 		setIsOpenDelete(false);
@@ -33,9 +30,9 @@ function DeleteModal(props: IDeleteModalProps) {
 		if (productState.productToDelete) {
 			await productState.destroy(productState.productToDelete);
 			closeDeleteConfirmation();
-			notifiers.notifySuccess('Produktet er slettet')
+			toast.success('Produktet er slettet')
 		} else {
-			notifiers.notifyError('fejl ved sletning af produkt')
+			toast.error('Fejl ved sletning af produkt')
 		}
 	};
 

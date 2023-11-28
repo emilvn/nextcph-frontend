@@ -3,6 +3,7 @@ import {Dispatch, SetStateAction} from "react";
 import ProductForm, {IProductFormData} from "./ProductForm.tsx";
 import Modal from "../../../components/Modal.tsx";
 import type {IModalProps} from "./CreateModal.tsx";
+import toast from "react-hot-toast";
 
 interface IUpdateModalProps extends IModalProps {
 	productState: {
@@ -19,9 +20,12 @@ interface IUpdateModalProps extends IModalProps {
 }
 
 function UpdateModal(props: IUpdateModalProps) {
-	const {productState, categoryState, channel, notifiers, setIsOpenUpdate} = props;
+	const {productState, categoryState, channel, setIsOpenUpdate} = props;
 	const handleUpdate = async (data: IProductFormData): Promise<void> => {
-		if(!productState.selectedProduct) return;
+		if(!productState.selectedProduct) {
+			toast.error('Fejl ved redigering af produkt');
+			return;
+		}
 		const updatedProduct: IUpdateProduct = {
 			id: productState.selectedProduct.id,
 			name: `${data.name || ''}, ${data.amount || ''}`,
@@ -33,7 +37,7 @@ function UpdateModal(props: IUpdateModalProps) {
 		setIsOpenUpdate(false);
 		categoryState.setSelectedCategories([]);
 		productState.setSelectedProduct(null);
-		notifiers.notifySuccess('Produktet er redigeret')
+		toast.success('Produktet er opdateret')
 	};
 
 	return (
@@ -46,7 +50,7 @@ function UpdateModal(props: IUpdateModalProps) {
 				products={productState.products}
 				selectedProduct={productState.selectedProduct}
 				selectedCategories={categoryState.selectedCategories}
-				setModal={setIsOpenUpdate}
+				setIsOpenModal={setIsOpenUpdate}
 			/>
 		</Modal>
 	);
