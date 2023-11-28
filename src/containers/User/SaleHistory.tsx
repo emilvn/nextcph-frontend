@@ -22,7 +22,7 @@ function ButtonFilterSales({ setCurrentSales, sales, user }: ButtonFilterSalesPr
 	const [isMySalesToggleClicked, setMySalesToggleClicked] = useState(false);
 	const [buttonText, setButtonText] = useState("Mine salg");
 
-	if (!user) return <div>No User</div>
+	if (!user) return <div>Bruger ikke fundet...</div>
 
 	function toggleMySales() {
 		if (isMySalesToggleClicked) {
@@ -87,7 +87,7 @@ function SaleHistory({ channel }: { channel: ChannelType }) {
 	}, [sales]);
 
 	if (isLoading) return (<Loading.LoadingPage />);
-	if (!sales || sales.length === 0) return (<PageLayout>No sales found...</PageLayout>);
+	if (!sales || sales.length === 0) return (<PageLayout>Salg ikke fundet...</PageLayout>);
 
 	return (
 		<div className="bg-next-blue">
