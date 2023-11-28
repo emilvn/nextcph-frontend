@@ -1,9 +1,9 @@
 import PageLayout from '../../components/layout.tsx';
-import {ChannelType} from '../../types/channel.types.ts';
+import type {ChannelType} from '../../types/channel.types.ts';
 import useProducts from '../../hooks/useProducts.ts';
-import {IProduct, INewProduct, IUpdateProduct} from '../../types/products.types.ts';
+import type {IProduct, INewProduct, IUpdateProduct} from '../../types/products.types.ts';
 import loading from '../../components/loading.tsx';
-import React, {ChangeEvent, Dispatch, SetStateAction, useState} from 'react';
+import {type ChangeEvent, type Dispatch, type FormEvent, type SetStateAction, useState} from 'react';
 import Creatable from 'react-select/creatable';
 import toast, {Toaster} from 'react-hot-toast';
 import {FaCheck} from "react-icons/fa";
@@ -16,7 +16,7 @@ interface INewProductData {
     price: number;
     stock: number;
     channel: ChannelType;
-    categories: string[]
+    categories: string[];
 }
 
 interface ICreateModalProps {
@@ -34,12 +34,12 @@ interface ICreateModalProps {
 }
 
 interface IDeleteModalProps {
-    destroy: (product: IProduct) => Promise<void>
+    destroy: (product: IProduct) => Promise<void>;
     setShowDeleteConfirmation: Dispatch<SetStateAction<boolean>>;
     notifySuccess: (message: string) => string;
     notifyError: (message: string) => string;
     setProductToDelete: Dispatch<SetStateAction<IProduct | null>>;
-    productToDelete: IProduct | null
+    productToDelete: IProduct | null;
     channel: ChannelType;
 }
 
@@ -52,20 +52,20 @@ interface IUpdateModalProps {
     notifySuccess: (message: string) => string;
     notifyError: (message: string) => string;
     update: (product: IUpdateProduct) => Promise<void>;
-    selectedProduct: IUpdateProduct | null
+    selectedProduct: IUpdateProduct | null;
     setSelectedProduct: Dispatch<SetStateAction<IUpdateProduct | null>>;
     handleFormInput: (e: ChangeEvent<HTMLInputElement>) => void;
     setNewProductData: Dispatch<SetStateAction<INewProductData>>;
-    setSelectedCategories: Dispatch<SetStateAction<string[]>>
+    setSelectedCategories: Dispatch<SetStateAction<string[]>>;
     setShowUpdateModal: Dispatch<SetStateAction<boolean>>;
 }
 
-interface IProductTableBodyProps {
+interface IProductTableProps {
     products: IProduct[];
     setSelectedProduct: Dispatch<SetStateAction<IUpdateProduct | null>>;
     setNewProductData: Dispatch<SetStateAction<INewProductData>>;
-    channel: ChannelType
-    setSelectedCategories: Dispatch<SetStateAction<string[]>>
+    channel: ChannelType;
+    setSelectedCategories: Dispatch<SetStateAction<string[]>>;
     setShowUpdateModal: Dispatch<SetStateAction<boolean>>;
     setProductToDelete: Dispatch<SetStateAction<IProduct | null>>;
     setShowDeleteConfirmation: Dispatch<SetStateAction<boolean>>;
@@ -73,7 +73,7 @@ interface IProductTableBodyProps {
 }
 
 function CreateModal(props: ICreateModalProps) {
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault()
 
         const newProduct: INewProduct = {
@@ -197,7 +197,7 @@ function DeleteModal(props: IDeleteModalProps) {
 }
 
 function UpdateModal(props: IUpdateModalProps) {
-    const handleUpdate = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+    const handleUpdate = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
 
         const updatedProduct: IUpdateProduct = {
@@ -291,21 +291,62 @@ function UpdateModal(props: IUpdateModalProps) {
 
 function ProductTableHeader() {
     return (
-        <thead>
-        <tr>
-            <th className="text-left text-2xl">Navn</th>
-            <th className="text-left text-2xl">Mængde</th>
-            <th className="text-left text-2xl">Pris</th>
-            <th className="text-left text-2xl">Lager</th>
-            <th className="text-left text-2xl">Kategori</th>
-            <th className="text-left text-2xl">Opdatere</th>
-            <th className="text-left text-2xl">Slet</th>
-        </tr>
+        <thead className="text-3xl">
+            <tr>
+                <th className="text-left p-2">Navn</th>
+                <th className="text-left p-2">Mængde</th>
+                <th className="text-left p-2">Pris</th>
+                <th className="text-left p-2">Lager</th>
+                <th className="text-left p-2">Kategori</th>
+                <th></th>
+                <th></th>
+            </tr>
         </thead>
     )
 }
 
-function ProductTableBody(props: IProductTableBodyProps) {
+interface IProductRowProps {
+    product: IProduct;
+    handleEdit: (product: IProduct) => void;
+    handleDelete: (product: IProduct) => void;
+}
+function ProductRow(props: IProductRowProps) {
+    const {product, handleEdit, handleDelete} = props;
+    return (
+            <tr key={product.id} className="border-b text-xl text-next-blue">
+                <td className="p-2">{product.name ? product.name.split(",")[0] : 'N/A'}</td>
+                <td className="p-2">{product.name && product.name.split(",")[1] ? product.name.split(",")[1].trim() : 'N/A'}</td>
+                <td className="p-2">{product.price}</td>
+                <td className="p-2">{product.stock}</td>
+                <td className="p-2">
+                    <ul>
+                        {product.categories.map((category) => (
+                            <li key={category.category.id}>{category.category.name}</li>
+                        ))}
+                    </ul>
+                </td>
+                <td>
+                    <button
+                        //erstat hele denne style med btn-white, på nær w-24
+                        className="bg-next-white font-bold text-next-blue p-2 border-[1.5px] border-next-blue hover:bg-next-blue hover:text-next-white transition-colors w-24"
+                        onClick={() => handleEdit(product)}
+                    >
+                        Rediger
+                    </button>
+                </td>
+                <td>
+                    <button
+                        //erstat hele denne style med btn-white, på nær w-24
+                        className="bg-next-white font-bold text-next-blue p-2 border-[1.5px] border-next-blue hover:bg-next-blue hover:text-next-white transition-colors w-24"
+                        onClick={() => handleDelete(product)}
+                    >
+                        Slet
+                    </button>
+                </td>
+            </tr>
+    );
+}
+function ProductTable(props: IProductTableProps) {
     const handleEdit = (product: IProduct) => {
         props.setSelectedProduct(product);
         const nameWithoutAmount = product.name.split(',')[0].trim(); // Extract name without amount
@@ -332,40 +373,20 @@ function ProductTableBody(props: IProductTableBodyProps) {
     };
 
     return (
-        <tbody>
-        {props.products &&
-            props.products.map((product) => (
-                <tr key={product.id} className="border-b">
-                    <td className="py-2">{product.name ? product.name.split(",")[0] : 'N/A'}</td>
-                    <td className="py-2">{product.name && product.name.split(",")[1] ? product.name.split(",")[1].trim() : 'N/A'}</td>
-                    <td className="py-2">{product.price}</td>
-                    <td className="py-2">{product.stock}</td>
-                    <td className="py-2">
-                        <ul>
-                            {product.categories.map((category) => (
-                                <li key={category.category.id}>{category.category.name}</li>
-                            ))}
-                        </ul>
-                    </td>
-                    <td>
-                        <button
-                            className="bg-next-darker-orange font-bold text-next-blue py-1 px-2 rounded hover:bg-next-blue hover:text-next-orange"
-                            onClick={() => handleEdit(product)}
-                        >
-                            Rediger
-                        </button>
-                    </td>
-                    <td>
-                        <button
-                            className="bg-next-blue text-next-orange font-bold py-1 px-2 rounded hover:bg-next-darker-orange hover:text-next-blue"
-                            onClick={() => handleDelete(product)}
-                        >
-                            Slet
-                        </button>
-                    </td>
-                </tr>
+        <table className="w-full">
+            <ProductTableHeader/>
+            <tbody>
+            {props.products && props.products.map((product) => (
+                <ProductRow
+                    key={product.id}
+                    product={product}
+                    handleEdit={handleEdit}
+                    handleDelete={handleDelete}
+                />
             ))}
-        </tbody>
+
+            </tbody>
+        </table>
     )
 }
 
@@ -419,71 +440,68 @@ function ProductOverview({channel}: {
 
     return (
         <PageLayout>
-            <div className="my-4">
-                <h2 className="text-3xl font-bold text-black mb-4">Produkter</h2>
+            <div className="fixed top-20 left-20 right-20 flex p-4 bg-next-blue items-center justify-between">
+                <h2 className="text-3xl font-bold text-next-darker-orange">PRODUKTER</h2>
                 <button
-                    className="bg-next-blue text-next-orange font-bold py-2 px-4 rounded hover:bg-next-darker-orange hover:text-next-blue mb-4"
+                    //erstat hele denne style med btn-blue
+                    className="border-[1.5px] border-next-darker-orange p-4 bg-next-blue text-next-orange font-bold hover:bg-next-darker-orange hover:text-next-blue transition-colors"
                     onClick={() => setShowCreateModal(true)}
                 >
-                    Opret Produkt
+                    Tilføj Produkt
                 </button>
-                {showCreateModal && (<CreateModal
-                    selectedCategories={selectedCategories}
-                    setShowCreateModal={setShowCreateModal}
-                    setNewProductData={setNewProductData}
-                    notifySuccess={notifySuccess}
-                    notifyError={notifyError}
-                    newProductData={newProductData}
-                    create={create}
+            </div>
+            <div className="mt-40">
+                {isLoading && <loading.LoadingSpinner/>}
+                {!isLoading && (<ProductTable
                     channel={channel}
+                    setSelectedProduct={setSelectedProduct}
+                    setNewProductData={setNewProductData}
                     products={products}
-                    handleCategoryChange={handleCategoryChange}
-                    handleFormInput={handleFormInput}
-                />)}
-                {showUpdateModal && (<UpdateModal
-                        update={update}
-                        notifySuccess={notifySuccess}
-                        notifyError={notifyError}
-                        channel={channel}
-                        selectedCategories={selectedCategories}
-                        setShowUpdateModal={setShowUpdateModal}
-                        newProductData={newProductData}
-                        products={products}
-                        handleCategoryChange={handleCategoryChange}
-                        selectedProduct={selectedProduct}
-                        setSelectedProduct={setSelectedProduct}
-                        handleFormInput={handleFormInput}
-                        setNewProductData={setNewProductData}
-                        setSelectedCategories={setSelectedCategories}
-                    />
-                )}
-                {showDeleteConfirmation && (<DeleteModal
+                    setSelectedCategories={setSelectedCategories}
+                    setShowUpdateModal={setShowUpdateModal}
                     setProductToDelete={setProductToDelete}
                     setShowDeleteConfirmation={setShowDeleteConfirmation}
-                    destroy={destroy}
-                    productToDelete={productToDelete}
+                />)}
+            </div>
+            {showCreateModal && (<CreateModal
+                selectedCategories={selectedCategories}
+                setShowCreateModal={setShowCreateModal}
+                setNewProductData={setNewProductData}
+                notifySuccess={notifySuccess}
+                notifyError={notifyError}
+                newProductData={newProductData}
+                create={create}
+                channel={channel}
+                products={products}
+                handleCategoryChange={handleCategoryChange}
+                handleFormInput={handleFormInput}
+            />)}
+            {showUpdateModal && (<UpdateModal
+                    update={update}
                     notifySuccess={notifySuccess}
                     notifyError={notifyError}
                     channel={channel}
-                />)}
-                {isLoading ? (
-                    <loading.LoadingSpinner/>
-                ) : (
-                    <table className="min-w-full">
-                        <ProductTableHeader/>
-                        <ProductTableBody
-                            channel={channel}
-                            setSelectedProduct={setSelectedProduct}
-                            setNewProductData={setNewProductData}
-                            products={products}
-                            setSelectedCategories={setSelectedCategories}
-                            setShowUpdateModal={setShowUpdateModal}
-                            setProductToDelete={setProductToDelete}
-                            setShowDeleteConfirmation={setShowDeleteConfirmation}
-                        />
-                    </table>
-                )}
-            </div>
+                    selectedCategories={selectedCategories}
+                    setShowUpdateModal={setShowUpdateModal}
+                    newProductData={newProductData}
+                    products={products}
+                    handleCategoryChange={handleCategoryChange}
+                    selectedProduct={selectedProduct}
+                    setSelectedProduct={setSelectedProduct}
+                    handleFormInput={handleFormInput}
+                    setNewProductData={setNewProductData}
+                    setSelectedCategories={setSelectedCategories}
+                />
+            )}
+            {showDeleteConfirmation && (<DeleteModal
+                setProductToDelete={setProductToDelete}
+                setShowDeleteConfirmation={setShowDeleteConfirmation}
+                destroy={destroy}
+                productToDelete={productToDelete}
+                notifySuccess={notifySuccess}
+                notifyError={notifyError}
+                channel={channel}
+            />)}
             <Toaster
                 reverseOrder={false}
                 toastOptions={{
