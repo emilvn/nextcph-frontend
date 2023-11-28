@@ -36,7 +36,7 @@ function NavCategory({category}:{category:string}) {
 	return (
 		<a
 			href={`#${category}`}
-			className="font-semibold text-next-darker-orange cursor-pointer border p-2 border-next-darker-orange hover:bg-next-darker-orange hover:text-next-blue w-full"
+			className="btn-blue w-full"
 		>
 			{category}
 		</a>
@@ -91,10 +91,10 @@ function Product({product}:{product:IProduct}) {
 					<p>Pris: {product.price},-</p>
 				</div>
 				<div className="flex flex-col gap-2">
-					<button className="border border-next-blue p-2 text-next-blue text-xl font-semibold hover:bg-next-blue hover:text-next-white transition-colors">
+					<button className="btn-white text-xl">
 						<FaPlus className="text-xl inline-block"/> Tilføj til salg
 					</button>
-					<button className="border border-next-blue p-2 text-next-blue text-xl font-semibold hover:bg-next-blue hover:text-next-white transition-colors">
+					<button className="btn-white text-xl">
 						<FaMinus className="text-xl inline-block"/> Fjern fra salg
 					</button>
 				</div>

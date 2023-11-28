@@ -15,7 +15,7 @@ function Login() {
                             </h2>
                             <SignUpButton mode={"modal"}>
                                     <button
-                                        className="bg-next-blue border-[1.5px] border-next-darker-orange text-next-darker-orange font-bold p-4 text-2xl w-60 hover:bg-next-darker-orange hover:text-next-blue transition-colors md:ml-8">
+                                        className="btn-blue font-bold p-4 text-2xl w-60 md:ml-8">
                                         Opret bruger
                                     </button>
                             </SignUpButton>
@@ -26,7 +26,7 @@ function Login() {
                             </h2>
                             <SignInButton mode={"modal"}>
                                 <button
-                                    className="md:ml-8 bg-next-darker-orange text-next-blue font-bold p-4 text-2xl w-60 hover:bg-next-blue hover:text-next-darker-orange border-[1.5px] border-next-blue transition-colors">
+                                    className="btn-orange md:ml-8 font-bold p-4 text-2xl w-60">
                                     Log ind
                                 </button>
                             </SignInButton>
