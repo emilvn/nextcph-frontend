@@ -25,7 +25,7 @@ function ButtonFilterSales({ setCurrentSales, sales, user }: ButtonFilterSalesPr
 	if (!user) return <div>No User</div>
 
 	function toggleMySales() {
-		if (!!isMySalesToggleClicked) {
+		if (isMySalesToggleClicked) {
 			setCurrentSales(sales);
 			setButtonText("Mine salg");
 		} else {
@@ -36,7 +36,7 @@ function ButtonFilterSales({ setCurrentSales, sales, user }: ButtonFilterSalesPr
 		setMySalesToggleClicked(!isMySalesToggleClicked);
 	}
 	return (
-		<button onClick={toggleMySales} className="w-48 h-20 fixed top-24 right-24 bg-next-blue border-[1.5px] border-next-darker-orange text-next-darker-orange font-bold text-2xl hover:bg-next-darker-orange hover:text-next-blue transition-colors md:ml-8">{buttonText}</button>
+		<button onClick={toggleMySales} className="btn-blue w-48 h-20 fixed top-24 right-24 text-2xl">{buttonText}</button>
 	)
 }
 
