@@ -36,18 +36,18 @@ function ButtonFilterSales({ setCurrentSales, sales, user }: ButtonFilterSalesPr
 		setMySalesToggleClicked(!isMySalesToggleClicked);
 	}
 	return (
-		<button onClick={toggleMySales} className="btn-blue w-48 h-20 fixed top-24 right-24 text-2xl">{buttonText}</button>
+		<button onClick={toggleMySales} className="btn-blue w-48 h-20 text-2xl">{buttonText}</button>
 	)
 }
 
 function SaleList({ sales }: { sales: ISale[] }) {
 	const groupedSales: { [key: string]: ISale[] } = groupSalesByDate({ sales });
 	return (
-		<div>
+		<div className="mt-16 flex flex-col gap-[1px]">
 			{Object.entries(groupedSales).map(([group, salesInGroup]) => (
 				<div key={group}>
-					<h1 className="pt-10 text-2xl font-semibold">{group}</h1>
-					<ul>
+					<h1 className="pt-10 text-3xl font-bold">{group}</h1>
+					<ul className="flex flex-col gap-[1px] bg-white">
 						{salesInGroup.map((sale) => (
 							<Sale key={sale.id} sale={sale} />
 						))}
@@ -60,21 +60,33 @@ function SaleList({ sales }: { sales: ISale[] }) {
 
 function Sale({ sale }: { sale: ISale }) {
 	return (
-		<div>
-			<div className="pt-4 text-lg font-semibold">{convertToDanishTime(sale.created_at)}</div>
-			{sale.products.map((product) => (
-				<Product key={product.product.id} product={product} />
-			))}
+		<div className="bg-next-white">
+			<div className="pt-4 text-2xl font-semibold text-next-blue">{convertToDanishTime(sale.created_at)}</div>
+			<table>
+				<thead>
+					<tr className="text-left">
+						<th>Produkt</th>
+						<th>Antal</th>
+						<th>Pris</th>
+					</tr>
+				</thead>
+				<tbody>
+					{sale.products.map((product) => (
+						<Product key={product.product.id} product={product} />
+					))}
+				</tbody>
+			</table>
 		</div>
 	)
 }
 
 function Product({ product }: { product: ISaleProduct }) {
 	return (
-		<div className="flex justify-between w-96 text-white">
-			<div className="pr-1">{product.product_quantity}x {product.product.name}</div>
-			<div>{calculateProductsTotalPrice(product.product.price, product.product_quantity)},-</div>
-		</div>)
+		<tr className="text-next-blue border-y border-white font-semibold">
+			<td className="w-[32rem] p-4">{product.product.name}</td>
+			<td className="w-20">{product.product_quantity} stk.</td>
+			<td>{calculateProductsTotalPrice(product.product.price, product.product_quantity)},-</td>
+		</tr>)
 }
 
 function SaleHistory({ channel }: { channel: ChannelType }) {
@@ -95,7 +107,7 @@ function SaleHistory({ channel }: { channel: ChannelType }) {
 		<PageLayout>
 			<div className="bg-next-white text-next-darker-orange p-3 flex justify-between">
 				<div className="w-full p-4">
-					<div className="bg-next-blue p-4 fixed">
+					<div className="bg-next-blue p-4 fixed top-20 left-20 right-20 flex justify-between items-center">
 						<h1 className="text-4xl font-bold">Salgshistorik</h1>
 						<ButtonFilterSales setCurrentSales={setCurrentSales} sales={sales} user={user} />
 					</div>
