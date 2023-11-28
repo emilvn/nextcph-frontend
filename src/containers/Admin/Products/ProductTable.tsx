@@ -40,7 +40,7 @@ function ProductRow(props: IProductRowProps) {
 			</td>
 			<td>
 				<button
-					//erstat hele denne style med btn-white, på nær w-24
+					//TODO: erstat hele denne style med btn-white, på nær w-24
 					className="bg-next-white font-bold text-next-blue p-2 border-[1.5px] border-next-blue hover:bg-next-blue hover:text-next-white transition-colors w-24"
 					onClick={() => handleEdit(product)}
 				>
@@ -49,7 +49,7 @@ function ProductRow(props: IProductRowProps) {
 			</td>
 			<td>
 				<button
-					//erstat hele denne style med btn-white, på nær w-24
+					//TODO: erstat hele denne style med btn-white, på nær w-24
 					className="bg-next-white font-bold text-next-blue p-2 border-[1.5px] border-next-blue hover:bg-next-blue hover:text-next-white transition-colors w-24"
 					onClick={() => handleDelete(product)}
 				>

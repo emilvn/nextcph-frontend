@@ -83,7 +83,7 @@ function ProductForm(props: IProductFormProps) {
 				isMulti={true}
 				onChange={props.handleCategoryChange}
 				value={props.selectedCategories?.map(category => ({value: category, label: category}))}
-				//brug getCategories fra helpers/categories.ts når merget til main
+				//TODO: brug getCategories fra helpers/categories.ts når merget til main
 				/*options={getCategories(props.products).map((categoryName, index) => ({
 					value: categoryName,
 					label: categoryName,
@@ -100,12 +100,14 @@ function ProductForm(props: IProductFormProps) {
 			/>
 			<div className="flex justify-around mt-10">
 				<button
+					//TODO: erstat hele denne style med btn-orange, på nær px-4 py-2
 					className="bg-next-darker-orange text-next-blue px-4 py-2 border-[1.5px] border-next-blue hover:bg-next-blue hover:text-next-orange"
 					type="submit"
 				>
 					<FaCheck size={25}/>
 				</button>
 				<button
+					//TODO: erstat hele denne style med btn-orange, på nær px-4 py-2
 					className="border-[1.5px] border-next-darker-orange bg-next-blue text-next-orange py-2 px-4 hover:bg-next-darker-orange hover:text-next-blue ml-4"
 					onClick={() => props.setIsOpenModal(false)}
 				>
