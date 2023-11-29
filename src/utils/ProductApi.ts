@@ -10,7 +10,7 @@ class ProductApi extends Api<IProduct, INewProduct> {
 		this.url = this.endpoint + "/products";
 	}
 	public async getByChannel(channel:ChannelType): Promise<IProduct[]> {
-		const response = await axios.get(this.url + "/?channel=" + channel);
+		const response = await axios.get(this.url + "?channel=" + channel);
 		if(response.status !== 200 || !response.data) {
 			throw new Error("Failed to fetch");
 		}

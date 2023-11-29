@@ -1,4 +1,4 @@
-import type {ISaleProduct, INewSaleProduct} from "./products.types.ts";
+import type { ISaleProduct, INewSaleProduct } from "./products.types.ts";
 
 interface INewSale {
 	id?: string;
@@ -10,8 +10,8 @@ interface ISale {
 	id: string;
 	user_id: string;
 	products: ISaleProduct[];
-	createdAt: string;
-	updatedAt: string;
+	created_at: string;
+	updated_at: string;
 }
 
-export type {INewSale, ISale}
+export type { INewSale, ISale }

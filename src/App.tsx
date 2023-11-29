@@ -13,8 +13,8 @@ import SelectChannelUser from "./containers/User/SelectChannelUser.tsx";
 import SelectChannelAdmin from "./containers/Admin/SelectChannelAdmin.tsx";
 
 function App() {
-    const {user, isLoaded, isSignedIn} = useUser();
-    const [channel, setChannel] = useState<ChannelType>("HAIR_CARE");
+    const { user, isLoaded, isSignedIn } = useUser();
+    const [channel, setChannel] = useState<ChannelType>("COSMETIC");
 
     if (!isLoaded) return (<Loading.LoadingPage/>)
 
@@ -25,7 +25,7 @@ function App() {
         <>
             <BrowserRouter>
                 {!isAdmin && <UserRoutes channel={channel} setChannel={setChannel}/>}
-                {!!isAdmin && <AdminRoutes channel={channel} setChannel={setChannel}/>}
+                {isAdmin && <AdminRoutes channel={channel} setChannel={setChannel}/>}
             </BrowserRouter>
         </>
     );
