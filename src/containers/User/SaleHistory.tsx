@@ -6,11 +6,11 @@ import type { ISale } from "../../types/sales.types.ts";
 import type { ISaleProduct } from "../../types/products.types.ts";
 import { useUser } from "@clerk/clerk-react";
 import type { UserResource } from "@clerk/types";
-import { useState, useEffect, type Dispatch, type SetStateAction } from "react";
+import {useState, useEffect, type Dispatch, type SetStateAction, ReactNode} from "react";
 import { convertToDanishTime } from "../../helpers/dateTime.ts";
 import { groupSalesByDate } from "../../helpers/groupSalesByDate.ts";
-import { sortSalesByDate } from "../../helpers/sortSalesByDate.ts";
 import { calculateProductsTotalPrice } from "../../helpers/CalculateProductPrice.ts";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 interface ButtonFilterSalesProps {
 	setCurrentSales: Dispatch<SetStateAction<ISale[]>>;
@@ -36,14 +36,14 @@ function ButtonFilterSales({ setCurrentSales, sales, user }: ButtonFilterSalesPr
 		setMySalesToggleClicked(!isMySalesToggleClicked);
 	}
 	return (
-		<button onClick={toggleMySales} className="btn-blue w-48 h-20 text-2xl">{buttonText}</button>
+		<button onClick={toggleMySales} className="btn-blue w-48 text-2xl">{buttonText}</button>
 	)
 }
 
 function SaleList({ sales }: { sales: ISale[] }) {
 	const groupedSales: { [key: string]: ISale[] } = groupSalesByDate({ sales });
 	return (
-		<div className="mt-16 flex flex-col gap-[1px]">
+		<div className="flex flex-col gap-[1px]">
 			{Object.entries(groupedSales).map(([group, salesInGroup]) => (
 				<div key={group}>
 					<h1 className="pt-10 text-3xl font-bold text-next-blue">{group}</h1>
@@ -59,6 +59,8 @@ function SaleList({ sales }: { sales: ISale[] }) {
 }
 
 function Sale({ sale }: { sale: ISale }) {
+	const totalQuantity = sale.products.reduce((acc, product) => acc + product.product_quantity, 0);
+	const totalPrice = sale.products.reduce((acc, product) => acc + calculateProductsTotalPrice(product.product.price, product.product_quantity), 0);
 	return (
 		<div className="bg-next-white">
 			<div className="pt-4 text-2xl font-semibold text-next-blue">{convertToDanishTime(sale.created_at)}</div>
@@ -74,6 +76,11 @@ function Sale({ sale }: { sale: ISale }) {
 					{sale.products.map((product) => (
 						<Product key={product.product.id} product={product} />
 					))}
+					<tr className="text-next-blue border-next-blue font-semibold border-t-[1.5px]">
+						<td className="w-[32rem] p-1 text-next-darker-orange font-bold">Total</td>
+						<td className="w-20">{totalQuantity} stk.</td>
+						<td>{totalPrice},-</td>
+					</tr>
 				</tbody>
 			</table>
 		</div>
@@ -83,36 +90,70 @@ function Sale({ sale }: { sale: ISale }) {
 function Product({ product }: { product: ISaleProduct }) {
 	return (
 		<tr className="text-next-blue border-y border-white font-semibold">
-			<td className="w-[32rem] p-4">{product.product.name}</td>
+			<td className="w-[32rem] p-1">{product.product.name}</td>
 			<td className="w-20">{product.product_quantity} stk.</td>
-			<td>{calculateProductsTotalPrice(product.product.price, product.product_quantity)},-</td>
+			<td>{product.product.price},-</td>
 		</tr>)
 }
 
+function Header({children}: {children: ReactNode}) {
+	return (
+		<div className="z-10 bg-next-blue p-2 fixed top-20 left-20 right-20 flex justify-between items-center">
+			<h1 className="text-3xl font-bold">Salgshistorik</h1>
+			{children}
+		</div>
+	);
+}
+
 function SaleHistory({ channel }: { channel: ChannelType }) {
-	const { sales, isLoading } = useSales(channel);
+	const { sales, isLoading, setPage, hasMore } = useSales(channel);
 	const { user } = useUser();
 
 	const [currentSales, setCurrentSales] = useState<ISale[]>([]);
 	useEffect(() => {
-		setCurrentSales(sortSalesByDate({ sales }));
+		setCurrentSales(sales);
 	}, [sales]);
 
 	if (isLoading) return (<Loading.LoadingPage />);
 	if (!sales || sales.length === 0) return (<PageLayout><div className="p-4 text-next-blue text-xl">Ingen salg endnu...</div></PageLayout>);
 
+	function fetchNextPage() {
+		setTimeout(() => {
+			setPage((prevPage) => prevPage + 1);
+		}, 2000);
+	}
+
 	return (
-		<PageLayout>
+		<main className="mt-20 mx-20 h-screen overflow-clip">
 			<div className="bg-next-white text-next-darker-orange p-3 flex justify-between">
 				<div className="w-full p-4">
-					<div className="bg-next-blue p-4 fixed top-20 left-20 right-20 flex justify-between items-center">
-						<h1 className="text-4xl font-bold">Salgshistorik</h1>
+					<Header>
 						<ButtonFilterSales setCurrentSales={setCurrentSales} sales={sales} user={user} />
+					</Header>
+					<div className="max-h-screen">
+						<InfiniteScroll
+							dataLength={currentSales.length}
+							next={fetchNextPage}
+							hasMore={hasMore}
+							height={window.innerHeight-200}
+							className="overscroll-none"
+							endMessage={
+								<div className="flex justify-center items-center font-bold">
+									Ikke flere salg at vise...
+								</div>
+							}
+							loader={
+								<div className="flex justify-center items-center">
+									<Loading.LoadingSpinner size={48}/>
+								</div>
+							}
+						>
+							<SaleList sales={currentSales} />
+						</InfiniteScroll>
 					</div>
-					<SaleList sales={currentSales} />
 				</div>
 			</div>
-		</PageLayout>
+		</main>
 	)
 }
 

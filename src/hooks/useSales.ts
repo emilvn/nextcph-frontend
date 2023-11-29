@@ -2,26 +2,39 @@ import { useEffect, useState } from "react";
 import type { INewSale, ISale } from "../types/sales.types.ts";
 import type { ChannelType } from "../types/channel.types.ts";
 import SaleApi from "../utils/SaleApi.ts";
+import {AxiosError} from "axios";
 
 function useSales(channel: ChannelType) {
 	const [sales, setSales] = useState<ISale[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
+	const [page, setPage] = useState(1);
+	const [hasMore, setHasMore] = useState(true);
 
 	const api = new SaleApi();
 
 	useEffect(() => {
 		async function loadSales() {
 			try {
-				const sales = await api.getByChannel(channel);
-				setSales(sales);
+				const newSalesData = await api.getByChannel(channel, page);
+				const newSales = newSalesData.data;
+
+				const uniqueSaleIds = new Set(sales.map(s => s.id));
+
+				const uniqueNewSales = newSales.filter(s => !uniqueSaleIds.has(s.id));
+
+				setSales([...sales, ...uniqueNewSales]);
+
+				if(newSalesData.pagination.totalPages === page) {
+					setHasMore(false);
+				}
 			}
-			catch (e) {
-				console.error(e);
+			catch (e:unknown) {
+				if(e instanceof AxiosError) console.error(e.response?.data || e.message);
 			}
 		}
 
 		loadSales().then(() => setIsLoading(false));
-	}, []);
+	}, [page]);
 
 	const create = async (sale: INewSale) => {
 		try {
@@ -44,7 +57,7 @@ function useSales(channel: ChannelType) {
 		}
 	}
 
-	return { sales, isLoading, create, destroy };
+	return { sales, isLoading, create, destroy, setPage, hasMore };
 }
 
 export default useSales;

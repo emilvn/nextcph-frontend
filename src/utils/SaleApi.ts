@@ -3,14 +3,24 @@ import type {INewSale, ISale} from "../types/sales.types.ts";
 import axios from "axios";
 import {ChannelType} from "../types/channel.types.ts";
 
+interface ISaleDataWithPagination {
+	data: ISale[];
+	pagination: {
+		totalCount:number,
+		totalPages:number,
+		currentPage: number,
+		pageSize: number
+	}
+}
+
 class SaleApi extends Api<ISale, INewSale> {
 	url: string;
 	constructor() {
 		super();
 		this.url = this.endpoint + "/sales";
 	}
-	public async getByChannel(channel:ChannelType): Promise<ISale[]> {
-		const response = await axios.get(this.url + "?channel=" + channel);
+	public async getByChannel(channel:ChannelType, page:number): Promise<ISaleDataWithPagination> {
+		const response = await axios.get(`${this.url}?channel=${channel}&page=${page}&pageSize=10`);
 		if(response.status !== 200 || !response.data) {
 			throw new Error("Failed to fetch");
 		}

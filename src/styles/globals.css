@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body{
+    @apply scroll-smooth bg-next-white text-next-blue overscroll-none
+}
+
 @layer components{
     .btn{
         @apply transition-colors font-semibold cursor-pointer border-[1.5px] p-2
