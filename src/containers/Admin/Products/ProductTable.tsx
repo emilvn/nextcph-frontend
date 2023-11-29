@@ -25,10 +25,14 @@ interface IProductRowProps {
 
 function ProductRow(props: IProductRowProps) {
 	const {product, handleEdit, handleDelete} = props;
+	const productNameArr = product.name.split(", ");
+	const productName = productNameArr[0];
+	const productAmount = productNameArr[1];
+
 	return (
 		<tr key={product.id} className="border-b text-xl text-next-blue">
-			<td className="p-4">{product.name ? product.name.split(", ")[0] : 'N/A'}</td>
-			<td className="p-4">{product.name && product.name.split(", ")[1] ? product.name.split(", ")[1].trim() : 'N/A'}</td>
+			<td className="p-4">{productName}</td>
+			<td className="p-4">{productAmount ? productAmount : '1 stk'}</td>
 			<td className="p-4">{product.price}</td>
 			<td className="p-4">{product.stock}</td>
 			<td className="p-4">
