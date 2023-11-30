@@ -108,11 +108,16 @@ function Header({children}: {children: ReactNode}) {
 function SaleHistory({ channel }: { channel: ChannelType }) {
 	const { sales, isLoading, setPage, hasMore } = useSales(channel);
 	const { user } = useUser();
-
 	const [currentSales, setCurrentSales] = useState<ISale[]>([]);
+	const [height, setHeight] = useState<number>(window.innerHeight - 200);
+
 	useEffect(() => {
 		setCurrentSales(sales);
 	}, [sales]);
+
+	window.onresize = () => {
+		setHeight(window.innerHeight - 200);
+	}
 
 	if (isLoading) return (<Loading.LoadingPage />);
 	if (!sales || sales.length === 0) return (<PageLayout><div className="p-4 text-next-blue text-xl">Ingen salg endnu...</div></PageLayout>);
@@ -130,12 +135,11 @@ function SaleHistory({ channel }: { channel: ChannelType }) {
 					<Header>
 						<ButtonFilterSales setCurrentSales={setCurrentSales} sales={sales} user={user} />
 					</Header>
-					<div className="max-h-screen">
 						<InfiniteScroll
 							dataLength={currentSales.length}
 							next={fetchNextPage}
 							hasMore={hasMore}
-							height={window.innerHeight-200}
+							height={height}
 							className="overscroll-none"
 							endMessage={
 								<div className="flex justify-center items-center font-bold">
@@ -150,7 +154,6 @@ function SaleHistory({ channel }: { channel: ChannelType }) {
 						>
 							<SaleList sales={currentSales} />
 						</InfiniteScroll>
-					</div>
 				</div>
 			</div>
 		</main>
