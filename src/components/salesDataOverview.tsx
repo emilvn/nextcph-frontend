@@ -1,7 +1,7 @@
-function salesDataOverview() {
+function SalesDataOverview() {
   return (
-    <div>salesDataOverview</div>
+    <div>SalesDataOverview</div>
   )
 }
 
-export default salesDataOverview
+export default SalesDataOverview
