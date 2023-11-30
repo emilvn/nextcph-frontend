@@ -59,16 +59,5 @@ export function DashboardCategory({channel}: {
 
     return (
         <Bar data={data} options={options}/>
-        /*<div>
-            <ul>
-                {sales.map(product => (
-                    <li key={product.id}>
-                        {product.products.map(category => (
-                            <span key={category.product.id}>{category.product.price}</span>
-                        ))}
-                    </li>
-                ))}
-            </ul>
-        </div>*/
     );
 }
