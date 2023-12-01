@@ -3,7 +3,7 @@ function convertToDanishDate(utcTimestamp: string): string {
 
     return date.toLocaleString('da-DK', {
         year: 'numeric',
-        month: '2-digit',
+        month: 'long',
         day: '2-digit',
     });
 }

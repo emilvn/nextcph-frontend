@@ -43,10 +43,10 @@ function ButtonFilterSales({ setCurrentSales, sales, user }: ButtonFilterSalesPr
 function SaleList({ sales}: { sales: ISale[] }) {
 	const groupedSales: { [key: string]: ISale[] } = groupSalesByDate({ sales });
 	return (
-		<div className="flex flex-col gap-[1px]">
+		<div className="flex flex-col gap-[1px] lg:w-1/2">
 			{Object.entries(groupedSales).map(([group, salesInGroup]) => (
 				<div key={group} className="bg-next-white">
-					<h1 className="pt-10 text-3xl font-bold text-next-blue">{group}</h1>
+					<h1 className="mt-10 text-3xl font-bold bg-next-blue text-next-white p-2">{group}</h1>
 					<ul className="flex flex-col gap-[1px] bg-white">
 						{salesInGroup.map((sale) => (
 							<Sale key={sale.id} sale={sale} />
@@ -120,32 +120,33 @@ function SaleHistory({ channel }: { channel: ChannelType }) {
 	function fetchNextPage() {
 		setTimeout(() => {
 			setPage((prevPage) => prevPage + 1);
-		}, 2000);
+		}, 1000);
 	}
 
-	return (<PageLayout>
-					<Header>
-						<ButtonFilterSales setCurrentSales={setCurrentSales} sales={sales} user={user} />
-					</Header>
-					<InfiniteScroll
-						dataLength={currentSales.length}
-						next={fetchNextPage}
-						hasMore={hasMore}
-						className="mt-28"
-						style={{ overflow: "hidden" }}
-						endMessage={
-							<div className="flex justify-center items-center font-bold">
-								Ikke flere salg at vise...
-							</div>
-						}
-						loader={
-							<div className="flex justify-center items-center">
-								<Loading.LoadingSpinner size={48}/>
-							</div>
-						}
-					>
-						<SaleList sales={currentSales} />
-					</InfiniteScroll>
+	return (
+		<PageLayout>
+		<Header>
+			<ButtonFilterSales setCurrentSales={setCurrentSales} sales={sales} user={user} />
+		</Header>
+		<InfiniteScroll
+			dataLength={currentSales.length}
+			next={fetchNextPage}
+			hasMore={hasMore}
+			className="mt-28 border-b bg-next-white"
+			style={{ overflow: "hidden" }}
+			endMessage={
+				<div className="flex justify-center items-center p-4 text-next-grey lg:w-1/2">
+					Ikke flere salg at vise...
+				</div>
+			}
+			loader={
+				<div className="flex justify-center items-center p-4 lg:w-1/2">
+					<Loading.LoadingSpinner size={48}/>
+				</div>
+			}
+		>
+			<SaleList sales={currentSales} />
+		</InfiniteScroll>
 	</PageLayout>
 	)
 }
