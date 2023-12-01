@@ -12,6 +12,7 @@ import {ChannelType} from "../types/channel.types.ts";
 import {getCategories} from "../helpers/categories.ts";
 import useProducts from "../hooks/useProducts.ts";
 import useSales from "../hooks/useSales.ts";
+import {convertChannelToDanish} from "../helpers/convertChannelToDanish.ts";
 
 
 export function DashboardCategory({channel}: {
@@ -74,7 +75,7 @@ export function DashboardCategory({channel}: {
             },
             title: {
                 display: true,
-                text: `Salg for hver Kategori for ${channel.toString()} hele året`,
+                text: `Salg for hver Kategori for ${convertChannelToDanish({channel})} per måned`,
             },
         },
     };
@@ -89,7 +90,7 @@ export function DashboardCategory({channel}: {
         labels,
         datasets: [
             {
-                label: channel.toString(),
+                label: convertChannelToDanish({channel}),
                 data: Object.values(categoryNumbers),
                 backgroundColor: 'rgba(255, 99, 132, 0.5)',
             },
