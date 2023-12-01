@@ -37,7 +37,7 @@ export function DashboardCategory({channel}: {
         };
     });
 
-    function calculateCategoryNumbers() {
+    /*function calculateCategoryNumbers() {
         const CategoryNumbers: { [key: string]: number } = {};
 
         combinedData.forEach(sale => {
@@ -56,6 +56,33 @@ export function DashboardCategory({channel}: {
         });
 
         return CategoryNumbers;
+    }*/
+
+    function calculateCategoryPercentages() {
+        const CategoryPercentages: { [key: string]: number } = {};
+        let totalValue: number = 0;
+
+        combinedData.forEach(sale => {
+            sale.products.forEach(product => {
+                product.categories.forEach(category => {
+                    const categoryName = category;
+                    const productPrice = product.product.price;
+
+                    totalValue += productPrice;
+
+                    if (!CategoryPercentages[categoryName]) {
+                        CategoryPercentages[categoryName] = productPrice;
+                    } else {
+                        CategoryPercentages[categoryName] += productPrice
+                    }
+                })
+            })
+        })
+
+        Object.keys(CategoryPercentages).forEach(category => {
+            CategoryPercentages[category] = (CategoryPercentages[category] / totalValue) * 100;
+        });
+        return CategoryPercentages
     }
 
     ChartJS.register(
@@ -84,7 +111,7 @@ export function DashboardCategory({channel}: {
 
     /*const generateRandomData = () => labels.map(() => Math.floor(Math.random() * 1000));*/
 
-    const categoryNumbers = calculateCategoryNumbers();
+    const categoryNumbers = calculateCategoryPercentages();
 
     const data = {
         labels,
