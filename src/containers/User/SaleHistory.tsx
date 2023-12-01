@@ -46,12 +46,12 @@ function SaleList({ sales}: { sales: ISale[] }) {
 		<div className="flex flex-col gap-[1px] lg:w-1/2">
 			{Object.entries(groupedSales).map(([group, salesInGroup]) => (
 				<div key={group} className="bg-next-white">
-					<h1 className="mt-10 text-3xl font-bold bg-next-blue text-next-white p-2">{group}</h1>
-					<ul className="flex flex-col gap-[1px] bg-white">
+					<h1 className="mt-10 text-3xl font-bold bg-next-blue text-next-white p-2 ">{group}</h1>
+					<div className="flex flex-col gap-[1px] bg-white">
 						{salesInGroup.map((sale) => (
 							<Sale key={sale.id} sale={sale} />
 						))}
-					</ul>
+					</div>
 				</div>
 			))}
 		</div>
@@ -76,7 +76,7 @@ function Sale({ sale }: { sale: ISale }) {
 					{sale.products.map((product) => (
 						<Product key={product.product.id} product={product} />
 					))}
-					<tr className="text-next-blue border-next-blue font-semibold border-t-[1.5px]">
+					<tr className="border-next-grey font-bold border-t-2">
 						<td className="w-[32rem] p-1 text-next-darker-orange font-bold">Total</td>
 						<td className="w-20">{totalQuantity} stk.</td>
 						<td>{totalPrice},-</td>
