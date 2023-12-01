@@ -3,8 +3,9 @@ import type { INewSale, ISale } from "../types/sales.types.ts";
 import type { ChannelType } from "../types/channel.types.ts";
 import SaleApi from "../utils/SaleApi.ts";
 
-function useSales(channel: ChannelType) {
+function useSales(channel: ChannelType, month?: string) {
 	const [sales, setSales] = useState<ISale[]>([]);
+	const [monthlySales, setMonthlySales] = useState<ISale[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 
 	const api = new SaleApi();
@@ -12,6 +13,11 @@ function useSales(channel: ChannelType) {
 	useEffect(() => {
 		async function loadSales() {
 			try {
+				if (!!month) {
+					const monthlySales = await api.getByMonth(channel, month);
+					setMonthlySales(monthlySales);
+					return;
+				}
 				const sales = await api.getByChannel(channel);
 				setSales(sales);
 			}
@@ -44,7 +50,7 @@ function useSales(channel: ChannelType) {
 		}
 	}
 
-	return { sales, isLoading, create, destroy };
+	return { sales, monthlySales, isLoading, create, destroy };
 }
 
 export default useSales;

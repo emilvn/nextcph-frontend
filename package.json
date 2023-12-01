@@ -12,7 +12,9 @@
   "dependencies": {
     "@clerk/clerk-react": "^4.28.0",
     "axios": "^1.6.2",
+    "chart.js": "^4.4.0",
     "react": "^18.2.0",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.48.2",
     "react-hot-toast": "^2.4.1",

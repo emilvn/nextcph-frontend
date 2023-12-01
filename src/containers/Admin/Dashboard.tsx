@@ -1,10 +1,11 @@
+import DashboardLineChartByMonth from "../../components/DashboardLineChartByMonth.tsx";
 import PageLayout from "../../components/layout.tsx";
-import {ChannelType} from "../../types/channel.types.ts";
+import { ChannelType } from "../../types/channel.types.ts";
 
-function Dashboard({channel}:{channel:ChannelType}) {
+function Dashboard({ channel }: { channel: ChannelType }) {
   return (
     <PageLayout>
-      Dashboard - {channel}
+      <DashboardLineChartByMonth channel={channel} />
     </PageLayout>
   )
 }
