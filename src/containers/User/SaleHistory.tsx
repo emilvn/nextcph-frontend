@@ -11,6 +11,7 @@ import { convertToDanishTime } from "../../helpers/dateTime.ts";
 import { groupSalesByDate } from "../../helpers/groupSalesByDate.ts";
 import { calculateProductsTotalPrice } from "../../helpers/CalculateProductPrice.ts";
 import InfiniteScroll from "react-infinite-scroll-component";
+import {IoIosArrowDown} from "react-icons/io";
 
 interface ButtonFilterSalesProps {
 	setCurrentSales: Dispatch<SetStateAction<ISale[]>>;
@@ -40,31 +41,55 @@ function ButtonFilterSales({ setCurrentSales, sales, user }: ButtonFilterSalesPr
 	)
 }
 
+function GroupedSales({ group, children}: { group: string; children: ReactNode}) {
+	return (
+		<div className="bg-next-white">
+			<h2
+				className="mt-10 text-3xl font-bold bg-next-blue text-next-white p-2 cursor-pointer"
+			>
+				{group}
+			</h2>
+			<div className="flex-col gap-[1px] bg-white">
+				{children}
+			</div>
+		</div>
+	);
+}
+
 function SaleList({ sales}: { sales: ISale[] }) {
 	const groupedSales: { [key: string]: ISale[] } = groupSalesByDate({ sales });
 	return (
 		<div className="flex flex-col gap-[1px] lg:w-1/2">
 			{Object.entries(groupedSales).map(([group, salesInGroup]) => (
-				<div key={group} className="bg-next-white">
-					<h1 className="mt-10 text-3xl font-bold bg-next-blue text-next-white p-2 ">{group}</h1>
-					<div className="flex flex-col gap-[1px] bg-white">
+				<GroupedSales group={group} key={group}>
 						{salesInGroup.map((sale) => (
 							<Sale key={sale.id} sale={sale} />
 						))}
-					</div>
-				</div>
+				</GroupedSales>
 			))}
 		</div>
 	)
 }
 
 function Sale({ sale }: { sale: ISale }) {
-	const totalQuantity = sale.products.reduce((acc, product) => acc + product.product_quantity, 0);
+	const [open, setOpen] = useState(false);
 	const totalPrice = sale.products.reduce((acc, product) => acc + calculateProductsTotalPrice(product.product.price, product.product_quantity), 0);
+
 	return (
-		<div className="bg-next-white">
-			<div className="pt-4 text-2xl font-semibold text-next-blue">{convertToDanishTime(sale.created_at)}</div>
-			<table>
+		<div className="bg-next-white pb-4">
+			<div
+				className="p-2 text-2xl font-semibold text-next-blue flex justify-between border-b-2 border-next-grey bg-next-white cursor-pointer"
+				onClick={() => setOpen(!open)}
+			>
+				<div>
+					Kl. {convertToDanishTime(sale.created_at)}
+				</div>
+				<div>
+					Total: {totalPrice},-
+					<IoIosArrowDown className={`inline-block ml-2 ${open ? "transform rotate-180" : ""}`} />
+				</div>
+			</div>
+			<table className={`w-full ${open ? "table" : "hidden"}`}>
 				<thead>
 					<tr className="text-left">
 						<th>Produkt</th>
@@ -76,11 +101,6 @@ function Sale({ sale }: { sale: ISale }) {
 					{sale.products.map((product) => (
 						<Product key={product.product.id} product={product} />
 					))}
-					<tr className="border-next-grey font-bold border-t-2">
-						<td className="w-[32rem] p-1 text-next-darker-orange font-bold">Total</td>
-						<td className="w-20">{totalQuantity} stk.</td>
-						<td>{totalPrice},-</td>
-					</tr>
 				</tbody>
 			</table>
 		</div>

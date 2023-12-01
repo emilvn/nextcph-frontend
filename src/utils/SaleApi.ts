@@ -20,7 +20,7 @@ class SaleApi extends Api<ISale, INewSale> {
 		this.url = this.endpoint + "/sales";
 	}
 	public async getByChannel(channel:ChannelType, page:number): Promise<ISaleDataWithPagination> {
-		const response = await axios.get(`${this.url}?channel=${channel}&page=${page}&pageSize=5`);
+		const response = await axios.get(`${this.url}?channel=${channel}&page=${page}&pageSize=15`);
 		if(response.status !== 200 || !response.data) {
 			throw new Error("Failed to fetch");
 		}
