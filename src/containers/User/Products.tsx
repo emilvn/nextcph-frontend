@@ -127,7 +127,7 @@ function Products({channel}:{channel:ChannelType}) {
 	return (
         <PageLayout>
 			<Header channel={channel} categories={categories} setSearch={setSearch}/>
-			<div className="mt-40 flex w-full">
+			<div className="mt-40 flex w-full bg-next-white">
 				<div className="flex flex-col gap-[1px] w-full">
 					{categories.map((category) => (
 						<Category

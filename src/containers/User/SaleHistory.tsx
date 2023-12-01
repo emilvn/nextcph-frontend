@@ -37,7 +37,9 @@ function ButtonFilterSales({ setCurrentSales, sales, user }: ButtonFilterSalesPr
 		setMySalesToggleClicked(!isMySalesToggleClicked);
 	}
 	return (
-		<button onClick={toggleMySales} className="btn-blue w-48 text-2xl">{buttonText}</button>
+		<button onClick={toggleMySales} className="btn-blue w-48 text-2xl">
+				{buttonText}
+		</button>
 	)
 }
 
