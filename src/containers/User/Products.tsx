@@ -7,6 +7,7 @@ import {IoSearchOutline } from "react-icons/io5";
 import {getCategories, getProductsWithCategory} from "../../helpers/categories.ts";
 import {FaMinus, FaPlus} from "react-icons/fa";
 import {type Dispatch, type SetStateAction, useState} from "react";
+import {IoIosArrowDown} from "react-icons/io";
 
 const channelDict = {
 	"HAIR_CARE": "FRISØR",
@@ -57,7 +58,7 @@ interface searchAndFilterProps {
 }
 function SearchAndFilter({categories, setSearch}:searchAndFilterProps) {
 	return (
-		<div className="flex flex-col items-center fixed bg-next-blue h-screen right-20 top-20 p-2 gap-8">
+		<div className="flex flex-col items-center fixed bg-next-blue h-screen left-20 top-20 p-2 gap-8">
 			<SearchBar setSearch={setSearch}/>
 			<CategoriesNav categories={categories}/>
 		</div>
@@ -73,8 +74,8 @@ function Header({channel, categories, setSearch}:IHeaderProps) {
 
 	return (
 		<div className="fixed left-20 right-20 top-20 z-20">
-			<div className="bg-next-blue flex items-center justify-between gap-8 p-5 h-[79px]">
-				<h2 className="text-next-orange text-3xl font-bold">{channelDict[channel]} PRODUKTER</h2>
+			<div className="bg-next-blue flex items-center justify-end gap-8 p-5 h-[79px]">
+				<h2 className="text-next-darker-orange text-3xl font-bold">{channelDict[channel]} PRODUKTER</h2>
 			</div>
 			<SearchAndFilter categories={categories} setSearch={setSearch}/>
 		</div>
@@ -104,10 +105,22 @@ function Product({product}:{product:IProduct}) {
 }
 
 function Category({category, products}:{category:string, products:IProduct[]}) {
+	const [open, setOpen] = useState(true);
+
+	function toggleOpen() {
+		setOpen(!open);
+	}
+
 	return(
 		<div id={category} className="scroll-mt-40 w-full">
-			<h2 className="text-2xl p-4 font-bold bg-next-blue mb-[1px] w-full text-next-darker-orange text-center">{category}</h2>
-			<div className="flex flex-col w-full gap-[1px]">
+			<h2
+				className="text-2xl p-4 font-bold bg-next-blue mb-[1px] w-full text-next-darker-orange text-center cursor-pointer"
+				onClick={toggleOpen}
+			>
+				{category}
+				<IoIosArrowDown className={`inline-block ml-4 transform ${open ? "rotate-180" : ""}`}/>
+			</h2>
+			<div className={`flex-col w-full gap-[1px] ${open ? "flex" : "hidden"}`}>
 				{products.map((product:IProduct) => (<Product key={product.id} product={product}/>))}
 			</div>
 		</div>
@@ -128,6 +141,7 @@ function Products({channel}:{channel:ChannelType}) {
         <PageLayout>
 			<Header channel={channel} categories={categories} setSearch={setSearch}/>
 			<div className="mt-40 flex w-full">
+				<div className="w-[392px] flex-shrink-0"></div>
 				<div className="flex flex-col gap-[1px] w-full">
 					{categories.map((category) => (
 						<Category
@@ -137,7 +151,6 @@ function Products({channel}:{channel:ChannelType}) {
 						/>
 						))}
 				</div>
-				<div className="w-[392px] flex-shrink-0"></div>
 			</div>
         </PageLayout>
     );
