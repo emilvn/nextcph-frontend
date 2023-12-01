@@ -19,7 +19,6 @@ function useSales(channel: ChannelType) {
 				console.error(e);
 			}
 		}
-
 		loadSales().then(() => setIsLoading(false));
 	}, []);
 
@@ -44,7 +43,17 @@ function useSales(channel: ChannelType) {
 		}
 	}
 
-	return { sales, isLoading, create, destroy };
+	const getDashboardOverviewData = async () => {
+		try {
+			const data = await api.getDashboardOverviewData(channel);
+			return data;
+		} catch (e) {
+			console.error(e);
+			return [];
+		}
+  	};
+
+	return { sales, isLoading, create, destroy, getDashboardOverviewData };
 }
 
 export default useSales;

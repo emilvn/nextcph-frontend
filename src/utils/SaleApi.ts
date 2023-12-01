@@ -48,5 +48,14 @@ class SaleApi extends Api<ISale, INewSale> {
 		}
 		return response.data;
 	}
+
+	public async getDashboardOverviewData(channel: ChannelType): Promise<any> {
+		const response = await axios.get(this.url + "/dashboard?channel=" + channel);
+		if (response.status !== 200 || !response.data) {
+		throw new Error("Failed to fetch dashboard overview data");
+		}
+		return response.data;
+	}
+
 }
 export default SaleApi;
