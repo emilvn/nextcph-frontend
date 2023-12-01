@@ -86,7 +86,7 @@ function Sale({ sale }: { sale: ISale }) {
 				</div>
 				<div>
 					Total: {totalPrice},-
-					<IoIosArrowDown className={`inline-block ml-2 ${open ? "transform rotate-180" : ""}`} />
+					<IoIosArrowDown className={`inline-block ml-2 transition-transform ${open ? "transform rotate-180" : ""}`} />
 				</div>
 			</div>
 			<table className={`w-full ${open ? "table" : "hidden"}`}>
