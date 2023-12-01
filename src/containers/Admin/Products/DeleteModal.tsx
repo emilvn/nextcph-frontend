@@ -39,15 +39,13 @@ function DeleteModal(props: IDeleteModalProps) {
 			<h3 className="text-next-blue text-xl font-semibold">Er du sikker på, at du vil slette dette produkt?</h3>
 			<div className="flex justify-around mt-10">
 				<button
-					//TODO: erstat hele denne style med btn-orange
-					className="bg-next-darker-orange text-next-blue border-[1.5px] border-next-blue hover:bg-next-blue hover:text-next-darker-orange transition-colors font-semibold p-2"
+					className="btn-orange"
 					onClick={confirmDelete}
 				>
 					JA, SLET
 				</button>
 				<button
-					//TODO: erstat hele denne style med btn-blue
-					className="bg-next-blue text-next-darker-orange border-[1.5px] border-next-darker-orange hover:bg-next-darker-orange hover:text-next-blue transition-colors font-semibold p-2"
+					className="btn-blue"
 					onClick={() => closeDeleteConfirmation()}
 				>
 					NEJ, ANNULLÉR

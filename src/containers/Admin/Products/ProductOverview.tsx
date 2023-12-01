@@ -15,8 +15,7 @@ function Header(props: { onClick: () => void }) {
     return (<div className="fixed top-20 left-20 right-20 flex p-4 bg-next-blue items-center justify-between">
         <h2 className="text-3xl font-bold text-next-darker-orange">PRODUKTER</h2>
         <button
-            //TODO: erstat hele denne style med btn-blue
-            className="border-[1.5px] border-next-darker-orange p-4 bg-next-blue text-next-orange font-bold hover:bg-next-darker-orange hover:text-next-blue transition-colors"
+            className="btn-blue"
             onClick={props.onClick}
         >
             Tilføj Produkt
