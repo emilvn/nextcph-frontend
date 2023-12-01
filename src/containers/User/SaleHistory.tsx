@@ -40,12 +40,12 @@ function ButtonFilterSales({ setCurrentSales, sales, user }: ButtonFilterSalesPr
 	)
 }
 
-function SaleList({ sales }: { sales: ISale[] }) {
+function SaleList({ sales}: { sales: ISale[] }) {
 	const groupedSales: { [key: string]: ISale[] } = groupSalesByDate({ sales });
 	return (
 		<div className="flex flex-col gap-[1px]">
 			{Object.entries(groupedSales).map(([group, salesInGroup]) => (
-				<div key={group}>
+				<div key={group} className="bg-next-white">
 					<h1 className="pt-10 text-3xl font-bold text-next-blue">{group}</h1>
 					<ul className="flex flex-col gap-[1px] bg-white">
 						{salesInGroup.map((sale) => (
@@ -99,7 +99,7 @@ function Product({ product }: { product: ISaleProduct }) {
 function Header({children}: {children: ReactNode}) {
 	return (
 		<div className="z-10 bg-next-blue p-2 fixed top-20 left-20 right-20 flex justify-between items-center">
-			<h1 className="text-3xl font-bold">Salgshistorik</h1>
+			<h1 className="text-3xl font-bold text-next-darker-orange">Salgshistorik</h1>
 			{children}
 		</div>
 	);
@@ -109,15 +109,10 @@ function SaleHistory({ channel }: { channel: ChannelType }) {
 	const { sales, isLoading, setPage, hasMore } = useSales(channel);
 	const { user } = useUser();
 	const [currentSales, setCurrentSales] = useState<ISale[]>([]);
-	const [height, setHeight] = useState<number>(window.innerHeight - 200);
 
 	useEffect(() => {
 		setCurrentSales(sales);
 	}, [sales]);
-
-	window.onresize = () => {
-		setHeight(window.innerHeight - 200);
-	}
 
 	if (isLoading) return (<Loading.LoadingPage />);
 	if (!sales || sales.length === 0) return (<PageLayout><div className="p-4 text-next-blue text-xl">Ingen salg endnu...</div></PageLayout>);
@@ -128,35 +123,30 @@ function SaleHistory({ channel }: { channel: ChannelType }) {
 		}, 2000);
 	}
 
-	return (
-		<main className="mt-20 mx-20 h-screen overflow-clip">
-			<div className="bg-next-white text-next-darker-orange p-3 flex justify-between">
-				<div className="w-full p-4">
+	return (<PageLayout>
 					<Header>
 						<ButtonFilterSales setCurrentSales={setCurrentSales} sales={sales} user={user} />
 					</Header>
-						<InfiniteScroll
-							dataLength={currentSales.length}
-							next={fetchNextPage}
-							hasMore={hasMore}
-							height={height}
-							className="overscroll-none"
-							endMessage={
-								<div className="flex justify-center items-center font-bold">
-									Ikke flere salg at vise...
-								</div>
-							}
-							loader={
-								<div className="flex justify-center items-center">
-									<Loading.LoadingSpinner size={48}/>
-								</div>
-							}
-						>
-							<SaleList sales={currentSales} />
-						</InfiniteScroll>
-				</div>
-			</div>
-		</main>
+					<InfiniteScroll
+						dataLength={currentSales.length}
+						next={fetchNextPage}
+						hasMore={hasMore}
+						className="mt-28"
+						style={{ overflow: "hidden" }}
+						endMessage={
+							<div className="flex justify-center items-center font-bold">
+								Ikke flere salg at vise...
+							</div>
+						}
+						loader={
+							<div className="flex justify-center items-center">
+								<Loading.LoadingSpinner size={48}/>
+							</div>
+						}
+					>
+						<SaleList sales={currentSales} />
+					</InfiniteScroll>
+	</PageLayout>
 	)
 }
 
