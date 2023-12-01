@@ -7,7 +7,7 @@ import type { ISaleProduct } from "../../types/products.types.ts";
 import { useUser } from "@clerk/clerk-react";
 import type { UserResource } from "@clerk/types";
 import {useState, useEffect, type Dispatch, type SetStateAction, ReactNode} from "react";
-import { convertToDanishTime } from "../../helpers/dateTime.ts";
+import {convertToDanishTime, formatPrice} from "../../helpers/formatting.ts";
 import { groupSalesByDate } from "../../helpers/groupSalesByDate.ts";
 import { calculateProductsTotalPrice } from "../../helpers/CalculateProductPrice.ts";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -87,7 +87,8 @@ function Sale({ sale }: { sale: ISale }) {
 					Kl. {convertToDanishTime(sale.created_at)}
 				</div>
 				<div>
-					Total: {totalPrice},-
+					<span className="text-next-grey">total: {formatPrice(totalPrice)}
+					</span>
 					<IoIosArrowDown className={`inline-block ml-2 transition-transform ${open ? "transform rotate-180" : ""}`} />
 				</div>
 			</div>
@@ -97,6 +98,7 @@ function Sale({ sale }: { sale: ISale }) {
 						<th>Produkt</th>
 						<th>Antal</th>
 						<th>Pris</th>
+						<th>Pris i alt</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -114,8 +116,10 @@ function Product({ product }: { product: ISaleProduct }) {
 		<tr className="text-next-blue border-y border-white font-semibold">
 			<td className="w-[32rem] p-1">{product.product.name}</td>
 			<td className="w-20">{product.product_quantity} stk.</td>
-			<td>{product.product.price},-</td>
-		</tr>)
+			<td>{formatPrice(product.product.price)}</td>
+			<td>{formatPrice(product.product.price * product.product_quantity)}</td>
+		</tr>
+	);
 }
 
 function Header({children}: {children: ReactNode}) {

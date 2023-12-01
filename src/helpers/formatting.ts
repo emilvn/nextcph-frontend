@@ -17,4 +17,9 @@ function convertToDanishTime(utcTimestamp: string): string {
     }).replace(".", ":");
 }
 
-export { convertToDanishDate, convertToDanishTime }
+function formatPrice(price: number): string {
+    return new Intl.NumberFormat('da-DK', { style: 'currency', currency: 'DKK' }).format(price);
+}
+
+
+export { convertToDanishDate, convertToDanishTime, formatPrice }

@@ -1,5 +1,6 @@
 import type {INewProduct, IProduct, IUpdateProduct} from "../../../types/products.types.ts";
 import type {Dispatch, SetStateAction} from "react";
+import {formatPrice} from "../../../helpers/formatting.ts";
 
 function ProductTableHeader() {
 	return (
@@ -33,7 +34,7 @@ function ProductRow(props: IProductRowProps) {
 		<tr key={product.id} className="border-b text-xl text-next-blue">
 			<td className="p-4">{productName}</td>
 			<td className="p-4">{productAmount ? productAmount : '1 stk'}</td>
-			<td className="p-4">{product.price}</td>
+			<td className="p-4">{formatPrice(product.price)}</td>
 			<td className="p-4">{product.stock}</td>
 			<td className="p-4">
 				<ul>

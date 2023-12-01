@@ -7,6 +7,7 @@ import {IoSearchOutline } from "react-icons/io5";
 import {getCategories, getProductsWithCategory} from "../../helpers/categories.ts";
 import {FaMinus, FaPlus} from "react-icons/fa";
 import {type Dispatch, type SetStateAction, useState} from "react";
+import {formatPrice} from "../../helpers/formatting.ts";
 
 const channelDict = {
 	"HAIR_CARE": "FRISØR",
@@ -74,7 +75,7 @@ function Header({channel, categories, setSearch}:IHeaderProps) {
 	return (
 		<div className="fixed left-20 right-20 top-20 z-20">
 			<div className="bg-next-blue flex items-center justify-between gap-8 p-5 h-[79px]">
-				<h2 className="text-next-orange text-3xl font-bold">{channelDict[channel]} PRODUKTER</h2>
+				<h2 className="text-next-darker-orange text-3xl font-bold">{channelDict[channel]} PRODUKTER</h2>
 			</div>
 			<SearchAndFilter categories={categories} setSearch={setSearch}/>
 		</div>
@@ -87,8 +88,8 @@ function Product({product}:{product:IProduct}) {
 			<div className="flex justify-between">
 				<div className="flex flex-col text-lg font-semibold">
 					<h3 className="text-2xl font-bold">{product.name}</h3>
-					<p>LAGER: {product.stock} stk.</p>
-					<p>Pris: {product.price},-</p>
+					<p>Lager: {product.stock} stk.</p>
+					<p>Pris: {formatPrice(product.price)}</p>
 				</div>
 				<div className="flex flex-col gap-2">
 					<button className="btn-white text-xl">
