@@ -105,6 +105,15 @@ export function DashboardCategory({channel}: {
                 text: `Salg for hver Kategori for ${convertChannelToDanish({channel})} per måned`,
             },
         },
+        scales: {
+            y: {
+                ticks: {
+                    callback: function (value: string) {
+                        return value.toString() + '%';
+                    }
+                }
+            }
+        }
     };
 
     const labels = getCategories(products);
@@ -112,6 +121,7 @@ export function DashboardCategory({channel}: {
     /*const generateRandomData = () => labels.map(() => Math.floor(Math.random() * 1000));*/
 
     const categoryNumbers = calculateCategoryPercentages();
+    console.log(categoryNumbers)
 
     const data = {
         labels,
