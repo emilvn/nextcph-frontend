@@ -80,7 +80,7 @@ export function DashboardCategory({channel}: {
         })
 
         Object.keys(CategoryPercentages).forEach(category => {
-            CategoryPercentages[category] = (CategoryPercentages[category] / totalValue) * 100;
+            CategoryPercentages[category] = Number(((CategoryPercentages[category] / totalValue) * 100).toFixed(1));
         });
         return CategoryPercentages
     }
@@ -121,7 +121,6 @@ export function DashboardCategory({channel}: {
     /*const generateRandomData = () => labels.map(() => Math.floor(Math.random() * 1000));*/
 
     const categoryNumbers = calculateCategoryPercentages();
-    console.log(categoryNumbers)
 
     const data = {
         labels,
