@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { INewSale, ISale } from "../types/sales.types.ts";
+import type { ISale } from "../types/sales.types.ts";
 import type { ChannelType } from "../types/channel.types.ts";
 import SaleApi from "../utils/SaleApi.ts";
 

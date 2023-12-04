@@ -1,8 +1,6 @@
 import { ChannelType } from "../types/channel.types";
 import { ISale } from "../types/sales.types";
 import Loading from "../components/loading";
-import { useState, useEffect } from "react";
-import useSales from "../hooks/useSales";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import { setSalesDataByDay } from "../helpers/setSalesDataByDay.ts";
