@@ -108,7 +108,7 @@ export function DashboardCategory({channel}: {
         scales: {
             y: {
                 ticks: {
-                    callback: function (value: unknown, _index: unknown, _ticks: unknown) {
+                    callback: function (value: unknown) {
                         if (!!value) return value.toString() + '%';
                     },
                 },
