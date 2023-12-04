@@ -25,7 +25,7 @@ function Footer() {
 
 function PageLayout({ children }:PropsWithChildren) {
 	return (<>
-			<main className="mt-20 mx-20 w-auto z-10 relative bg-next-white">
+			<main className="mt-20 md:mx-20 w-auto z-10 relative bg-next-white">
 				{children}
 			</main>
 			<div className="h-[calc(60vh-80px)] bg-next-white"></div>

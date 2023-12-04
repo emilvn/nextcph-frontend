@@ -3,36 +3,31 @@ import type {ChannelType} from "../../types/channel.types.ts";
 import useProducts from "../../hooks/useProducts.ts";
 import Loading from "../../components/loading.tsx";
 import type {INewSaleProduct, IProduct} from "../../types/products.types.ts";
-import {IoSearchOutline} from "react-icons/io5";
+import {IoFilter, IoSearchOutline} from "react-icons/io5";
 import {getCategories, getProductsWithCategory} from "../../helpers/categories.ts";
 import {FaMinus, FaPlus, FaShoppingCart} from "react-icons/fa";
 import {type Dispatch, type SetStateAction, useState} from "react";
 import {formatPrice} from "../../helpers/formatting.ts";
 import {IoIosArrowDown} from "react-icons/io";
 import useSales from "../../hooks/useSales.ts";
+import SaleOverview from "./SaleOverview.tsx";
 
 const channelDict = {
 	"HAIR_CARE": "FRISØR",
 	"COSMETIC": "KOSMETIKER"
 }
 
-/*interface ISaleModalProps {
-	currentSaleProducts: INewSaleProduct[];
-	setIsOpenModal: Dispatch<SetStateAction<boolean>>;
-	setCurrentSaleProducts: Dispatch<SetStateAction<INewSaleProduct[]>>;
-	create: (sale: INewSale) => Promise<void>;
-}
-function SaleOverView({currentSaleProducts, setIsOpenModal, setCurrentSaleProducts, create}:ISaleModalProps) {
-
-}*/
-
 
 interface searchProps {
 	setSearch: Dispatch<SetStateAction<string>>;
+	onClick: () => void;
 }
-function SearchBar({setSearch}:searchProps) {
+function SearchBar({setSearch, onClick}:searchProps) {
 	return (
 		<div className="flex items-center">
+			<div className="bg-white p-4 hover:bg-next-white cursor-pointer border-r-2" onClick={onClick}>
+				<IoFilter className="text-next-blue w-full text-2xl"/>
+			</div>
 			<input
 				type="text"
 				placeholder="SØG EFTER PRODUKT"
@@ -59,7 +54,7 @@ function NavCategory({category}:{category:string}) {
 
 function CategoriesNav({categories}:{categories:string[]}) {
 	return (
-		<div className="flex flex-col gap-4 items-start w-3/4 overflow-y-auto">
+		<div className="flex flex-col gap-4 items-start w-3/4 overflow-y-auto overscroll-none max-h-[calc(100vh-200px)]">
 			{categories.map((category) => (<NavCategory key={category} category={category}/>))}
 		</div>
 	);
@@ -70,10 +65,11 @@ interface searchAndFilterProps {
 	setSearch: Dispatch<SetStateAction<string>>;
 }
 function SearchAndFilter({categories, setSearch}:searchAndFilterProps) {
+	const [open, setOpen] = useState(false);
 	return (
-		<div className="z-0 flex flex-col items-center fixed bg-next-blue h-screen left-20 top-20 p-2 gap-8 max-md:hidden">
-			<SearchBar setSearch={setSearch}/>
-			<CategoriesNav categories={categories}/>
+		<div className="z-0 flex flex-col items-center fixed bg-next-blue max-md:right-0 md:left-20 top-20 p-4 gap-8">
+			<SearchBar setSearch={setSearch} onClick={() => setOpen(!open)}/>
+			{open && <CategoriesNav categories={categories}/>}
 		</div>
 	);
 }
@@ -83,16 +79,16 @@ interface IHeaderProps {
 	categories: string[];
 	setSearch: Dispatch<SetStateAction<string>>;
 	saleProductAmount: number;
-	setIsOpenModal: Dispatch<SetStateAction<boolean>>;
+	setIsOpenSales: Dispatch<SetStateAction<boolean>>;
 }
-function Header({channel, categories, setSearch, saleProductAmount, setIsOpenModal}:IHeaderProps) {
+function Header({channel, categories, setSearch, saleProductAmount, setIsOpenSales}:IHeaderProps) {
 	return (
-		<div className="fixed left-20 right-20 top-20 z-20">
-			<div className="bg-next-blue flex items-center justify-end gap-8 p-5 h-[79px]">
-				<h2 className="text-next-darker-orange text-3xl font-bold">{channelDict[channel]} PRODUKTER</h2>
+		<div className="fixed md:left-20 md:right-20 top-20 z-20">
+			<div className="bg-next-blue flex items-center justify-end gap-8 p-5">
+				<h2 className="text-next-darker-orange text-3xl font-bold">{channelDict[channel]}</h2>
 				<button
 					className="btn-blue text-2xl w-64 relative flex gap-2 justify-center items-center"
-					onClick={() => setIsOpenModal(true)}
+					onClick={() => setIsOpenSales(true)}
 				>
 					<FaShoppingCart className="text-2xl inline-block animate-pulse"/>
 					SALG <span className="text-next-grey text-sm">({saleProductAmount})</span>
@@ -105,31 +101,16 @@ function Header({channel, categories, setSearch, saleProductAmount, setIsOpenMod
 
 interface IProductProps {
 	product: IProduct | INewSaleProduct;
-	setCurrentSaleProducts: Dispatch<SetStateAction<INewSaleProduct[]>>;
-	currentSaleProducts: INewSaleProduct[];
+	addToSale: (product: IProduct | INewSaleProduct) => void;
+	removeFromSale: (product: IProduct | INewSaleProduct) => void;
 }
-function Product({product, setCurrentSaleProducts, currentSaleProducts}:IProductProps) {
+function Product({product, addToSale, removeFromSale}:IProductProps) {
 
-	function addToSale() {
-		const productInSale = currentSaleProducts.find((p) => p.id === product.id);
-		if(productInSale){
-			productInSale.quantity++;
-		}
-		else{
-			currentSaleProducts.push({name: product.name, price:product.price, id: product.id, quantity: 1, channel: product.channel});
-		}
-		setCurrentSaleProducts([...currentSaleProducts]);
+	function handleAddToSale() {
+		addToSale(product);
 	}
-	function removeFromSale() {
-		const productInSale = currentSaleProducts.find((p) => p.id === product.id);
-		if(productInSale){
-			productInSale.quantity--;
-			if(productInSale.quantity <= 0){
-				const index = currentSaleProducts.indexOf(productInSale);
-				currentSaleProducts.splice(index, 1);
-			}
-		}
-		setCurrentSaleProducts([...currentSaleProducts]);
+	function handleRemoveFromSale() {
+		removeFromSale(product);
 	}
 
 	return(
@@ -141,10 +122,10 @@ function Product({product, setCurrentSaleProducts, currentSaleProducts}:IProduct
 					<p>Pris: {product.price ? formatPrice(product.price): "-"}</p>
 				</div>
 				<div className="flex flex-col gap-2">
-					<button className="btn-white text-xl" onClick={addToSale}>
+					<button className="btn-white text-xl" onClick={handleAddToSale}>
 						<FaPlus className="text-xl inline-block"/> Tilføj til salg
 					</button>
-					<button className="btn-white text-xl" onClick={removeFromSale}>
+					<button className="btn-white text-xl" onClick={handleRemoveFromSale}>
 						<FaMinus className="text-xl inline-block"/> Fjern fra salg
 					</button>
 				</div>
@@ -156,10 +137,10 @@ function Product({product, setCurrentSaleProducts, currentSaleProducts}:IProduct
 interface ICategoryProps {
 	category: string;
 	products: IProduct[];
-	setCurrentSaleProducts: Dispatch<SetStateAction<INewSaleProduct[]>>;
-	currentSaleProducts: INewSaleProduct[];
+	addToSale: (product: IProduct | INewSaleProduct) => void;
+	removeFromSale: (product: IProduct | INewSaleProduct) => void;
 }
-function Category({category, products, currentSaleProducts, setCurrentSaleProducts}:ICategoryProps) {
+function Category({category, products, addToSale, removeFromSale}:ICategoryProps) {
 	const [open, setOpen] = useState(true);
 
 	function toggleOpen() {
@@ -180,8 +161,9 @@ function Category({category, products, currentSaleProducts, setCurrentSaleProduc
 					<Product
 						key={product.id}
 						product={product}
-						setCurrentSaleProducts={setCurrentSaleProducts}
-						currentSaleProducts={currentSaleProducts}/>
+						addToSale={addToSale}
+						removeFromSale={removeFromSale}
+					/>
 				))}
 			</div>
 		</div>
@@ -201,36 +183,63 @@ function Products({channel}:{channel:ChannelType}) {
 
 	const categories = getCategories(filteredProducts);
 
+	function addToSale(product: IProduct|INewSaleProduct) {
+		const productInSale = currentSaleProducts.find((p) => p.id === product.id);
+		if(productInSale){
+			productInSale.quantity++;
+		}
+		else{
+			currentSaleProducts.push({name: product.name, price:product.price, id: product.id, quantity: 1, channel: product.channel});
+		}
+		setCurrentSaleProducts([...currentSaleProducts]);
+	}
+	function removeFromSale(product: IProduct|INewSaleProduct) {
+		const productInSale = currentSaleProducts.find((p) => p.id === product.id);
+		if(productInSale){
+			productInSale.quantity--;
+			if(productInSale.quantity <= 0){
+				const index = currentSaleProducts.indexOf(productInSale);
+				currentSaleProducts.splice(index, 1);
+			}
+		}
+		setCurrentSaleProducts([...currentSaleProducts]);
+	}
+
 	return (
         <PageLayout>
-			<Header
-				channel={channel}
-				categories={categories}
-				setSearch={setSearch}
-				setIsOpenModal={setIsOpenSales}
-				saleProductAmount={currentSaleProducts.reduce((acc, cur) => acc + cur.quantity, 0)}
-			/>
-			{/*{isOpenSales &&
-				<SaleOverView
+			{isOpenSales &&
+				<SaleOverview
 					currentSaleProducts={currentSaleProducts}
-					setIsOpenModal={setIsOpenSales}
+					setIsOpenSales={setIsOpenSales}
 					setCurrentSaleProducts={setCurrentSaleProducts}
-					create={create}/>
-			}*/}
-			<div className="mt-40 flex w-full">
-				<div className="w-[392px] flex-shrink-0 max-md:hidden"></div>
-				<div className="flex flex-col gap-[1px] w-full">
-					{categories.map((category) => (
-						<Category
-							key={category}
-							category={category}
-							products={getProductsWithCategory(filteredProducts, category)}
-							setCurrentSaleProducts={setCurrentSaleProducts}
-							currentSaleProducts={currentSaleProducts}
-						/>
-						))}
+					create={create}
+					addToSale={addToSale}
+					removeFromSale={removeFromSale}
+				/>
+			}
+			{!isOpenSales && <>
+				<Header
+					channel={channel}
+					categories={categories}
+					setSearch={setSearch}
+					setIsOpenSales={setIsOpenSales}
+					saleProductAmount={currentSaleProducts.reduce((acc, cur) => acc + cur.quantity, 0)}
+				/>
+				<div className="mt-40 flex w-full">
+					<div className="flex flex-col gap-[1px] w-full">
+						{categories.map((category) => (
+							<Category
+								key={category}
+								category={category}
+								products={getProductsWithCategory(filteredProducts, category)}
+								addToSale={addToSale}
+								removeFromSale={removeFromSale}
+							/>
+							))}
+					</div>
 				</div>
-			</div>
+			</>
+			}
         </PageLayout>
     );
 }

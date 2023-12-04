@@ -31,7 +31,7 @@ interface IUpdateProduct {
 
 export interface INewSaleProduct {
 	name?: string;
-	price?: number;
+	price: number;
 	stock?: number;
 	id: string;
 	quantity: number;
