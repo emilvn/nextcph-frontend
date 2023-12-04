@@ -3,34 +3,28 @@ import type {ChannelType} from "../../types/channel.types.ts";
 import useProducts from "../../hooks/useProducts.ts";
 import Loading from "../../components/loading.tsx";
 import type {INewSaleProduct, IProduct} from "../../types/products.types.ts";
-import {IoSearchOutline } from "react-icons/io5";
+import {IoSearchOutline} from "react-icons/io5";
 import {getCategories, getProductsWithCategory} from "../../helpers/categories.ts";
 import {FaMinus, FaPlus, FaShoppingCart} from "react-icons/fa";
-import {type Dispatch, type SetStateAction, useEffect, useState} from "react";
+import {type Dispatch, type SetStateAction, useState} from "react";
 import {formatPrice} from "../../helpers/formatting.ts";
 import {IoIosArrowDown} from "react-icons/io";
-import Modal from "../../components/Modal.tsx";
-import {SubmitHandler, useForm} from "react-hook-form";
-import {IProductFormData} from "../Admin/Products/ProductForm.tsx";
+import useSales from "../../hooks/useSales.ts";
 
 const channelDict = {
 	"HAIR_CARE": "FRISØR",
 	"COSMETIC": "KOSMETIKER"
 }
 
-interface ISaleModalProps {
-	onSubmit: SubmitHandler<IProductFormData>;
-	currentSaleProducts: IProduct[];
+/*interface ISaleModalProps {
+	currentSaleProducts: INewSaleProduct[];
 	setIsOpenModal: Dispatch<SetStateAction<boolean>>;
+	setCurrentSaleProducts: Dispatch<SetStateAction<INewSaleProduct[]>>;
+	create: (sale: INewSale) => Promise<void>;
 }
-function SaleModal({onSubmit, currentSaleProducts, setIsOpenModal}) {
-	const {register, handleSubmit, setValue, reset} = useForm<IProductFormData>();
-	return (
-		<Modal>
-			<form action=""></form>
-		</Modal>
-	);
-}
+function SaleOverView({currentSaleProducts, setIsOpenModal, setCurrentSaleProducts, create}:ISaleModalProps) {
+
+}*/
 
 
 interface searchProps {
@@ -77,7 +71,7 @@ interface searchAndFilterProps {
 }
 function SearchAndFilter({categories, setSearch}:searchAndFilterProps) {
 	return (
-		<div className="flex flex-col items-center fixed bg-next-blue h-screen left-20 top-20 p-2 gap-8">
+		<div className="z-0 flex flex-col items-center fixed bg-next-blue h-screen left-20 top-20 p-2 gap-8 max-md:hidden">
 			<SearchBar setSearch={setSearch}/>
 			<CategoriesNav categories={categories}/>
 		</div>
@@ -89,13 +83,17 @@ interface IHeaderProps {
 	categories: string[];
 	setSearch: Dispatch<SetStateAction<string>>;
 	saleProductAmount: number;
+	setIsOpenModal: Dispatch<SetStateAction<boolean>>;
 }
-function Header({channel, categories, setSearch, saleProductAmount}:IHeaderProps) {
+function Header({channel, categories, setSearch, saleProductAmount, setIsOpenModal}:IHeaderProps) {
 	return (
 		<div className="fixed left-20 right-20 top-20 z-20">
 			<div className="bg-next-blue flex items-center justify-end gap-8 p-5 h-[79px]">
 				<h2 className="text-next-darker-orange text-3xl font-bold">{channelDict[channel]} PRODUKTER</h2>
-				<button className="btn-blue text-2xl w-64 relative flex gap-2 justify-center items-center">
+				<button
+					className="btn-blue text-2xl w-64 relative flex gap-2 justify-center items-center"
+					onClick={() => setIsOpenModal(true)}
+				>
 					<FaShoppingCart className="text-2xl inline-block animate-pulse"/>
 					SALG <span className="text-next-grey text-sm">({saleProductAmount})</span>
 				</button>
@@ -106,7 +104,7 @@ function Header({channel, categories, setSearch, saleProductAmount}:IHeaderProps
 }
 
 interface IProductProps {
-	product: IProduct;
+	product: IProduct | INewSaleProduct;
 	setCurrentSaleProducts: Dispatch<SetStateAction<INewSaleProduct[]>>;
 	currentSaleProducts: INewSaleProduct[];
 }
@@ -118,7 +116,7 @@ function Product({product, setCurrentSaleProducts, currentSaleProducts}:IProduct
 			productInSale.quantity++;
 		}
 		else{
-			currentSaleProducts.push({id: product.id, quantity: 1, channel: product.channel});
+			currentSaleProducts.push({name: product.name, price:product.price, id: product.id, quantity: 1, channel: product.channel});
 		}
 		setCurrentSaleProducts([...currentSaleProducts]);
 	}
@@ -138,9 +136,9 @@ function Product({product, setCurrentSaleProducts, currentSaleProducts}:IProduct
 		<div className="p-4 w-full bg-next-white flex flex-col gap-4">
 			<div className="flex justify-between">
 				<div className="flex flex-col text-lg font-semibold">
-					<h3 className="text-2xl font-bold">{product.name}</h3>
-					<p>Lager: {product.stock} stk.</p>
-					<p>Pris: {formatPrice(product.price)}</p>
+					<h3 className="text-2xl font-bold">{product.name ?? "-"}</h3>
+					<p>Lager: {product.stock ?? "-"} stk.</p>
+					<p>Pris: {product.price ? formatPrice(product.price): "-"}</p>
 				</div>
 				<div className="flex flex-col gap-2">
 					<button className="btn-white text-xl" onClick={addToSale}>
@@ -175,7 +173,7 @@ function Category({category, products, currentSaleProducts, setCurrentSaleProduc
 				onClick={toggleOpen}
 			>
 				{category}
-				<IoIosArrowDown className={`inline-block ml-4 transform ${open ? "rotate-180" : ""}`}/>
+				<IoIosArrowDown className={`z-0 inline-block ml-4 transform ${open ? "rotate-180" : ""}`}/>
 			</h2>
 			<div className={`flex-col w-full gap-[1px] ${open ? "flex" : "hidden"}`}>
 				{products.map((product:IProduct) => (
@@ -192,6 +190,8 @@ function Category({category, products, currentSaleProducts, setCurrentSaleProduc
 
 function Products({channel}:{channel:ChannelType}) {
 	const {products, isLoading} = useProducts(channel);
+	const {create} = useSales(channel);
+	const [isOpenSales, setIsOpenSales] = useState(false);
 	const [search, setSearch] = useState("");
 	const [currentSaleProducts, setCurrentSaleProducts] = useState<INewSaleProduct[]>([]);
 	if(isLoading) return (<Loading.LoadingPage/>);
@@ -207,10 +207,18 @@ function Products({channel}:{channel:ChannelType}) {
 				channel={channel}
 				categories={categories}
 				setSearch={setSearch}
+				setIsOpenModal={setIsOpenSales}
 				saleProductAmount={currentSaleProducts.reduce((acc, cur) => acc + cur.quantity, 0)}
 			/>
+			{/*{isOpenSales &&
+				<SaleOverView
+					currentSaleProducts={currentSaleProducts}
+					setIsOpenModal={setIsOpenSales}
+					setCurrentSaleProducts={setCurrentSaleProducts}
+					create={create}/>
+			}*/}
 			<div className="mt-40 flex w-full">
-				<div className="w-[392px] flex-shrink-0"></div>
+				<div className="w-[392px] flex-shrink-0 max-md:hidden"></div>
 				<div className="flex flex-col gap-[1px] w-full">
 					{categories.map((category) => (
 						<Category
