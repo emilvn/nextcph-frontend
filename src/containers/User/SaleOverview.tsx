@@ -1,24 +1,26 @@
-import {INewSaleProduct, IProduct} from "../../types/products.types.ts";
-import {Dispatch, ReactNode, SetStateAction} from "react";
-import {INewSale} from "../../types/sales.types.ts";
+import type {INewSaleProduct, IProduct} from "../../types/products.types.ts";
+import type {Dispatch, ReactNode, SetStateAction} from "react";
+import type {INewSale} from "../../types/sales.types.ts";
 import {useUser} from "@clerk/clerk-react";
 import toast from "react-hot-toast";
 import {FaArrowLeft, FaCheck, FaMinus, FaPlus, FaShoppingCart, FaTrash} from "react-icons/fa";
 import {formatPrice} from "../../helpers/formatting.ts";
 
 function ProductList({ children }: { children: ReactNode}) {
-	return (<table className="w-full">
-		<thead>
-		<tr className="border-b-2">
-			<th className="text-left md:text-xl">Produkt</th>
-			<th className="text-left md:text-xl">Antal</th>
-			<th className="text-left md:text-xl">Pris</th>
-		</tr>
-		</thead>
-		<tbody>
-			{children}
-		</tbody>
-	</table>);
+	return (
+		<table className="w-full">
+			<thead>
+			<tr className="border-b-2">
+				<th className="text-left md:text-xl">Produkt</th>
+				<th className="text-left md:text-xl">Antal</th>
+				<th className="text-left md:text-xl">Pris</th>
+			</tr>
+			</thead>
+			<tbody>
+				{children}
+			</tbody>
+		</table>
+	);
 }
 
 interface IProductRowProps {
@@ -122,6 +124,7 @@ function SaleOverview(props:ISaleOverviewProps) {
 						<ProductList>
 							{currentSaleProducts.map((product) => (
 								<ProductRow
+									key={product.id}
 									product={product}
 									addToSale={() => addToSale(product)}
 									removeFromSale={() => removeFromSale(product)}

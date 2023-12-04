@@ -6,7 +6,7 @@ import type {INewSaleProduct, IProduct} from "../../types/products.types.ts";
 import {IoFilter, IoSearchOutline} from "react-icons/io5";
 import {getCategories, getProductsWithCategory} from "../../helpers/categories.ts";
 import {FaMinus, FaPlus, FaShoppingCart} from "react-icons/fa";
-import {type Dispatch, type SetStateAction, useState} from "react";
+import {type Dispatch, type SetStateAction, useEffect, useState} from "react";
 import {formatPrice} from "../../helpers/formatting.ts";
 import {IoIosArrowDown} from "react-icons/io";
 import useSales from "../../hooks/useSales.ts";
@@ -171,11 +171,27 @@ function Category({category, products, addToSale, removeFromSale}:ICategoryProps
 }
 
 function Products({channel}:{channel:ChannelType}) {
+	const localStorageSale = localStorage.getItem("sale");
+	const initialSaleProducts = localStorageSale ? JSON.parse(localStorageSale) : [];
+
 	const {products, isLoading} = useProducts(channel);
 	const {create} = useSales(channel);
+
 	const [isOpenSales, setIsOpenSales] = useState(false);
 	const [search, setSearch] = useState("");
-	const [currentSaleProducts, setCurrentSaleProducts] = useState<INewSaleProduct[]>([]);
+	const [currentSaleProducts, setCurrentSaleProducts] = useState<INewSaleProduct[]>(initialSaleProducts);
+
+	useEffect(() => {
+		localStorage.setItem("sale", JSON.stringify(currentSaleProducts));
+	}, [currentSaleProducts]);
+
+	// Reset sale if channel is changed
+	useEffect(() => {
+		if(currentSaleProducts[0]?.channel !== channel){
+			setCurrentSaleProducts([]);
+		}
+	}, []);
+
 	if(isLoading) return (<Loading.LoadingPage/>);
 	if(!products || products.length === 0) return (<PageLayout>No products found...</PageLayout>);
 
@@ -217,16 +233,16 @@ function Products({channel}:{channel:ChannelType}) {
 					removeFromSale={removeFromSale}
 				/>
 			}
-			{!isOpenSales && <>
-				<Header
-					channel={channel}
-					categories={categories}
-					setSearch={setSearch}
-					setIsOpenSales={setIsOpenSales}
-					saleProductAmount={currentSaleProducts.reduce((acc, cur) => acc + cur.quantity, 0)}
-				/>
-				<div className="mt-40 flex w-full">
-					<div className="flex flex-col gap-[1px] w-full">
+			{!isOpenSales &&
+				<>
+					<Header
+						channel={channel}
+						categories={categories}
+						setSearch={setSearch}
+						setIsOpenSales={setIsOpenSales}
+						saleProductAmount={currentSaleProducts.reduce((acc, cur) => acc + cur.quantity, 0)}
+					/>
+					<div className="mt-40 flex flex-col gap-[1px] w-full">
 						{categories.map((category) => (
 							<Category
 								key={category}
@@ -235,10 +251,9 @@ function Products({channel}:{channel:ChannelType}) {
 								addToSale={addToSale}
 								removeFromSale={removeFromSale}
 							/>
-							))}
+						))}
 					</div>
-				</div>
-			</>
+				</>
 			}
         </PageLayout>
     );
