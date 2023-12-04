@@ -7,30 +7,27 @@ import useDashboard from "../../hooks/useDashboard.ts";
 import { ISale } from "../../types/sales.types.ts";
 
 function Dashboard({ channel }: { channel: ChannelType }) {
-  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [currentSales, setCurrentSales] = useState<ISale[]>([]);
-  const { monthlySales, isLoading } = useDashboard(channel, selectedYear + "-" + selectedMonth);
+  const { monthlySales, isLoading, setMonth, setYear, month, year } = useDashboard(channel);
 
   const dateStates = {
-    selectedMonth,
-    selectedYear,
-    setSelectedMonth,
-    setSelectedYear,
+    setMonth,
+    setYear,
+    month,
+    year
   };
 
   const lineChartData = {
     currentSales,
-    setCurrentSales,
-    monthlySales,
     isLoading,
-    month: selectedYear + "-" + selectedMonth,
+    month,
+    year,
     channel
   };
 
   useEffect(() => {
     setCurrentSales(monthlySales);
-  }, [selectedMonth, selectedYear, monthlySales]);
+  }, [monthlySales]);
 
   return (
     <PageLayout>

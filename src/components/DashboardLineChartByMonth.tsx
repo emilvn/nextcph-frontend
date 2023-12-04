@@ -11,10 +11,9 @@ import { setChartData } from "../helpers/setChartData.ts";
 interface ILineChatProps {
     lineChartData: {
         currentSales: ISale[];
-        setCurrentSales: React.Dispatch<React.SetStateAction<ISale[]>>;
-        monthlySales: ISale[];
         isLoading: boolean;
-        month: string;
+        month: number;
+        year: number;
         channel: ChannelType;
     }
 }
