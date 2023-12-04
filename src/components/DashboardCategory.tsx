@@ -108,17 +108,16 @@ export function DashboardCategory({channel}: {
         scales: {
             y: {
                 ticks: {
-                    callback: function (value: string) {
-                        return value.toString() + '%';
-                    }
-                }
-            }
-        }
+                    callback: function (value: unknown, _index: unknown, _ticks: unknown) {
+                        if (!!value) return value.toString() + '%';
+                    },
+                },
+            },
+        },
     };
 
     const labels = getCategories(products);
 
-    /*const generateRandomData = () => labels.map(() => Math.floor(Math.random() * 1000));*/
 
     const categoryNumbers = calculateCategoryPercentages();
 
