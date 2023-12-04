@@ -18,8 +18,9 @@ class SaleApi extends Api<ISale, INewSale> {
 	}
 
 	public async getByMonth(channel: ChannelType, month?: string): Promise<ISale[]> {
-		const query: string = month ? "?channel=" + channel + "&month=" + month : "?channel=" + channel;
+		const query: string = month ? "/month/?channel=" + channel + "&month=" + month : "month/?channel=" + channel;
 		const response = await axios.get(this.url + query);
+		console.log(response);
 		if (response.status !== 200 || !response.data) {
 			throw new Error("Failed to fetch");
 		}

@@ -9,22 +9,25 @@ import { setSalesDataByDay } from "../helpers/setSalesDataByDay.ts";
 import { setChartData } from "../helpers/setChartData.ts";
 
 interface ILineChatProps {
-    channel: ChannelType;
-    month: string;
+    lineChartData: {
+        currentSales: ISale[];
+        setCurrentSales: React.Dispatch<React.SetStateAction<ISale[]>>;
+        monthlySales: ISale[];
+        isLoading: boolean;
+        month: string;
+        channel: ChannelType;
+    }
 }
 
-function DashboardLineChartByMonth({ channel, month }: ILineChatProps) {
-    const [currentSales, setCurrentSales] = useState<ISale[]>([]);
-    const { monthlySales, isLoading } = useSales(channel, month);
+
+
+function DashboardLineChartByMonth({ lineChartData }: ILineChatProps) {
     ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
-    useEffect(() => {
-        setCurrentSales(monthlySales);
-    }, [monthlySales]);
 
-    if (isLoading) return (<Loading.LoadingPage />);
+    if (lineChartData.isLoading) return (<Loading.LoadingPage />);
 
-    const daysOfCurrentMonthArray = Array.from(Array(new Date(new Date(month).getFullYear(), new Date(month).getMonth() + 1, 0).getDate()).keys()).map((_, index) => index + 1);
-    const monthlyData = setSalesDataByDay(currentSales, daysOfCurrentMonthArray);
+    const daysOfCurrentMonthArray = Array.from(Array(new Date(new Date(lineChartData.month).getFullYear(), new Date(lineChartData.month).getMonth() + 1, 0).getDate()).keys()).map((_, index) => index + 1);
+    const monthlyData = setSalesDataByDay(lineChartData.currentSales, daysOfCurrentMonthArray);
     const { chartData, chartOptions } = setChartData(daysOfCurrentMonthArray, monthlyData);
 
     const data = chartData;
