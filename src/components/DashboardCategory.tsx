@@ -12,7 +12,7 @@ import {ChannelType} from "../types/channel.types.ts";
 import {getCategories} from "../helpers/categories.ts";
 import useProducts from "../hooks/useProducts.ts";
 import useSales from "../hooks/useSales.ts";
-import {channelDict, convertChannelToDanish} from "../helpers/channelDict.ts";
+import {channelDict} from "../helpers/channelDict.ts";
 
 
 export function DashboardCategory({channel}: {
