@@ -6,7 +6,7 @@ import type { ISale } from "../../types/sales.types.ts";
 import type { ISaleProduct } from "../../types/products.types.ts";
 import { useUser } from "@clerk/clerk-react";
 import type { UserResource } from "@clerk/types";
-import {useState, useEffect, type Dispatch, type SetStateAction, ReactNode} from "react";
+import {useState, type Dispatch, type SetStateAction, ReactNode, useEffect} from "react";
 import {convertToDanishTime, formatPrice} from "../../helpers/formatting.ts";
 import { groupSalesByDate } from "../../helpers/groupSalesByDate.ts";
 import { calculateProductsTotalPrice } from "../../helpers/CalculateProductPrice.ts";
@@ -14,12 +14,11 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import {IoIosArrowDown} from "react-icons/io";
 
 interface ButtonFilterSalesProps {
-	setCurrentSales: Dispatch<SetStateAction<ISale[]>>;
-	sales: ISale[];
-	user: UserResource | null | undefined
+	user: UserResource | null | undefined;
+	setUserId: Dispatch<SetStateAction<string | undefined>>;
 }
 
-function ButtonFilterSales({ setCurrentSales, sales, user }: ButtonFilterSalesProps) {
+function ButtonFilterSales({ user, setUserId }: ButtonFilterSalesProps) {
 	const [isMySalesToggleClicked, setMySalesToggleClicked] = useState(false);
 	const [buttonText, setButtonText] = useState("Mine salg");
 
@@ -27,11 +26,10 @@ function ButtonFilterSales({ setCurrentSales, sales, user }: ButtonFilterSalesPr
 
 	function toggleMySales() {
 		if (isMySalesToggleClicked) {
-			setCurrentSales(sales);
+			setUserId(undefined);
 			setButtonText("Mine salg");
 		} else {
-			const filteredSales: ISale[] = sales.filter((sale) => sale.user_id === user?.id);
-			setCurrentSales(filteredSales);
+			setUserId(user?.id);
 			setButtonText("Alle salg");
 		}
 		setMySalesToggleClicked(!isMySalesToggleClicked);
@@ -58,8 +56,8 @@ function GroupedSales({ group, children}: { group: string; children: ReactNode})
 	);
 }
 
-function SaleList({ sales}: { sales: ISale[] }) {
-	const groupedSales: { [key: string]: ISale[] } = groupSalesByDate({ sales });
+function SaleList({ currentSales}: { currentSales: ISale[] }) {
+	const groupedSales: { [key: string]: ISale[] } = groupSalesByDate({ sales: currentSales });
 	return (
 		<div className="flex flex-col gap-[1px] lg:w-1/2">
 			{Object.entries(groupedSales).map(([group, salesInGroup]) => (
@@ -132,13 +130,14 @@ function Header({children}: {children: ReactNode}) {
 }
 
 function SaleHistory({ channel }: { channel: ChannelType }) {
-	const { sales, isLoading, setPage, hasMore } = useSales(channel);
+	const { sales, isLoading, setPage, hasMore, setUserId, userId } = useSales(channel);
 	const { user } = useUser();
 	const [currentSales, setCurrentSales] = useState<ISale[]>([]);
 
 	useEffect(() => {
-		setCurrentSales(sales);
-	}, [sales]);
+		if(userId) setCurrentSales(sales.filter((sale) => sale.user_id === userId));
+		else setCurrentSales(sales);
+	}, [sales, userId]);
 
 	if (isLoading) return (<Loading.LoadingPage />);
 	if (!sales || sales.length === 0) return (<PageLayout><div className="p-4 text-next-blue text-xl">Ingen salg endnu...</div></PageLayout>);
@@ -151,28 +150,33 @@ function SaleHistory({ channel }: { channel: ChannelType }) {
 
 	return (
 		<PageLayout>
-		<Header>
-			<ButtonFilterSales setCurrentSales={setCurrentSales} sales={sales} user={user} />
-		</Header>
-		<InfiniteScroll
-			dataLength={currentSales.length}
-			next={fetchNextPage}
-			hasMore={hasMore}
-			className="mt-28 border-b bg-next-white"
-			style={{ overflow: "hidden" }}
-			endMessage={
-				<div className="flex justify-center items-center p-4 text-next-grey lg:w-1/2">
-					Ikke flere salg at vise...
-				</div>
+			<Header>
+				<ButtonFilterSales user={user} setUserId={setUserId}/>
+			</Header>
+			{currentSales. length === 0 &&
+				<div className="mt-40 p-4 text-next-blue text-xl">Ingen salg endnu...</div>
 			}
-			loader={
-				<div className="flex justify-center items-center p-4 lg:w-1/2">
-					<Loading.LoadingSpinner size={48}/>
-				</div>
+			{currentSales.length > 0 &&
+				<InfiniteScroll
+					dataLength={currentSales.length}
+					next={fetchNextPage}
+					hasMore={hasMore}
+					className="mt-28 border-b bg-next-white"
+					style={{ overflow: "hidden" }}
+					endMessage={
+						<div className="flex justify-center items-center p-4 text-next-grey lg:w-1/2">
+							Ikke flere salg at vise...
+						</div>
+					}
+					loader={
+						<div className="flex justify-center items-center p-4 lg:w-1/2">
+							<Loading.LoadingSpinner size={48}/>
+						</div>
+					}
+				>
+					<SaleList currentSales={currentSales} />
+				</InfiniteScroll>
 			}
-		>
-			<SaleList sales={currentSales} />
-		</InfiniteScroll>
 	</PageLayout>
 	)
 }

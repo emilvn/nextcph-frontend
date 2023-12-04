@@ -19,8 +19,8 @@ class SaleApi extends Api<ISale, INewSale> {
 		super();
 		this.url = this.endpoint + "/sales";
 	}
-	public async getByChannel(channel:ChannelType, page:number): Promise<ISaleDataWithPagination> {
-		const response = await axios.get(`${this.url}?channel=${channel}&page=${page}&pageSize=15`);
+	public async getByChannel(channel:ChannelType, page:number, user_id?:string): Promise<ISaleDataWithPagination> {
+		const response = await axios.get(`${this.url}?channel=${channel}&page=${page}&pageSize=15${user_id ? "&user_id=" + user_id : ""}`);
 		if(response.status !== 200 || !response.data) {
 			throw new Error("Failed to fetch");
 		}
@@ -29,14 +29,6 @@ class SaleApi extends Api<ISale, INewSale> {
 
 	public async getById(id: string): Promise<ISale> {
 		const response = await axios.get(this.url + "/" + id);
-		if(response.status !== 200 || !response.data) {
-			throw new Error("Failed to fetch");
-		}
-		return response.data;
-	}
-
-	public async getByUserId(user_id: string, channel:ChannelType): Promise<ISale[]> {
-		const response = await axios.get(this.url + "?user_id=" + user_id + "&channel=" + channel);
 		if(response.status !== 200 || !response.data) {
 			throw new Error("Failed to fetch");
 		}

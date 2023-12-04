@@ -3,11 +3,13 @@ import type { INewSale, ISale } from "../types/sales.types.ts";
 import type { ChannelType } from "../types/channel.types.ts";
 import SaleApi from "../utils/SaleApi.ts";
 import {AxiosError} from "axios";
+import toast from "react-hot-toast";
 
 function useSales(channel: ChannelType) {
 	const [sales, setSales] = useState<ISale[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [page, setPage] = useState(1);
+	const [userId, setUserId] = useState<string | undefined>(undefined);
 	const [hasMore, setHasMore] = useState(true);
 
 	const api = new SaleApi();
@@ -15,13 +17,12 @@ function useSales(channel: ChannelType) {
 	useEffect(() => {
 		async function loadSales() {
 			try {
-				const newSalesData = await api.getByChannel(channel, page);
+				const newSalesData = await api.getByChannel(channel, page, userId);
 				const newSales = newSalesData.data;
 
 				const uniqueSaleIds = new Set(sales.map(s => s.id));
 
 				const uniqueNewSales = newSales.filter(s => !uniqueSaleIds.has(s.id));
-
 				setSales([...sales, ...uniqueNewSales]);
 
 				if(newSalesData.pagination.totalPages === page) {
@@ -30,11 +31,12 @@ function useSales(channel: ChannelType) {
 			}
 			catch (e:unknown) {
 				if(e instanceof AxiosError) console.error(e.response?.data || e.message);
+				toast.error("Kunne ikke hente salg");
 			}
 		}
 
 		loadSales().then(() => setIsLoading(false));
-	}, [page]);
+	}, [page, userId]);
 
 	const create = async (sale: INewSale) => {
 		try {
@@ -57,7 +59,7 @@ function useSales(channel: ChannelType) {
 		}
 	}
 
-	return { sales, isLoading, create, destroy, setPage, hasMore };
+	return { sales, isLoading, create, destroy, setPage, hasMore , setUserId, userId};
 }
 
 export default useSales;
