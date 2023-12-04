@@ -1,30 +1,16 @@
-import { useEffect } from 'react';
 import { ChannelType } from '../types/channel.types';
-import useSales from '../hooks/useSales';
+import useDashboard from '../hooks/useDashboard';
 
 function SalesDataOverview({ channel }: { channel: ChannelType }) {
-  const { isLoading, getDashboardOverviewData } = useSales(channel);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getDashboardOverviewData();
-        console.table(data); 
-      } catch (error) {
-        console.error('Fejl ved hentning af dashboard oversigtsdata', error);
-      }
-    };
-
-    fetchData();
-  }, [getDashboardOverviewData]); 
-
+  const { isLoading, overviewData } = useDashboard(channel);
+  if(!isLoading) console.log(overviewData)
   return (
     <div>
       {isLoading ? (
         <p>Loading...</p>
       ) : (
         <div>
-          hej
+          hejsa
         </div>
       )}
     </div>

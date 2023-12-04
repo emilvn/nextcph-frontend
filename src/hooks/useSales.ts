@@ -43,17 +43,7 @@ function useSales(channel: ChannelType) {
 		}
 	}
 
-	const getDashboardOverviewData = async () => {
-		try {
-			const data = await api.getDashboardOverviewData(channel);
-			return data;
-		} catch (e) {
-			console.error(e);
-			return [];
-		}
-  	};
-
-	return { sales, isLoading, create, destroy, getDashboardOverviewData };
+	return { sales, isLoading, create, destroy, };
 }
 
 export default useSales;
