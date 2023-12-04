@@ -11,12 +11,12 @@ body{
         @apply transition-colors font-semibold cursor-pointer border-[1.5px] p-2
     }
     .btn-blue{
-        @apply btn text-next-darker-orange border-next-darker-orange hover:bg-next-darker-orange hover:text-next-blue
+        @apply btn bg-next-blue text-next-darker-orange border-next-darker-orange hover:bg-next-darker-orange hover:text-next-blue
     }
     .btn-orange{
-        @apply btn text-next-blue border-next-blue hover:bg-next-blue hover:text-next-darker-orange
+        @apply btn bg-next-darker-orange text-next-blue border-next-blue hover:bg-next-blue hover:text-next-darker-orange
     }
     .btn-white{
-        @apply btn border-next-blue text-next-blue hover:bg-next-blue hover:text-next-white
+        @apply btn bg-next-white border-next-blue text-next-blue hover:bg-next-blue hover:text-next-white
     }
 }
