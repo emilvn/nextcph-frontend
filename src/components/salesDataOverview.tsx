@@ -10,16 +10,16 @@ const renderGridContent = (data: IOverviewData, formatNumber: (number: number, a
       <p className="text-lg font-bold">{formatNumber(data.totalRevenue, true)}</p>
     </div>
     <div className="bg-white p-4 border border-gray-200 rounded">
-      <p className="text-gray-800">Total salg</p>
-      <p className="text-lg font-bold">{formatNumber(data.totalSales, true)}</p>
+      <p className="text-gray-800">Total antal salg</p>
+      <p className="text-lg font-bold">{data.totalSales} stk. </p>
     </div>
     <div className="bg-white p-4 border border-gray-200 rounded">
       <p className="text-gray-800">Gennemsnitlig daglig omsætning</p>
       <p className="text-lg font-bold">{formatNumber(data.averageDailyRevenue, true)}</p>
     </div>
     <div className="bg-white p-4 border border-gray-200 rounded">
-      <p className="text-gray-800">Gennemsnitlig daglig salg</p>
-      <p className="text-lg font-bold">{formatNumber(data.averageDailySales, true)}</p>
+      <p className="text-gray-800">Gennemsnitlig daglig antal salg</p>
+      <p className="text-lg font-bold">{data.averageDailySales.toFixed(2)} stk. </p>
     </div>
   </div>
 );
@@ -45,7 +45,11 @@ const renderTableContent = (categories: IOverviewCategory[], formatNumber: (numb
   </table>
 );
 
-const formatNumber = (number: number, addCurrency: boolean = false, isPercentage: boolean = false) => {
+const formatNumber = (number: number | undefined, addCurrency: boolean = false, isPercentage: boolean = false) => {
+  if (number == null) {
+    return addCurrency ? 'N/A DKK' : 'N/A';
+  }
+
   const decimalPlaces = isPercentage ? (number % 1 === 0 ? 0 : 1) : 2;
   const formattedNumber = number.toLocaleString('da-DK', {
     minimumFractionDigits: decimalPlaces,
@@ -54,6 +58,7 @@ const formatNumber = (number: number, addCurrency: boolean = false, isPercentage
 
   return addCurrency ? `${formattedNumber} DKK` : formattedNumber;
 };
+
 
 const renderOverviewContent = (data: IOverviewData, formatNumber: (number: number, addCurrency?: boolean) => string) => (
   <div>
