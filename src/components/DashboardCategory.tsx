@@ -6,6 +6,7 @@ import {
     Title,
     Tooltip,
     Legend,
+    type ChartOptions
 } from 'chart.js';
 import {Bar} from 'react-chartjs-2';
 import {ChannelType} from "../types/channel.types.ts";
@@ -74,9 +75,18 @@ export function DashboardCategory({channel}: {
         Legend
     );
 
-    const options = {
+    const options: ChartOptions = {
         responsive: true,
         plugins: {
+            tooltip: {
+                callbacks: {
+                    label: function (context) {
+                        const label = context.dataset.label || '';
+                        const value = context.parsed.y || 0;
+                        return label + ': ' + value.toFixed(1) + '%';
+                    }
+                }
+            },
             legend: {
                 position: 'top' as const,
             },
@@ -107,9 +117,9 @@ export function DashboardCategory({channel}: {
             {
                 label: channelDict[channel],
                 data: Object.values(categoryNumbers),
-                backgroundColor: '#010E2B',
-                borderColor: '#F96B4C',
-                borderWidth: 2,
+                backgroundColor: '#F96B4C',
+                borderColor: '#010E2B',
+                borderWidth: 1,
             },
         ],
     };
