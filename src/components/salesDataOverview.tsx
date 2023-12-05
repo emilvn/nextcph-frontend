@@ -2,6 +2,7 @@ import { ChannelType } from '../types/channel.types';
 import useDashboard from '../hooks/useDashboard';
 import { IOverviewData, IOverviewCategory } from '../types/dashboard.types';
 import loading from './loading';
+import { useState } from 'react';
 
 const renderGridContent = (data: IOverviewData, formatNumber: (number: number, addCurrency?: boolean) => string) => (
   <div className="grid grid-cols-4 gap-4 mb-4">
@@ -59,26 +60,9 @@ const formatNumber = (number: number | undefined, addCurrency: boolean = false, 
   return addCurrency ? `${formattedNumber} DKK` : formattedNumber;
 };
 
-const renderOverviewContent = (data: IOverviewData | IOverviewData[], formatNumber: (number: number, addCurrency?: boolean) => string) => (
-  <div>
-    {Array.isArray(data) ? (
-      data.map((item, index) => (
-        <div key={index}>
-          {renderGridContent(item, formatNumber)}
-          {item.categories && renderTableContent(item.categories, formatNumber)}
-        </div>
-      ))
-    ) : (
-      <>
-        {renderGridContent(data, formatNumber)}
-        {data.categories && renderTableContent(data.categories, formatNumber)}
-      </>
-    )}
-  </div>
-);
-
-function SalesDataOverview({ channel }: { channel: ChannelType }) {
+const SalesDataOverview = ({ channel }: { channel: ChannelType }) => {
   const { isLoading, overviewData } = useDashboard(channel);
+  const [showTable, setShowTable] = useState(false);
 
   return (
     <div className="bg-gray-100 p-4">
@@ -86,11 +70,31 @@ function SalesDataOverview({ channel }: { channel: ChannelType }) {
       {!isLoading && (
         <div className="border border-gray-300 p-4">
           <h2 className="text-lg font-bold mb-4">Salgs data oversigt</h2>
-          <div>{renderOverviewContent(overviewData, formatNumber)}</div>
+          <div>
+            {Array.isArray(overviewData) ? (
+              overviewData.map((data, index) => (
+                <div key={index}>
+                  {renderGridContent(data, formatNumber)}
+                  {showTable && 'categories' in data && data.categories && renderTableContent(data.categories, formatNumber)}
+                </div>
+              ))
+            ) : (
+              <>
+                {renderGridContent(overviewData, formatNumber)}
+                {showTable && (overviewData as IOverviewData)?.categories && renderTableContent((overviewData as IOverviewData).categories, formatNumber)}
+              </>
+            )}
+          </div>
+         <button className="btn-blue mt-4 w-full" onClick={() => setShowTable(!showTable)}>
+          {showTable ? 'Skjul tabel' : 'Vis tabel'}
+        </button>
         </div>
       )}
     </div>
   );
-}
+};
 
 export default SalesDataOverview;
+
+
+
