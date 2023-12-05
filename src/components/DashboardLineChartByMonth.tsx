@@ -5,6 +5,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 import { Line } from 'react-chartjs-2';
 import { setSalesDataByDay } from "../helpers/setSalesDataByDay.ts";
 import { setChartData } from "../helpers/setChartData.ts";
+import { getDaysOfCurrentMonth } from "../helpers/getDaysOfCurrentMonth.ts";
 
 interface ILineChatProps {
     lineChartData: {
@@ -21,7 +22,7 @@ function DashboardLineChartByMonth({ lineChartData }: ILineChatProps) {
 
     if (lineChartData.isLoading) return (<Loading.LoadingPage />);
 
-    const daysOfCurrentMonthArray = Array.from(Array(new Date(new Date(lineChartData.month).getFullYear(), new Date(lineChartData.month).getMonth() + 1, 0).getDate()).keys()).map((_, index) => index + 1);
+    const daysOfCurrentMonthArray = getDaysOfCurrentMonth(lineChartData.month, lineChartData.year);
     const monthlyData = setSalesDataByDay(lineChartData.currentSales, daysOfCurrentMonthArray);
     const { chartData, chartOptions } = setChartData(daysOfCurrentMonthArray, monthlyData);
 
