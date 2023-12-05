@@ -4,53 +4,61 @@ import { IOverviewData, IOverviewCategory } from '../types/dashboard.types';
 import loading from './loading';
 import { useState } from 'react';
 
-const renderGridContent = (data: IOverviewData, formatNumber: (number: number, addCurrency?: boolean) => string) => (
-  <div className="grid grid-cols-4 gap-4 mb-4">
-    <div className="bg-white p-4 border border-gray-200 rounded">
-      <p className="text-gray-800">Total omsætning</p>
-      <p className="text-lg font-bold">{formatNumber(data.totalRevenue, true)}</p>
+function renderGridContent(data: IOverviewData, formatNumber: (number: number, addCurrency?: boolean) => string) {
+  return (
+    <div className="grid grid-cols-4 gap-4 mb-4">
+      <div className="bg-white p-4 border border-gray-200 rounded">
+        <p className="text-gray-800">Total omsætning</p>
+        <p className="text-lg font-bold">{formatNumber(data.totalRevenue, true)}</p>
+      </div>
+      <div className="bg-white p-4 border border-gray-200 rounded">
+        <p className="text-gray-800">Total antal salg</p>
+        <p className="text-lg font-bold">{data.totalSales} stk. </p>
+      </div>
+      <div className="bg-white p-4 border border-gray-200 rounded">
+        <p className="text-gray-800">Gennemsnitlig daglig omsætning</p>
+        <p className="text-lg font-bold">{formatNumber(data.averageDailyRevenue, true)}</p>
+      </div>
+      <div className="bg-white p-4 border border-gray-200 rounded">
+        <p className="text-gray-800">Gennemsnitlig daglig antal salg</p>
+        <p className="text-lg font-bold">{data.averageDailySales.toFixed(2)} stk. </p>
+      </div>
     </div>
-    <div className="bg-white p-4 border border-gray-200 rounded">
-      <p className="text-gray-800">Total antal salg</p>
-      <p className="text-lg font-bold">{data.totalSales} stk. </p>
-    </div>
-    <div className="bg-white p-4 border border-gray-200 rounded">
-      <p className="text-gray-800">Gennemsnitlig daglig omsætning</p>
-      <p className="text-lg font-bold">{formatNumber(data.averageDailyRevenue, true)}</p>
-    </div>
-    <div className="bg-white p-4 border border-gray-200 rounded">
-      <p className="text-gray-800">Gennemsnitlig daglig antal salg</p>
-      <p className="text-lg font-bold">{data.averageDailySales.toFixed(2)} stk. </p>
-    </div>
-  </div>
-);
+  );
+}
 
-const renderTableContent = (categories: IOverviewCategory[], formatNumber: (number: number, addCurrency?: boolean, isPercentage?: boolean) => string) => (
-  <table className="min-w-full">
-    <thead>
-      <tr>
-        <th className="bg-gray-200 border border-gray-300 p-2">Kategori</th>
-        <th className="bg-gray-200 border border-gray-300 p-2">Total</th>
-        <th className="bg-gray-200 border border-gray-300 p-2">Procent</th>
-      </tr>
-    </thead>
-    <tbody>
-      {categories.map((category: IOverviewCategory, index: number) => (
-        <tr key={index}>
-          <td className="border border-gray-300 p-2">{category.name}</td>
-          <td className="border border-gray-300 p-2">{formatNumber(category.total, true)}</td>
-          <td className="border border-gray-300 p-2">{formatNumber(category.percentage, false, true)}%</td>
+function renderTableContent(categories: IOverviewCategory[], formatNumber: (number: number, addCurrency?: boolean, isPercentage?: boolean) => string) {
+  return (
+    <table className="min-w-full">
+      <thead>
+        <tr>
+          <th className="bg-gray-200 border border-gray-300 p-2">Kategori</th>
+          <th className="bg-gray-200 border border-gray-300 p-2">Total</th>
+          <th className="bg-gray-200 border border-gray-300 p-2">Procent</th>
         </tr>
-      ))}
-    </tbody>
-  </table>
-);
+      </thead>
+      <tbody>
+        {categories.map((category: IOverviewCategory, index: number) => (
+          <tr key={index}>
+            <td className="border border-gray-300 p-2">{category.name}</td>
+            <td className="border border-gray-300 p-2">{formatNumber(category.total, true)}</td>
+            <td className="border border-gray-300 p-2">{formatNumber(category.percentage, false, true)}%</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
 
-const formatNumber = (number: number | undefined, addCurrency: boolean = false, isPercentage: boolean = false) => {
+function formatNumber(number: number | undefined, addCurrency: boolean = false, isPercentage: boolean = false) {
   if (number == null) {
     return addCurrency ? 'N/A DKK' : 'N/A';
   }
 
+  // Bestemer antallet af decimaler baseret på om det er en procentdel:
+  // Hvis det er en procentdel (isPercentage er sand), og tallet har ingen decimaler,
+  // så brug 0 decimaler, ellers brug 1 decimal.
+  // Hvis det ikke er en procentdel (isPercentage er falsk), brug altid 2 decimaler.
   const decimalPlaces = isPercentage ? (number % 1 === 0 ? 0 : 1) : 2;
   const formattedNumber = number.toLocaleString('da-DK', {
     minimumFractionDigits: decimalPlaces,
@@ -58,9 +66,9 @@ const formatNumber = (number: number | undefined, addCurrency: boolean = false, 
   });
 
   return addCurrency ? `${formattedNumber} DKK` : formattedNumber;
-};
+}
 
-const SalesDataOverview = ({ channel }: { channel: ChannelType }) => {
+function SalesDataOverview({ channel }: { channel: ChannelType }) {
   const { isLoading, overviewData } = useDashboard(channel);
   const [showTable, setShowTable] = useState(false);
 
@@ -71,30 +79,22 @@ const SalesDataOverview = ({ channel }: { channel: ChannelType }) => {
         <div className="border border-gray-300 p-4">
           <h2 className="text-lg font-bold mb-4">Salgs data oversigt</h2>
           <div>
-            {Array.isArray(overviewData) ? (
-              overviewData.map((data, index) => (
-                <div key={index}>
-                  {renderGridContent(data, formatNumber)}
-                  {showTable && 'categories' in data && data.categories && renderTableContent(data.categories, formatNumber)}
-                </div>
-              ))
-            ) : (
-              <>
-                {renderGridContent(overviewData, formatNumber)}
-                {showTable && (overviewData as IOverviewData)?.categories && renderTableContent((overviewData as IOverviewData).categories, formatNumber)}
-              </>
-            )}
+            {/* Tjekker om overviewData er en array. Hvis det er tilfældet,
+            bruges det direkte. Hvis ikke, omsluttes det i et array. */}
+            {(Array.isArray(overviewData) ? overviewData : [overviewData]).map((data, index) => (
+              <div key={index}>
+                {renderGridContent(data, formatNumber)}
+                {showTable && data.categories && renderTableContent(data.categories, formatNumber)}
+              </div>
+            ))}
           </div>
-         <button className="btn-blue mt-4 w-full" onClick={() => setShowTable(!showTable)}>
-          {showTable ? 'Skjul tabel' : 'Vis tabel'}
-        </button>
+          <button className="btn-blue mt-4 w-full" onClick={() => setShowTable(!showTable)}>
+            {showTable ? 'Skjul tabel' : 'Vis tabel'}
+          </button>
         </div>
       )}
     </div>
   );
-};
+}
 
 export default SalesDataOverview;
-
-
-
