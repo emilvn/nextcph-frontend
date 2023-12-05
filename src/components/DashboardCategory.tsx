@@ -40,7 +40,9 @@ export function DashboardCategory({channel}: {
 
 
     function calculateCategoryPercentages() {
-        const CategoryPercentages: { [key: string]: number } = {};
+        const CategoryPercentages: {
+            [key: string]: number
+        } = {};
         let totalValue: number = 0;
 
         combinedData.forEach(sale => {
@@ -75,7 +77,7 @@ export function DashboardCategory({channel}: {
         Legend
     );
 
-    const options: ChartOptions = {
+    const options: ChartOptions<"bar"> = {
         responsive: true,
         plugins: {
             tooltip: {
@@ -98,7 +100,7 @@ export function DashboardCategory({channel}: {
         scales: {
             y: {
                 ticks: {
-                    callback: function (value: unknown) {
+                    callback: function (value) {
                         if (!!value) return value.toString() + '%';
                     },
                 },
