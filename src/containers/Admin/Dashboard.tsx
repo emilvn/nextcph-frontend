@@ -11,10 +11,10 @@ function Dashboard({ channel }: { channel: ChannelType }) {
   const { monthlySales, isLoading, setMonth, setYear, month, year } = useDashboard(channel);
 
   const dateStates = {
+    month,
+    year,
     setMonth,
     setYear,
-    month,
-    year
   };
 
   const lineChartData = {
