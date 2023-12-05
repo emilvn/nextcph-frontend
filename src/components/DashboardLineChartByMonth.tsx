@@ -16,8 +16,6 @@ interface ILineChatProps {
     }
 }
 
-
-
 function DashboardLineChartByMonth({ lineChartData }: ILineChatProps) {
     ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
