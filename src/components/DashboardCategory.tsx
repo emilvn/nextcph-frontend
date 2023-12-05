@@ -37,26 +37,6 @@ export function DashboardCategory({channel}: {
         };
     });
 
-    /*function calculateCategoryNumbers() {
-        const CategoryNumbers: { [key: string]: number } = {};
-
-        combinedData.forEach(sale => {
-            sale.products.forEach(product => {
-                product.categories.forEach(category => {
-                    const categoryName = category;
-                    const productPrice = product.product.price;
-
-                    if (!CategoryNumbers[categoryName]) {
-                        CategoryNumbers[categoryName] = productPrice;
-                    } else {
-                        CategoryNumbers[categoryName] += productPrice;
-                    }
-                });
-            });
-        });
-
-        return CategoryNumbers;
-    }*/
 
     function calculateCategoryPercentages() {
         const CategoryPercentages: { [key: string]: number } = {};
@@ -127,7 +107,9 @@ export function DashboardCategory({channel}: {
             {
                 label: channelDict[channel],
                 data: Object.values(categoryNumbers),
-                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                backgroundColor: '#010E2B',
+                borderColor: '#F96B4C',
+                borderWidth: 2,
             },
         ],
     };
