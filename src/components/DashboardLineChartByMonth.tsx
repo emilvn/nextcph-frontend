@@ -28,7 +28,7 @@ function DashboardLineChartByMonth({ lineChartData }: ILineChatProps) {
 
     return (
         <div>
-            <Line className="bg-next-white" options={chartOptions} data={chartData} />
+            <Line className="bg-next-white p-20" options={chartOptions} data={chartData} />
         </div>
     )
 }
