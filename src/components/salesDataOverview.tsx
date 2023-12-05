@@ -59,6 +59,7 @@ function formatNumber(number: number | undefined, addCurrency: boolean = false, 
   // Hvis det er en procentdel (isPercentage er sand), og tallet har ingen decimaler,
   // så brug 0 decimaler, ellers brug 1 decimal.
   // Hvis det ikke er en procentdel (isPercentage er falsk), brug altid 2 decimaler.
+
   const decimalPlaces = isPercentage ? (number % 1 === 0 ? 0 : 1) : 2;
   const formattedNumber = number.toLocaleString('da-DK', {
     minimumFractionDigits: decimalPlaces,
