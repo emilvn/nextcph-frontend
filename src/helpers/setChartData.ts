@@ -39,7 +39,7 @@ function setChartData(daysOfCurrentMonthArray: number[], monthlyData: number[]) 
         }
     };
 
-    return { chartData, chartOptions, daysOfCurrentMonthArray };
+    return { chartData, chartOptions };
 }
 
 export { setChartData }

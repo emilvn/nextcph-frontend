@@ -31,7 +31,7 @@ function MonthPickerHeader({ dateStates, modalState, monthString }: IMonthPicker
         <div className="flex justify-between items-center">
             <div className="flex flex-col">
                 <div className="text-lg text-next-blue font-bold mb-2">Vælg måned</div>
-                <button onClick={() => modalState.setIsOpenMonthPicker(!modalState.isOpenMonthPicker)} className="btn-blue bg-next-blue">{monthString}. {dateStates.year}</button>
+                <button onClick={() => modalState.setIsOpenMonthPicker(!modalState.isOpenMonthPicker)} className="btn-blue bg-next-blue">{monthString} {dateStates.year}</button>
             </div>
         </div>
     );
