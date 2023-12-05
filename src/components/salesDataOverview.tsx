@@ -59,32 +59,36 @@ const formatNumber = (number: number | undefined, addCurrency: boolean = false, 
   return addCurrency ? `${formattedNumber} DKK` : formattedNumber;
 };
 
-
-const renderOverviewContent = (data: IOverviewData, formatNumber: (number: number, addCurrency?: boolean) => string) => (
+const renderOverviewContent = (data: IOverviewData | IOverviewData[], formatNumber: (number: number, addCurrency?: boolean) => string) => (
   <div>
-    {renderGridContent(data, formatNumber)}
-    {data.categories && renderTableContent(data.categories, formatNumber)}
+    {Array.isArray(data) ? (
+      data.map((item, index) => (
+        <div key={index}>
+          {renderGridContent(item, formatNumber)}
+          {item.categories && renderTableContent(item.categories, formatNumber)}
+        </div>
+      ))
+    ) : (
+      <>
+        {renderGridContent(data, formatNumber)}
+        {data.categories && renderTableContent(data.categories, formatNumber)}
+      </>
+    )}
   </div>
-)
+);
 
 function SalesDataOverview({ channel }: { channel: ChannelType }) {
   const { isLoading, overviewData } = useDashboard(channel);
 
   return (
     <div className="bg-gray-100 p-4">
-      {isLoading && (
-        <loading.LoadingSpinner />
-      )}
+      {isLoading && <loading.LoadingSpinner />}
       {!isLoading && (
         <div className="border border-gray-300 p-4">
           <h2 className="text-lg font-bold mb-4">Salgs data oversigt</h2>
-          {Array.isArray(overviewData) ? (
-            overviewData.map((data, index) => <div key={index}>{renderOverviewContent(data, formatNumber)}</div>)
-          ) : (
-            <div>{renderOverviewContent(overviewData as IOverviewData, formatNumber)}</div>
-          )}
+          <div>{renderOverviewContent(overviewData, formatNumber)}</div>
         </div>
-       )}
+      )}
     </div>
   );
 }
