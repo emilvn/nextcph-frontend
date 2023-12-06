@@ -11,6 +11,7 @@ import {formatPrice} from "../../helpers/formatting.ts";
 import {IoIosArrowDown} from "react-icons/io";
 import useSales from "../../hooks/useSales.ts";
 import SaleOverview from "./SaleOverview.tsx";
+import toast from "react-hot-toast";
 
 const channelDict = {
 	"HAIR_CARE": "FRISØR",
@@ -174,12 +175,23 @@ function Products({channel}:{channel:ChannelType}) {
 	const localStorageSale = localStorage.getItem("sale");
 	const initialSaleProducts = localStorageSale ? JSON.parse(localStorageSale) : [];
 
-	const {products, isLoading} = useProducts(channel);
+	const {products, loadProducts, isLoading} = useProducts(channel);
 	const {create} = useSales(channel);
 
+	const [filteredProducts, setFilteredProducts] = useState<IProduct[]>([]);
 	const [isOpenSales, setIsOpenSales] = useState(false);
 	const [search, setSearch] = useState("");
 	const [currentSaleProducts, setCurrentSaleProducts] = useState<INewSaleProduct[]>(initialSaleProducts);
+
+	useEffect(() => {
+		const filtered = products.filter((product) => product.name.toLowerCase().includes(search.toLowerCase()));
+		setFilteredProducts(filtered);
+	}, [products, search]);
+
+	useEffect(() => {
+		loadProducts();
+		setFilteredProducts(products);
+	}, [isOpenSales]);
 
 	useEffect(() => {
 		localStorage.setItem("sale", JSON.stringify(currentSaleProducts));
@@ -195,17 +207,20 @@ function Products({channel}:{channel:ChannelType}) {
 	if(isLoading) return (<Loading.LoadingPage/>);
 	if(!products || products.length === 0) return (<PageLayout>No products found...</PageLayout>);
 
-	const filteredProducts = products.filter((product) => product.name.toLowerCase().includes(search.toLowerCase()));
-
 	const categories = getCategories(filteredProducts);
 
 	function addToSale(product: IProduct|INewSaleProduct) {
 		const productInSale = currentSaleProducts.find((p) => p.id === product.id);
-		if(productInSale){
+		if(product.stock === 0 || (!!productInSale && productInSale.quantity >= product.stock)){
+			toast.error("Der er ikke flere af dette produkt på lager");
+		}
+		else if(!!productInSale && productInSale.quantity < product.stock){
 			productInSale.quantity++;
+			toast.success(product.name + " tilføjet til salg");
 		}
 		else{
-			currentSaleProducts.push({name: product.name, price:product.price, id: product.id, quantity: 1, channel: product.channel});
+			currentSaleProducts.push({name: product.name, price:product.price, id: product.id, quantity: 1, channel: product.channel, stock: product.stock});
+			toast.success(product.name + " tilføjet til salg");
 		}
 		setCurrentSaleProducts([...currentSaleProducts]);
 	}
@@ -213,6 +228,7 @@ function Products({channel}:{channel:ChannelType}) {
 		const productInSale = currentSaleProducts.find((p) => p.id === product.id);
 		if(productInSale){
 			productInSale.quantity--;
+			toast.success(product.name + " fjernet fra salg");
 			if(productInSale.quantity <= 0){
 				const index = currentSaleProducts.indexOf(productInSale);
 				currentSaleProducts.splice(index, 1);

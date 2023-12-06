@@ -48,14 +48,6 @@ function ProductRow({ product, addToSale, removeFromSale}: IProductRowProps) {
 	);
 }
 
-interface ISaleOverviewProps {
-	currentSaleProducts: INewSaleProduct[];
-	setIsOpenSales: Dispatch<SetStateAction<boolean>>;
-	setCurrentSaleProducts: Dispatch<SetStateAction<INewSaleProduct[]>>;
-	create: (sale: INewSale) => Promise<void>;
-	addToSale: (product: IProduct | INewSaleProduct) => void;
-	removeFromSale: (product: IProduct | INewSaleProduct) => void;
-}
 
 function SaleButtons(props: { finishSale: () => Promise<void>, resetSale: () => void }) {
 	return <>
@@ -73,6 +65,14 @@ function SaleButtons(props: { finishSale: () => Promise<void>, resetSale: () => 
 		</button>
 	</>;
 }
+interface ISaleOverviewProps {
+	currentSaleProducts: INewSaleProduct[];
+	setIsOpenSales: Dispatch<SetStateAction<boolean>>;
+	setCurrentSaleProducts: Dispatch<SetStateAction<INewSaleProduct[]>>;
+	create: (sale: INewSale) => Promise<void>;
+	addToSale: (product: IProduct | INewSaleProduct) => void;
+	removeFromSale: (product: IProduct | INewSaleProduct) => void;
+}
 
 function SaleOverview(props:ISaleOverviewProps) {
 	const {
@@ -84,7 +84,7 @@ function SaleOverview(props:ISaleOverviewProps) {
 		addToSale
 	} = props;
 	const {user} = useUser();
-	const saleTotal = currentSaleProducts.reduce((acc, product) => acc + product.price, 0);
+	const saleTotal = currentSaleProducts.reduce((acc, product) => acc + (product.price*product.quantity), 0);
 	async function finishSale() {
 		if(!user || !user.id) {
 			toast.error("Du skal være logget ind for at oprette et salg");
@@ -95,8 +95,10 @@ function SaleOverview(props:ISaleOverviewProps) {
 			user_id: user.id
 		}
 		void create(sale);
-		setIsOpenSales(false);
-		setCurrentSaleProducts([]);
+		setTimeout(() => {
+			setIsOpenSales(false);
+			setCurrentSaleProducts([]);
+		}, 1000);
 	}
 
 	function resetSale() {
