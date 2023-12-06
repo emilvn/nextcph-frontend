@@ -12,7 +12,9 @@ function useProducts(channel: ChannelType) {
 
     const api = new ProductApi();
 
-    useEffect(() => {
+
+    const loadProducts = () => {
+        setIsLoading(true);
         api.getByChannel(channel).then((products) => {
             setProducts(products);
             setIsLoading(false);
@@ -20,6 +22,10 @@ function useProducts(channel: ChannelType) {
             if(e instanceof AxiosError) console.error(e.response?.data || e.message);
             toast.error("Kunne ikke hente produkter");
         });
+    }
+
+    useEffect(() => {
+        loadProducts();
     }, []);
 
     const create = async (product: INewProduct) => {
@@ -57,7 +63,7 @@ function useProducts(channel: ChannelType) {
         }
     }
 
-    return {products, isLoading, create, update, destroy};
+    return {products, loadProducts, isLoading, create, update, destroy};
 }
 
 export default useProducts;

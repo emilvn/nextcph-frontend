@@ -7,14 +7,19 @@ import Products from "./containers/User/Products.tsx";
 import SaleHistory from "./containers/User/SaleHistory.tsx";
 import Dashboard from "./containers/Dashboard/Dashboard.tsx";
 import ProductOverview from "./containers/Admin/Products/ProductOverview.tsx";
-import {Dispatch, SetStateAction, useState} from "react";
+import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {ChannelType} from "./types/channel.types.ts";
 import SelectChannelUser from "./containers/User/SelectChannelUser.tsx";
 import SelectChannelAdmin from "./containers/Admin/SelectChannelAdmin.tsx";
 
 function App() {
+    const localStorageChannel:ChannelType|null = localStorage.getItem("channel") ? JSON.parse(localStorage.getItem("channel")!) : null
     const { user, isLoaded, isSignedIn } = useUser();
-    const [channel, setChannel] = useState<ChannelType>("COSMETIC");
+    const [channel, setChannel] = useState<ChannelType|null>(localStorageChannel);
+
+    useEffect(() => {
+        localStorage.setItem("channel", JSON.stringify(channel));
+    },[channel]);
 
     if (!isLoaded) return (<Loading.LoadingPage/>)
 
@@ -33,30 +38,40 @@ function App() {
 }
 
 interface RoutesProps {
-    channel: ChannelType;
-    setChannel: Dispatch<SetStateAction<ChannelType>>
+    channel: ChannelType|null;
+    setChannel: Dispatch<SetStateAction<ChannelType|null>>
 }
 function UserRoutes({channel, setChannel}:RoutesProps) {
+
     return (
         <>
             <NavBarUser/>
             <Routes>
-                <Route path="/" element={<SelectChannelUser setChannel={setChannel}/>}/>
-                <Route path="/user/products" element={<Products channel={channel}/>}/>
-                <Route path="/user/history" element={<SaleHistory channel={channel}/>}/>
+                <Route path="/*" element={<SelectChannelUser setChannel={setChannel}/>}/>
+                {!!channel &&
+                    <>
+                        <Route path="/user/products" element={<Products channel={channel}/>}/>
+                        <Route path="/user/history" element={<SaleHistory channel={channel}/>}/>
+                    </>
+                }
             </Routes>
         </>
     )
 }
 
 function AdminRoutes({channel, setChannel}:RoutesProps) {
+
     return (
         <>
             <NavBarAdmin/>
             <Routes>
                 <Route path="/*" element={<SelectChannelAdmin setChannel={setChannel} /> }/>
-                <Route path="/admin/dashboard" element={<Dashboard channel={channel}/>}/>
-                <Route path="/admin/products" element={<ProductOverview channel={channel}/>}/>
+                {!!channel &&
+                    <>
+                        <Route path="/admin/dashboard" element={<Dashboard channel={channel}/>}/>
+                        <Route path="/admin/products" element={<ProductOverview channel={channel}/>}/>
+                    </>
+                }
             </Routes>
         </>
     )

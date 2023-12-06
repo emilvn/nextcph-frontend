@@ -1,4 +1,4 @@
-import type { PropsWithChildren } from "react";
+import type {PropsWithChildren} from "react";
 import StyledToaster from "./Toaster.tsx";
 
 function Footer() {
@@ -23,14 +23,14 @@ function Footer() {
 	);
 }
 
-function PageLayout({ children }: PropsWithChildren) {
+function PageLayout({ children }:PropsWithChildren) {
 	return (<>
-		<main className="mt-20 mx-20 w-auto z-10 relative bg-next-white">
-			{children}
-		</main>
-		<div className="h-[calc(60vh-80px)] bg-next-white"></div>
-		<Footer />
-		<StyledToaster />
+			<main className="mt-20 md:mx-20 w-auto z-10 relative bg-next-white">
+				{children}
+			</main>
+			<div className="h-[calc(60vh-80px)] bg-next-white"></div>
+			<Footer/>
+			<StyledToaster/>
 	</>
 	);
 }

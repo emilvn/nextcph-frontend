@@ -6,6 +6,7 @@ import type {ActionMeta, Options} from "react-select";
 import Creatable from "react-select/creatable";
 import {FaCheck} from "react-icons/fa";
 import {IoCloseSharp} from "react-icons/io5";
+import {getCategories} from "../../../helpers/categories.ts";
 
 interface IProductFormData {
 	name: string;
@@ -83,20 +84,11 @@ function ProductForm(props: IProductFormProps) {
 				isMulti={true}
 				onChange={props.handleCategoryChange}
 				value={props.selectedCategories?.map(category => ({value: category, label: category}))}
-				//TODO: brug getCategories fra helpers/categories.ts når merget til main
-				/*options={getCategories(props.products).map((categoryName, index) => ({
+				options={getCategories(props.products).map((categoryName, index) => ({
 					value: categoryName,
 					label: categoryName,
 					key: index
 				}))}
-				 */
-				options={Array.from(new Set(props.products.flatMap(product =>
-					product.categories.map(category => category.category.name))))
-					.map((categoryName, index) => ({
-						value: categoryName,
-						label: categoryName,
-						key: index
-					}))}
 			/>
 			<div className="flex justify-around mt-10">
 				<button

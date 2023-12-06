@@ -4,7 +4,7 @@ import PageLayout from "../../components/layout.tsx";
 import {Link} from "react-router-dom";
 
 interface SelectChannelProps {
-	setChannel: Dispatch<SetStateAction<ChannelType>>
+	setChannel: Dispatch<SetStateAction<ChannelType|null>>
 
 }
 function SelectChannelAdmin({setChannel}: SelectChannelProps) {
