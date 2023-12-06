@@ -39,4 +39,4 @@ function Dashboard({ channel }: { channel: ChannelType }) {
   );
 }
 
-export default Dashboard;
+export default Dashboard; 
