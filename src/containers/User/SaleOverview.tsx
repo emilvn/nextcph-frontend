@@ -94,10 +94,9 @@ function SaleOverview(props:ISaleOverviewProps) {
 			products: currentSaleProducts,
 			user_id: user.id
 		}
-		await create(sale);
+		void create(sale);
 		setIsOpenSales(false);
 		setCurrentSaleProducts([]);
-		toast.success("Salg oprettet");
 	}
 
 	function resetSale() {
