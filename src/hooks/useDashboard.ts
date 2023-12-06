@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { ChannelType } from "../types/channel.types.ts";
 import { AxiosError } from "axios";
-import type { IOverviewData, ICategoryNames } from "../types/dashboard.types.ts";
+import type { IOverviewData } from "../types/dashboard.types.ts";
 import SaleApi from "../utils/SaleApi.ts";
 import toast from "react-hot-toast";
 import type { ISale } from "../types/sales.types.ts";
