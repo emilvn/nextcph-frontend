@@ -1,6 +1,12 @@
 # Next CPH Frontend
 ## First year exam project, KEA Datamatiker - December 2023
 
+### Segments
+- [Deployed frontend](#deployed-frontend)
+- [Installation](#installation)
+- [Setting up Clerk](#setting-up-clerk)
+- [Setting up admin user](#setting-up-admin-user)
+
 ### Deployed frontend
 https://nextcph.vercel.app
 
