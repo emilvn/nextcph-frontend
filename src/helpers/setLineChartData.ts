@@ -1,5 +1,5 @@
 function setChartData(daysOfCurrentMonthArray: number[], monthlyData: number[]) {
-    const chartData = {
+    const lineChartData = {
         labels: daysOfCurrentMonthArray,
         datasets: [{
             label: 'Salg pr dag i DKK',
@@ -10,7 +10,7 @@ function setChartData(daysOfCurrentMonthArray: number[], monthlyData: number[]) 
             backgroundColor: '#F96B4C',
         }]
     };
-    const chartOptions = {
+    const lineChartOptions = {
         responsive: true,
         plugins: {
             legend: {
@@ -19,7 +19,7 @@ function setChartData(daysOfCurrentMonthArray: number[], monthlyData: number[]) 
             title: {
                 display: true,
                 color: '#010E2B',
-                text: 'Månedlige salg',
+                text: 'Linje Diagram',
                 font: {
                     size: 20,
                 }
@@ -39,7 +39,7 @@ function setChartData(daysOfCurrentMonthArray: number[], monthlyData: number[]) 
         }
     };
 
-    return { chartData, chartOptions };
+    return { lineChartData, lineChartOptions };
 }
 
 export { setChartData }
