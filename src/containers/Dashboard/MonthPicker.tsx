@@ -4,16 +4,18 @@ import type { Dispatch, SetStateAction } from "react";
 import { FaArrowCircleLeft, FaArrowCircleRight } from "react-icons/fa";
 import { getMonthsArray } from "../../helpers/getMonthsArray";
 
-interface IDateStatesProps {
-    dateStates: {
+interface IMonthPickerStatesProps {
+    monthPickerStates: {
         month: number;
         year: number;
+        showStatisticsTable: boolean;
         setMonth: Dispatch<SetStateAction<number>>;
         setYear: Dispatch<SetStateAction<number>>;
+        setShowStatisticsTable: Dispatch<SetStateAction<boolean>>;
     };
 }
 
-interface IMonthPickerProps extends IDateStatesProps {
+interface IMonthPickerProps extends IMonthPickerStatesProps {
     modalState: {
         isOpenMonthPicker: boolean;
         selectedYearInModal: number;
@@ -26,12 +28,12 @@ interface IMonthPickerHeadProps extends IMonthPickerProps {
     monthString: string;
 }
 
-function MonthPickerHeader({ dateStates, modalState, monthString }: IMonthPickerHeadProps) {
+function MonthPickerHeader({ monthPickerStates, modalState, monthString }: IMonthPickerHeadProps) {
     return (
         <div className="flex justify-between items-center">
             <div className="flex flex-col">
                 <div className="text-lg text-next-blue font-bold mb-2">Vælg måned</div>
-                <button onClick={() => modalState.setIsOpenMonthPicker(!modalState.isOpenMonthPicker)} className="btn-blue bg-next-blue">{monthString} {dateStates.year}</button>
+                <button onClick={() => modalState.setIsOpenMonthPicker(!modalState.isOpenMonthPicker)} className="btn-blue bg-next-blue">{monthString} {monthPickerStates.year}</button>
             </div>
         </div>
     );
@@ -41,7 +43,7 @@ interface IMonthPickerModalProps extends IMonthPickerProps {
     months: string[];
 }
 
-function MonthPickerModal({ dateStates, modalState, months }: IMonthPickerModalProps) {
+function MonthPickerModal({ monthPickerStates, modalState, months }: IMonthPickerModalProps) {
     return (
         <Modal>
             <div className="w-60 h-60 flex flex-col items-center justify-center text-next-darker-orange bg-next-blue shadow-lg">
@@ -52,7 +54,7 @@ function MonthPickerModal({ dateStates, modalState, months }: IMonthPickerModalP
                 </div>
                 <div className="grid grid-cols-3 gap-4">
                     {months.map((monthString, index) => (
-                        <Month key={index} dateStates={dateStates} modalState={modalState} isActive={!!(dateStates.month === index + 1 && dateStates.year === modalState.selectedYearInModal)} monthNumber={index + 1} monthString={monthString} />
+                        <Month key={index} monthPickerStates={monthPickerStates} modalState={modalState} isActive={!!(monthPickerStates.month === index + 1 && monthPickerStates.year === modalState.selectedYearInModal)} monthNumber={index + 1} monthString={monthString} />
                     ))}
                 </div>
             </div>
@@ -66,12 +68,12 @@ interface IMonthProps extends IMonthPickerProps {
     monthNumber: number;
 }
 
-function Month({ dateStates, modalState, isActive, monthString, monthNumber }: IMonthProps) {
+function Month({ monthPickerStates, modalState, isActive, monthString, monthNumber }: IMonthProps) {
     function handleClick() {
+        monthPickerStates.setShowStatisticsTable(false);
         modalState.setIsOpenMonthPicker(!modalState.isOpenMonthPicker);
-        dateStates.setYear(modalState.selectedYearInModal);
-        dateStates.setMonth(monthNumber);
-
+        monthPickerStates.setYear(modalState.selectedYearInModal);
+        monthPickerStates.setMonth(monthNumber);
     }
     return (
         <>
@@ -91,17 +93,17 @@ function Modal({ children }: { children: ReactNode }) {
     );
 }
 
-function MonthPicker({ dateStates }: IDateStatesProps) {
+function MonthPicker({ monthPickerStates }: IMonthPickerStatesProps) {
     const [isOpenMonthPicker, setIsOpenMonthPicker] = useState(false);
-    const [selectedYearInModal, setSelectedYearInModal] = useState(dateStates.year);
+    const [selectedYearInModal, setSelectedYearInModal] = useState(monthPickerStates.year);
     const modalState = { isOpenMonthPicker, selectedYearInModal, setIsOpenMonthPicker, setSelectedYearInModal }
     const months = getMonthsArray();
 
     return (
         <div className="flex flex-col items-start">
-            <MonthPickerHeader dateStates={dateStates} modalState={modalState} monthString={months[dateStates.month - 1]} />
+            <MonthPickerHeader monthPickerStates={monthPickerStates} modalState={modalState} monthString={months[monthPickerStates.month - 1]} />
             {isOpenMonthPicker && (
-                <MonthPickerModal dateStates={dateStates} modalState={modalState} months={months} />)
+                <MonthPickerModal monthPickerStates={monthPickerStates} modalState={modalState} months={months} />)
             }
         </div>
     );

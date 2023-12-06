@@ -10,13 +10,16 @@ import Statistics from "./Statistics.tsx";
 
 function Dashboard({ channel }: { channel: ChannelType }) {
   const [currentSales, setCurrentSales] = useState<ISale[]>([]);
+  const [showStatisticsTable, setShowStatisticsTable] = useState(false);
   const { monthlySales, overviewData, isLoading, setMonth, setYear, month, year } = useDashboard(channel);
 
-  const dateStates = {
+  const monthPickerStates = {
     month,
     year,
+    showStatisticsTable,
     setMonth,
     setYear,
+    setShowStatisticsTable
   };
 
   const lineChartComponentData = {
@@ -37,6 +40,8 @@ function Dashboard({ channel }: { channel: ChannelType }) {
     overviewData,
     isLoading,
     channel,
+    showStatisticsTable,
+    setShowStatisticsTable
   };
 
   useEffect(() => {
@@ -46,7 +51,7 @@ function Dashboard({ channel }: { channel: ChannelType }) {
   return (
     <PageLayout>
       <div className="bg-next-white">
-        <MonthPicker dateStates={dateStates} />
+        <MonthPicker monthPickerStates={monthPickerStates} />
         <Statistics statisticsData={statisticsData} />
         <div className="flex">
           <div className="w-full">

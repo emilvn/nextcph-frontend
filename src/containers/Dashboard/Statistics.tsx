@@ -1,7 +1,6 @@
 import type { ChannelType } from '../../types/channel.types.ts';
 import type { IOverviewData, IOverviewCategory } from '../../types/dashboard.types.ts';
 import loading from '../../components/loading.tsx';
-import { useState } from 'react';
 import { formatPercentage, formatPrice } from "../../helpers/formatting.ts";
 
 function GridContent(data: IOverviewData) {
@@ -55,11 +54,12 @@ interface IStaticticsDataProps {
         overviewData: IOverviewData;
         isLoading: boolean;
         channel: ChannelType;
+        showStatisticsTable: boolean;
+        setShowStatisticsTable: React.Dispatch<React.SetStateAction<boolean>>;
     }
 }
 
 function Statistics({ statisticsData }: IStaticticsDataProps) {
-    const [showTable, setShowTable] = useState(false);
 
     if (statisticsData.isLoading) return <loading.LoadingSpinner size={60} />
     if (!statisticsData.overviewData) return <div>No data found...</div>
@@ -73,11 +73,11 @@ function Statistics({ statisticsData }: IStaticticsDataProps) {
                         <div>
                             {GridContent(statisticsData.overviewData)}
                             {statisticsData.overviewData.categories && statisticsData.overviewData.categories.length > 0 && (
-                                <button className="btn-white mt-4 w-full" onClick={() => setShowTable(!showTable)}>
-                                    {showTable ? 'Skjul tabel' : 'Vis tabel'}
+                                <button className="btn-white mt-4 w-full" onClick={() => statisticsData.setShowStatisticsTable(!statisticsData.showStatisticsTable)}>
+                                    {statisticsData.showStatisticsTable ? 'Skjul tabel' : 'Vis tabel'}
                                 </button>
                             )}
-                            {showTable && statisticsData.overviewData.categories && TableContent(statisticsData.overviewData.categories)}
+                            {statisticsData.showStatisticsTable && statisticsData.overviewData.categories && TableContent(statisticsData.overviewData.categories)}
                         </div>
                     </div>
                 </div>
