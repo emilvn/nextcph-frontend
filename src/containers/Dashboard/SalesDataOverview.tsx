@@ -3,13 +3,14 @@ import useDashboard from '../../hooks/useDashboard.ts';
 import type { IOverviewData, IOverviewCategory } from '../../types/dashboard.types.ts';
 import loading from '../../components/loading.tsx';
 import { useState } from 'react';
+import {formatPercentage, formatPrice} from "../../helpers/formatting.ts";
 
-function GridContent(data: IOverviewData, formatNumber: (number: number, addCurrency?: boolean) => string) {
+function GridContent(data: IOverviewData) {
     return (
         <div className="grid grid-cols-4 gap-4 mb-4">
             <div className="bg-white p-4 border border-gray-200 rounded">
                 <p className="text-gray-800">Total omsætning</p>
-                <p className="text-lg font-bold">{formatNumber(data.totalRevenue, true)}</p>
+                <p className="text-lg font-bold">{formatPrice(data.totalRevenue)}</p>
             </div>
             <div className="bg-white p-4 border border-gray-200 rounded">
                 <p className="text-gray-800">Total antal salg</p>
@@ -17,7 +18,7 @@ function GridContent(data: IOverviewData, formatNumber: (number: number, addCurr
             </div>
             <div className="bg-white p-4 border border-gray-200 rounded">
                 <p className="text-gray-800">Gennemsnitlig daglig omsætning</p>
-                <p className="text-lg font-bold">{formatNumber(data.averageDailyRevenue, true)}</p>
+                <p className="text-lg font-bold">{formatPrice(data.averageDailyRevenue)}</p>
             </div>
             <div className="bg-white p-4 border border-gray-200 rounded">
                 <p className="text-gray-800">Gennemsnitlig daglig antal salg</p>
@@ -27,7 +28,7 @@ function GridContent(data: IOverviewData, formatNumber: (number: number, addCurr
     );
 }
 
-function TableContent(categories: IOverviewCategory[], formatNumber: (number: number, addCurrency?: boolean, isPercentage?: boolean) => string) {
+function TableContent(categories: IOverviewCategory[]) {
     return (
         <table className="min-w-full">
             <thead>
@@ -41,32 +42,13 @@ function TableContent(categories: IOverviewCategory[], formatNumber: (number: nu
             {categories.map((category: IOverviewCategory, index: number) => (
                 <tr key={index}>
                     <td className="border border-gray-300 p-2">{category.name}</td>
-                    <td className="border border-gray-300 p-2">{formatNumber(category.total, true)}</td>
-                    <td className="border border-gray-300 p-2">{formatNumber(category.percentage, false, true)}%</td>
+                    <td className="border border-gray-300 p-2">{formatPrice(category.total)}</td>
+                    <td className="border border-gray-300 p-2">{formatPercentage(category.percentage)}%</td>
                 </tr>
             ))}
             </tbody>
         </table>
     );
-}
-
-function formatNumber(number: number | undefined, addCurrency: boolean = false, isPercentage: boolean = false) {
-    if (number == null) {
-        return addCurrency ? 'N/A DKK' : 'N/A';
-    }
-
-    // Bestemmer antallet af decimaler baseret på om det er en procentdel:
-    // Hvis det er en procentdel (isPercentage er sand), og tallet har ingen decimaler,
-    // så brug 0 decimaler, ellers brug 1 decimal.
-    // Hvis det ikke er en procentdel (isPercentage er falsk), brug altid 2 decimaler.
-
-    const decimalPlaces = isPercentage ? (number % 1 === 0 ? 0 : 1) : 2;
-    const formattedNumber = number.toLocaleString('da-DK', {
-        minimumFractionDigits: decimalPlaces,
-        maximumFractionDigits: decimalPlaces,
-    });
-
-    return addCurrency ? `${formattedNumber} DKK` : formattedNumber;
 }
 
 function SalesDataOverview({ channel }: { channel: ChannelType }) {
@@ -85,11 +67,11 @@ function SalesDataOverview({ channel }: { channel: ChannelType }) {
                     <h2 className="text-lg font-bold mb-4">Salgs data oversigt</h2>
                     <div>
                         <div>
-                            {GridContent(overviewData, formatNumber)}
+                            {GridContent(overviewData)}
                             <button className="btn-blue mt-4 w-full" onClick={() => setShowTable(!showTable)}>
                                 {showTable ? 'Skjul tabel' : 'Vis tabel'}
                             </button>
-                            {showTable && overviewData.categories && TableContent(overviewData.categories, formatNumber)}
+                            {showTable && overviewData.categories && TableContent(overviewData.categories)}
                         </div>
                     </div>
                 </div>
