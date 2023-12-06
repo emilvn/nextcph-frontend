@@ -11,13 +11,13 @@ function Footer() {
 			<div>
 				<h3 className="text-xl text-next-blue font-bold">KONTAKT</h3>
 				<p className="text-next-blue">Viktor</p>
-				<a href="mailto:example@example.com" className="cursor-pointer">example@example.com</a>
+				<a href="mailto:vira0002@stud.kea.dk" className="cursor-pointer">vira0002@stud.kea.dk</a>
 				<p className="text-next-blue">Emil</p>
-				<a href="mailto:emilvnielsen@hotmail.com">emilvnielsen@hotmail.com</a>
+				<a href="mailto:emni0001@stud.kea.dk">emni0001@stud.kea.dk</a>
 				<p className="text-next-blue">Martin</p>
-				<a href="mailto:example@example.com">example@example.com</a>
+				<a href="mailto:mani0002@stud.kea.dk">mani0002@stud.kea.dk</a>
 				<p className="text-next-blue">Christian</p>
-				<a href="mailto:example@example.com">example@example.com</a>
+				<a href="mailto:chbi0001@stud.kea.dk">chbi0001@stud.kea.dk</a>
 			</div>
 		</footer>
 	);

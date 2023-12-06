@@ -6,10 +6,14 @@ interface IOverviewData {
 	categories: IOverviewCategory[];
 }
 
-interface IOverviewCategory{
+interface IOverviewCategory {
 	name: string;
 	total: number;
 	percentage: number;
 }
 
-export type { IOverviewData, IOverviewCategory }
+interface ICategoryNames {
+	name: string;
+}
+
+export type { IOverviewData, IOverviewCategory, ICategoryNames }

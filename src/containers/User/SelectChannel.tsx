@@ -5,14 +5,14 @@ import {Link} from "react-router-dom";
 
 interface SelectChannelProps {
 	setChannel: Dispatch<SetStateAction<ChannelType|null>>
-
+	to:string
 }
-function SelectChannelUser({setChannel}: SelectChannelProps) {
+function SelectChannel({setChannel, to}: SelectChannelProps) {
 	return (
 		<PageLayout>
 			<div className="flex items-center bg-[url('/images/Admin.png')] w-full min-h-screen bg-cover bg-center justify-between">
 				<Link
-					to={"user/products"}
+					to={to}
 					onClick={()=> setChannel("COSMETIC")}
 					className="hover:bg-opacity-0 hover:backdrop-blur-0 transition-colors text-2xl lg:text-5xl w-full flex justify-center items-center bg-next-blue min-h-screen bg-opacity-50 backdrop-blur-sm"
 				>
@@ -21,7 +21,7 @@ function SelectChannelUser({setChannel}: SelectChannelProps) {
 					</div>
 				</Link>
 				<Link
-					to={"/user/products"}
+					to={to}
 					onClick={() => setChannel("HAIR_CARE")}
 					className="hover:bg-opacity-0 hover:backdrop-blur-0 transition-colors text-2xl lg:text-5xl w-full flex justify-center items-center bg-next-blue min-h-screen bg-opacity-50 backdrop-blur-sm"
 				>
@@ -34,4 +34,4 @@ function SelectChannelUser({setChannel}: SelectChannelProps) {
 	);
 }
 
-export default SelectChannelUser;
+export default SelectChannel;

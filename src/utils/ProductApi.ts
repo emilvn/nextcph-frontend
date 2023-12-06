@@ -1,7 +1,7 @@
 import Api from "./Api.ts";
 import axios from "axios";
-import {INewProduct, IProduct, IUpdateProduct} from "../types/products.types.ts";
-import {ChannelType} from "../types/channel.types.ts";
+import { INewProduct, IProduct, IUpdateProduct } from "../types/products.types.ts";
+import { ChannelType } from "../types/channel.types.ts";
 
 class ProductApi extends Api<IProduct, INewProduct> {
 	url: string;
@@ -9,9 +9,9 @@ class ProductApi extends Api<IProduct, INewProduct> {
 		super();
 		this.url = this.endpoint + "/products";
 	}
-	public async getByChannel(channel:ChannelType): Promise<IProduct[]> {
+	public async getByChannel(channel: ChannelType): Promise<IProduct[]> {
 		const response = await axios.get(this.url + "?channel=" + channel);
-		if(response.status !== 200 || !response.data) {
+		if (response.status !== 200 || !response.data) {
 			throw new Error("Failed to fetch");
 		}
 		return response.data;
@@ -19,7 +19,7 @@ class ProductApi extends Api<IProduct, INewProduct> {
 
 	public async getById(id: string): Promise<IProduct> {
 		const response = await axios.get(this.url + "/" + id);
-		if(response.status !== 200 || !response.data) {
+		if (response.status !== 200 || !response.data) {
 			throw new Error("Failed to fetch");
 		}
 		return response.data;
@@ -27,7 +27,7 @@ class ProductApi extends Api<IProduct, INewProduct> {
 
 	public async create(data: INewProduct): Promise<IProduct> {
 		const response = await axios.post(this.url, data);
-		if(response.status !== 201 || !response.data) {
+		if (response.status !== 201 || !response.data) {
 			throw new Error("Failed to create");
 		}
 		return response.data;
@@ -35,7 +35,7 @@ class ProductApi extends Api<IProduct, INewProduct> {
 
 	public async update(data: IUpdateProduct): Promise<IProduct> {
 		const response = await axios.put(this.url + "/" + data.id, data);
-		if(response.status !== 200 || !response.data) {
+		if (response.status !== 200 || !response.data) {
 			throw new Error("Failed to update");
 		}
 		return response.data;
@@ -43,7 +43,7 @@ class ProductApi extends Api<IProduct, INewProduct> {
 
 	public async deleteById(id: string): Promise<IProduct> {
 		const response = await axios.delete(this.url + "/" + id);
-		if(response.status !== 200) {
+		if (response.status !== 200) {
 			throw new Error("Failed to delete");
 		}
 		return response.data;

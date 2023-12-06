@@ -6,10 +6,10 @@ import type { ISale } from "../../types/sales.types.ts";
 import type { ISaleProduct } from "../../types/products.types.ts";
 import { useUser } from "@clerk/clerk-react";
 import type { UserResource } from "@clerk/types";
-import {useState, type Dispatch, type SetStateAction, ReactNode, useEffect} from "react";
-import {convertToDanishTime, formatPrice} from "../../helpers/formatting.ts";
+import { useState, type Dispatch, type SetStateAction, ReactNode, useEffect } from "react";
+import { convertToDanishTime, formatPrice } from "../../helpers/formatting.ts";
 import { groupSalesByDate } from "../../helpers/groupSalesByDate.ts";
-import { calculateProductsTotalPrice } from "../../helpers/CalculateProductPrice.ts";
+import { calculateProductsTotalPrice } from "../../helpers/calculateProductPrice.ts";
 import InfiniteScroll from "react-infinite-scroll-component";
 import {IoIosArrowDown} from "react-icons/io";
 import {FaMoneyBill} from "react-icons/fa";
@@ -37,12 +37,12 @@ function ButtonFilterSales({ user, setUserId }: ButtonFilterSalesProps) {
 	}
 	return (
 		<button onClick={toggleMySales} className="btn-blue w-48 text-2xl">
-				{buttonText}
+			{buttonText}
 		</button>
 	)
 }
 
-function GroupedSales({ group, children}: { group: string; children: ReactNode}) {
+function GroupedSales({ group, children }: { group: string; children: ReactNode }) {
 	return (
 		<div className="bg-next-white">
 			<h2
@@ -57,15 +57,15 @@ function GroupedSales({ group, children}: { group: string; children: ReactNode})
 	);
 }
 
-function SaleList({ currentSales}: { currentSales: ISale[] }) {
+function SaleList({ currentSales }: { currentSales: ISale[] }) {
 	const groupedSales: { [key: string]: ISale[] } = groupSalesByDate({ sales: currentSales });
 	return (
 		<div className="flex flex-col gap-[1px] lg:w-1/2">
 			{Object.entries(groupedSales).map(([group, salesInGroup]) => (
 				<GroupedSales group={group} key={group}>
-						{salesInGroup.map((sale) => (
-							<Sale key={sale.id} sale={sale} />
-						))}
+					{salesInGroup.map((sale) => (
+						<Sale key={sale.id} sale={sale} />
+					))}
 				</GroupedSales>
 			))}
 		</div>
@@ -121,7 +121,7 @@ function Product({ product }: { product: ISaleProduct }) {
 	);
 }
 
-function Header({children}: {children: ReactNode}) {
+function Header({ children }: { children: ReactNode }) {
 	return (
 		<div className="z-10 bg-next-blue p-2 fixed top-20 left-20 right-20 flex justify-between items-center">
 			<h1 className="text-3xl font-bold text-next-darker-orange">Salgshistorik</h1>
@@ -145,7 +145,7 @@ function SaleHistory({ channel }: { channel: ChannelType }) {
 	const [currentSales, setCurrentSales] = useState<ISale[]>([]);
 
 	useEffect(() => {
-		if(userId) setCurrentSales(sales.filter((sale) => sale.user_id === userId));
+		if (userId) setCurrentSales(sales.filter((sale) => sale.user_id === userId));
 		else setCurrentSales(sales);
 	}, [sales, userId]);
 
@@ -160,7 +160,7 @@ function SaleHistory({ channel }: { channel: ChannelType }) {
 	return (
 		<PageLayout>
 			<Header>
-				<ButtonFilterSales user={user} setUserId={setUserId}/>
+				<ButtonFilterSales user={user} setUserId={setUserId} />
 			</Header>
 			{!sales || currentSales.length === 0 && <NoSales/>}
 			{currentSales.length > 0 &&
@@ -177,14 +177,14 @@ function SaleHistory({ channel }: { channel: ChannelType }) {
 					}
 					loader={
 						<div className="flex justify-center items-center p-4 lg:w-1/2">
-							<Loading.LoadingSpinner size={48}/>
+							<Loading.LoadingSpinner size={48} />
 						</div>
 					}
 				>
 					<SaleList currentSales={currentSales} />
 				</InfiniteScroll>
 			}
-	</PageLayout>
+		</PageLayout>
 	)
 }
 
