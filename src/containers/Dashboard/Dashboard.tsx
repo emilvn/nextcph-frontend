@@ -1,4 +1,4 @@
-import SalesDataOverview from "../../components/salesDataOverview.tsx";
+import SalesDataOverview from "./SalesDataOverview.tsx";
 import PageLayout from "../../components/layout.tsx";
 import { ChannelType } from "../../types/channel.types.ts";
 

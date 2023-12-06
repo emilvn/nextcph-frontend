@@ -2,6 +2,7 @@ import Api from "./Api.ts";
 import type {INewSale, ISale} from "../types/sales.types.ts";
 import axios from "axios";
 import {ChannelType} from "../types/channel.types.ts";
+import {IOverviewData} from "../types/dashboard.types.ts";
 
 class SaleApi extends Api<ISale, INewSale> {
 	url: string;
@@ -49,8 +50,8 @@ class SaleApi extends Api<ISale, INewSale> {
 		return response.data;
 	}
 
-	public async getDashboardOverviewData(channel: ChannelType): Promise<[]> {
-		const response = await axios.get(this.url + "/dashboard?channel=" + channel);
+	public async getDashboardOverviewData(channel: ChannelType): Promise<IOverviewData> {
+		const response = await axios.get(this.url + "/statistics?channel=" + channel);
 		if (response.status !== 200 || !response.data) {
 			throw new Error("Failed to fetch dashboard overview data");
 		}

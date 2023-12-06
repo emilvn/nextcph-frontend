@@ -8,7 +8,7 @@ import SaleApi from "../utils/SaleApi.ts";
 import toast from "react-hot-toast";
 
 function useDashboard(channel: ChannelType) {
-    const [overviewData, setOverviewData] = useState<IOverviewData[]>([]);
+    const [overviewData, setOverviewData] = useState<IOverviewData|null>(null);
 
     const [isLoading, setIsLoading] = useState(true);
 
@@ -26,7 +26,7 @@ function useDashboard(channel: ChannelType) {
 					}
 					toast.error("Kunne ikke hente dashboard overview data");
 				}
-  		};
+		};
 		getDashboardOverviewData().then(() => setIsLoading(false));
 	}, [])
 
