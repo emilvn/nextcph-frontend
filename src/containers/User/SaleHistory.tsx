@@ -12,6 +12,7 @@ import { groupSalesByDate } from "../../helpers/groupSalesByDate.ts";
 import { calculateProductsTotalPrice } from "../../helpers/CalculateProductPrice.ts";
 import InfiniteScroll from "react-infinite-scroll-component";
 import {IoIosArrowDown} from "react-icons/io";
+import {FaMoneyBill} from "react-icons/fa";
 
 interface ButtonFilterSalesProps {
 	user: UserResource | null | undefined;
@@ -129,6 +130,15 @@ function Header({children}: {children: ReactNode}) {
 	);
 }
 
+function NoSales() {
+	return (
+		<div className="flex flex-col justify-center items-center p-8 min-h-[calc(100vh-300px)]">
+			<FaMoneyBill className="text-8xl text-center"/>
+			<p className="text-center">Ingen salg endnu...</p>
+		</div>
+	)
+}
+
 function SaleHistory({ channel }: { channel: ChannelType }) {
 	const { sales, isLoading, setPage, hasMore, setUserId, userId } = useSales(channel);
 	const { user } = useUser();
@@ -140,7 +150,6 @@ function SaleHistory({ channel }: { channel: ChannelType }) {
 	}, [sales, userId]);
 
 	if (isLoading) return (<Loading.LoadingPage />);
-	if (!sales || sales.length === 0) return (<PageLayout><div className="p-4 text-next-blue text-xl">Ingen salg endnu...</div></PageLayout>);
 
 	function fetchNextPage() {
 		setTimeout(() => {
@@ -153,9 +162,7 @@ function SaleHistory({ channel }: { channel: ChannelType }) {
 			<Header>
 				<ButtonFilterSales user={user} setUserId={setUserId}/>
 			</Header>
-			{currentSales. length === 0 &&
-				<div className="mt-40 p-4 text-next-blue text-xl">Ingen salg endnu...</div>
-			}
+			{!sales || currentSales.length === 0 && <NoSales/>}
 			{currentSales.length > 0 &&
 				<InfiniteScroll
 					dataLength={currentSales.length}

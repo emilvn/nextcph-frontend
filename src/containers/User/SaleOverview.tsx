@@ -75,14 +75,8 @@ interface ISaleOverviewProps {
 }
 
 function SaleOverview(props:ISaleOverviewProps) {
-	const {
-		currentSaleProducts,
-		setIsOpenSales,
-		setCurrentSaleProducts,
-		create,
-		removeFromSale,
-		addToSale
-	} = props;
+	const {currentSaleProducts, setIsOpenSales, setCurrentSaleProducts,
+		create, removeFromSale, addToSale} = props;
 	const {user} = useUser();
 	const saleTotal = currentSaleProducts.reduce((acc, product) => acc + (product.price*product.quantity), 0);
 	async function finishSale() {
@@ -98,7 +92,7 @@ function SaleOverview(props:ISaleOverviewProps) {
 		setTimeout(() => {
 			setIsOpenSales(false);
 			setCurrentSaleProducts([]);
-		}, 1000);
+		}, 500);
 	}
 
 	function resetSale() {

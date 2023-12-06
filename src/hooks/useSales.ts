@@ -46,9 +46,9 @@ function useSales(channel: ChannelType) {
 	const create = async (sale: INewSale) => {
 		try {
 			const newSale = await api.create(sale);
-			toast.success("Salg oprettet");
 			const newSales = [...sales, newSale];
 			setSales(newSales);
+			toast.success("Salg oprettet");
 		} catch (e:unknown) {
 			if(e instanceof AxiosError) {
 				console.error(e.response?.data || e.message);
