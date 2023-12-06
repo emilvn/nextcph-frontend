@@ -3,7 +3,7 @@ function convertToDanishDate(utcTimestamp: string): string {
 
     return date.toLocaleString('da-DK', {
         year: 'numeric',
-        month: '2-digit',
+        month: 'long',
         day: '2-digit',
     });
 }
@@ -17,4 +17,13 @@ function convertToDanishTime(utcTimestamp: string): string {
     }).replace(".", ":");
 }
 
-export { convertToDanishDate, convertToDanishTime }
+function formatPrice(price: number): string {
+    return new Intl.NumberFormat('da-DK', { style: 'currency', currency: 'DKK' }).format(price);
+}
+
+function formatPercentage(number: number) {
+    return number.toLocaleString('da-DK', { maximumFractionDigits: 1, minimumFractionDigits: 1 });
+}
+
+
+export { convertToDanishDate, convertToDanishTime, formatPrice, formatPercentage}
