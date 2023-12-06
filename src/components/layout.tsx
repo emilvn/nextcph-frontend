@@ -1,4 +1,5 @@
 import type {PropsWithChildren} from "react";
+import StyledToaster from "./Toaster.tsx";
 
 function Footer() {
 	return (
@@ -24,11 +25,12 @@ function Footer() {
 
 function PageLayout({ children }:PropsWithChildren) {
 	return (<>
-			<main className="mt-20 mr-20 ml-20 w-auto bg-white z-10 relative">
+			<main className="mt-20 mx-20 w-auto z-10 relative bg-next-white">
 				{children}
 			</main>
 			<div className="h-[calc(60vh-80px)] bg-next-white"></div>
 			<Footer/>
+			<StyledToaster/>
 	</>
 	);
 }

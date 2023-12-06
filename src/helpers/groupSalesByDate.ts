@@ -1,4 +1,4 @@
-import { convertToDanishDate } from "./dateTime";
+import { convertToDanishDate } from "./formatting.ts";
 import { ISale } from "../types/sales.types";
 
 function groupSalesByDate({ sales }: { sales: ISale[] }): { [key: string]: ISale[] } {
