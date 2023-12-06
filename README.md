@@ -1,27 +1,56 @@
-# React + TypeScript + Vite
+# Next CPH Frontend
+## First year exam project, KEA Datamatiker - December 2023
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### Deployed frontend
+https://nextcph.vercel.app
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
+### Installation
+1. Clone the repository
+```bash
+git clone https://github.com/emilvn/nextcph-frontend.git
+```
+2. Enter the directory
+```bash
+cd nextcph-frontend
+```
+3. Install dependencies
+```bash
+npm install
+```
+4. Create a .env file in the root of the project and add a VITE_BACKEND_URL variable that points to your local backend, or the deployed backend
+- Local backend
+```bash
+VITE_BACKEND_URL=http://localhost:3000
+```
+- Deployed backend
+```bash
+VITE_BACKEND_URL=https://nextcph-backend.azurewebsites.net
+```
+4b. To run the application on your own machine you also need a Clerk publishable key. You can get one by creating an account on https://clerk.dev, see the Clerk section below for more information.
+```bash
+VITE_APP_CLERK_PUBLISHABLE_KEY=clerk_public_key
+```
+5. Run the server in development mode
+```bash
+npm run dev
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+Now the frontend should be running.
+
+### Setting up Clerk
+1. Create an account on https://clerk.dev
+2. Create a new Clerk application
+3. Go to the settings tab and copy the publishable key
+4. Add the publishable key to your .env file
+```bash
+VITE_APP_CLERK_PUBLISHABLE_KEY=clerk_public_key
+```
+5. Go to the sign in methods tab and enable the email/password sign in method
+Now you should be able to sign in with Clerk on the frontend. However you will not be able to sign in as admin, as you have not set up an admin user yet.
+
+#### Setting up admin user
+1. Go to the organizations tab and create a new organization called "admin"
+2. Go to the users tab and create a new user
+3. Go to the organizations tab and add the user to the admin organization
+Now you should be able to sign in as admin with the user you created
+
