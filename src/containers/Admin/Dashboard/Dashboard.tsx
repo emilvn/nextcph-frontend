@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import LineChart from "./LineChart.tsx";
-import PageLayout from "../../components/layout.tsx";
-import type { ChannelType } from "../../types/channel.types.ts";
+import PageLayout from "../../../components/layout.tsx";
+import type { ChannelType } from "../../../types/channel.types.ts";
 import MonthPicker from "./MonthPicker.tsx";
-import useDashboard from "../../hooks/useDashboard.ts";
-import { ISale } from "../../types/sales.types.ts";
+import useDashboard from "../../../hooks/useDashboard.ts";
+import { ISale } from "../../../types/sales.types.ts";
 import { BarChart } from "./BarChart.tsx";
 import Statistics from "./Statistics.tsx";
 

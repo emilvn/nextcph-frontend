@@ -1,11 +1,11 @@
-import { ChannelType } from "../../types/channel.types.ts";
-import { ISale } from "../../types/sales.types.ts";
-import Loading from "../../components/loading.tsx";
+import { ChannelType } from "../../../types/channel.types.ts";
+import { ISale } from "../../../types/sales.types.ts";
+import Loading from "../../../components/loading.tsx";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { monthlySalesDataByDay } from "../../helpers/setSalesDataByDay.ts";
-import { setChartData } from "../../helpers/setLineChartData.ts";
-import { getDaysOfCurrentMonth } from "../../helpers/getDaysOfCurrentMonth.ts";
+import { monthlySalesDataByDay } from "../../../helpers/setSalesDataByDay.ts";
+import { setChartData } from "../../../helpers/setLineChartData.ts";
+import { getDaysOfCurrentMonth } from "../../../helpers/getDaysOfCurrentMonth.ts";
 
 interface ILineChartComponentProps {
     lineChartComponentData: {

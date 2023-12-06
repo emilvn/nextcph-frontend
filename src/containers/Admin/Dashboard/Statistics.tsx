@@ -1,7 +1,7 @@
-import type { ChannelType } from '../../types/channel.types.ts';
-import type { IOverviewData, IOverviewCategory } from '../../types/dashboard.types.ts';
-import loading from '../../components/loading.tsx';
-import { formatPercentage, formatPrice } from "../../helpers/formatting.ts";
+import type { ChannelType } from '../../../types/channel.types.ts';
+import type { IOverviewData, IOverviewCategory } from '../../../types/dashboard.types.ts';
+import loading from '../../../components/loading.tsx';
+import { formatPercentage, formatPrice } from "../../../helpers/formatting.ts";
 
 function GridContent(data: IOverviewData) {
     return (
