@@ -9,11 +9,11 @@ import {
     type ChartOptions
 } from 'chart.js';
 import {Bar} from 'react-chartjs-2';
-import {ChannelType} from "../types/channel.types.ts";
-import {getCategories} from "../helpers/categories.ts";
-import useProducts from "../hooks/useProducts.ts";
-import useSales from "../hooks/useSales.ts";
-import {channelDict} from "../helpers/channelDict.ts";
+import {ChannelType} from "../../types/channel.types.ts";
+import {getCategories} from "../../helpers/categories.ts";
+import useProducts from "../../hooks/useProducts.ts";
+import useSales from "../../hooks/useSales.ts";
+import {channelDict} from "../../helpers/channelDict.ts";
 
 
 export function DashboardCategory({channel}: {
@@ -101,7 +101,7 @@ export function DashboardCategory({channel}: {
             y: {
                 ticks: {
                     callback: function (value) {
-                        if (!!value) return value.toString() + '%';
+                        if (value) return value.toString() + '%';
                     },
                 },
             },

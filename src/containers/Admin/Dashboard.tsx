@@ -1,6 +1,6 @@
 import PageLayout from "../../components/layout.tsx";
 import {ChannelType} from "../../types/channel.types.ts";
-import {DashboardCategory} from "../../components/DashboardCategory.tsx";
+import {DashboardCategory} from "./DashboardCategory.tsx";
 
 function Dashboard({channel}: { channel: ChannelType }) {
     return (
