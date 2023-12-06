@@ -5,7 +5,7 @@ import {NavBarAdmin, NavBarUser} from "./components/nav.tsx";
 import Loading from "./components/loading.tsx";
 import Products from "./containers/User/Products.tsx";
 import SaleHistory from "./containers/User/SaleHistory.tsx";
-import Dashboard from "./containers/Admin/Dashboard.tsx";
+import Dashboard from "./containers/Dashboard/Dashboard.tsx";
 import ProductOverview from "./containers/Admin/Products/ProductOverview.tsx";
 import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {ChannelType} from "./types/channel.types.ts";

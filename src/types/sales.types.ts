@@ -5,7 +5,6 @@ interface INewSale {
 	user_id: string;
 	products: INewSaleProduct[];
 }
-
 interface ISale {
 	id: string;
 	user_id: string;
