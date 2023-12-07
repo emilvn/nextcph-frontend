@@ -6,7 +6,7 @@ function setBarChartData(overviewData: IOverviewCategory[]) {
         labels: overviewData.map((category) => category.name),
         datasets: [
             {
-                label: 'Salg pr kategori i %',
+                label: 'Omsætning pr. kategori i %',
                 data: overviewData.map((category) => category.percentage),
                 backgroundColor: '#F96B4C',
                 borderColor: '#010E2B',
@@ -35,7 +35,7 @@ function setBarChartData(overviewData: IOverviewCategory[]) {
                 font: {
                     size: 20,
                 },
-                text: `Søjle Diagram`,
+                text: `Omsætning pr. Kategori`,
             },
         },
         scales: {

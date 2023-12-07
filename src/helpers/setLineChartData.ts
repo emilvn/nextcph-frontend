@@ -2,7 +2,7 @@ function setChartData(daysOfCurrentMonthArray: number[], monthlyData: number[]) 
     const lineChartData = {
         labels: daysOfCurrentMonthArray,
         datasets: [{
-            label: 'Salg pr dag i DKK',
+            label: 'Omsætning pr. dag i DKK',
             data: monthlyData,
             fill: false,
             borderColor: '#010E2B',
@@ -19,7 +19,7 @@ function setChartData(daysOfCurrentMonthArray: number[], monthlyData: number[]) 
             title: {
                 display: true,
                 color: '#010E2B',
-                text: 'Linje Diagram',
+                text: 'Daglig Omsætning',
                 font: {
                     size: 20,
                 }

@@ -1,7 +1,7 @@
 import type { ChannelType } from '../../../types/channel.types.ts';
 import type { IOverviewData, IOverviewCategory } from '../../../types/dashboard.types.ts';
 import loading from '../../../components/loading.tsx';
-import { formatPercentage, formatPrice } from "../../../helpers/formatting.ts";
+import {formatFraction, formatPercentage, formatPrice} from "../../../helpers/formatting.ts";
 
 function GridContent(data: IOverviewData) {
     return (
@@ -11,16 +11,16 @@ function GridContent(data: IOverviewData) {
                 <p className="text-lg font-bold">{formatPrice(data.totalRevenue)}</p>
             </div>
             <div className="bg-gray-200 p-4 border border-next-white rounded">
-                <p className="text-gray-800">Total antal salg</p>
-                <p className="text-lg font-bold">{data.totalSales} stk. </p>
+                <p className="text-gray-800">Totale antal salg</p>
+                <p className="text-lg font-bold">{data.totalSales}</p>
             </div>
             <div className="bg-gray-200 p-4 border border-next-white rounded">
                 <p className="text-gray-800">Gennemsnitlig daglig omsætning</p>
                 <p className="text-lg font-bold">{formatPrice(data.averageDailyRevenue)}</p>
             </div>
             <div className="bg-gray-200 p-4 border border-next-white rounded">
-                <p className="text-gray-800">Gennemsnitlig daglig antal salg</p>
-                <p className="text-lg font-bold">{data.averageDailySales.toFixed(2)} stk. </p>
+                <p className="text-gray-800">Gennemsnitligt dagligt antal salg</p>
+                <p className="text-lg font-bold">{formatFraction(data.averageDailySales)}</p>
             </div>
         </div>
     );
@@ -33,15 +33,15 @@ function TableContent(categories: IOverviewCategory[]) {
                 <tr>
                     <th className="bg-next-white border border-gray-300 p-2">Kategori</th>
                     <th className="bg-next-white border border-gray-300 p-2">Total</th>
-                    <th className="bg-next-white border border-gray-300 p-2">Procent</th>
+                    <th className="bg-next-white border border-gray-300 p-2">% af total omsætning</th>
                 </tr>
             </thead>
             <tbody>
                 {categories.map((category: IOverviewCategory, index: number) => (
                     <tr key={index}>
                         <td className="border border-gray-300 p-2">{category.name}</td>
-                        <td className="border border-gray-300 p-2">{formatPrice(category.total)}</td>
-                        <td className="border border-gray-300 p-2">{formatPercentage(category.percentage)}%</td>
+                        <td className="border border-gray-300 p-2 text-center">{formatPrice(category.total)}</td>
+                        <td className="border border-gray-300 p-2 text-center">{formatPercentage(category.percentage)}</td>
                     </tr>
                 ))}
             </tbody>
