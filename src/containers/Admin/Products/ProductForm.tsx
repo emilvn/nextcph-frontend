@@ -99,7 +99,10 @@ function ProductForm(props: IProductFormProps) {
 				</button>
 				<button
 					className="btn-blue px-4 py-2"
-					onClick={() => props.setIsOpenModal(false)}
+					onClick={() => {
+						props.setIsOpenModal(false)
+						props.setSelectedCategories([]);
+					}}
 				>
 					<IoCloseSharp size={25}/>
 				</button>
