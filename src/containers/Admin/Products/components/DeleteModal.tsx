@@ -1,7 +1,7 @@
-import type {IProduct} from "../../../types/products.types.ts";
+import type {IProduct} from "../../../../types/products.types.ts";
 import type {Dispatch, SetStateAction} from "react";
-import type {INewProduct, IUpdateProduct} from "../../../types/products.types.ts";
-import Modal from "../../../components/Modal.tsx";
+import type {INewProduct, IUpdateProduct} from "../../../../types/products.types.ts";
+import Modal from "../../../../components/modal.tsx";
 import toast from "react-hot-toast";
 
 interface IDeleteModalProps {

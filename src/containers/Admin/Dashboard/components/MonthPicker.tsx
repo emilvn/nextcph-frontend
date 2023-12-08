@@ -2,7 +2,8 @@ import { ReactNode } from "react";
 import { useState } from "react";
 import type { Dispatch, SetStateAction } from "react";
 import { FaArrowCircleLeft, FaArrowCircleRight } from "react-icons/fa";
-import { getMonthsArray } from "../../../helpers/getMonthsArray.ts";
+
+import {getMonthsArray} from "../../../../helpers/dashboard.ts";
 
 interface IMonthPickerStatesProps {
     monthPickerStates: {

@@ -1,5 +1,5 @@
 import type {PropsWithChildren} from "react";
-import StyledToaster from "./Toaster.tsx";
+import StyledToaster from "./toaster.tsx";
 
 function Footer() {
 	return (

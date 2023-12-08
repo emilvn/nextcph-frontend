@@ -5,11 +5,11 @@ import PageLayout from '../../../components/layout.tsx';
 import useProducts from '../../../hooks/useProducts.ts';
 import loading from '../../../components/loading.tsx';
 import {useState} from 'react';
-import UpdateModal from "./UpdateModal.tsx";
-import CreateModal from "./CreateModal.tsx";
-import DeleteModal from "./DeleteModal.tsx";
-import ProductTable from "./ProductTable.tsx";
-import StyledToaster from "../../../components/Toaster.tsx";
+import UpdateModal from "./components/UpdateModal.tsx";
+import CreateModal from "./components/CreateModal.tsx";
+import DeleteModal from "./components/DeleteModal.tsx";
+import ProductTable from "./components/ProductTable.tsx";
+import StyledToaster from "../../../components/toaster.tsx";
 
 function Header(props: { onClick: () => void }) {
     return (<div className="fixed top-20 left-20 right-20 flex p-4 bg-next-blue items-center justify-between">

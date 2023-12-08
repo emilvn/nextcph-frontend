@@ -7,4 +7,8 @@ interface ICategory {
 	}
 }
 
-export type {ICategory};
+interface ICategoryNames {
+	name: string;
+}
+
+export type {ICategory, ICategoryNames};

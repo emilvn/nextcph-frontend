@@ -8,11 +8,11 @@ import { useUser } from "@clerk/clerk-react";
 import type { UserResource } from "@clerk/types";
 import { useState, type Dispatch, type SetStateAction, ReactNode, useEffect } from "react";
 import { convertToDanishTime, formatPrice } from "../../helpers/formatting.ts";
-import { groupSalesByDate } from "../../helpers/groupSalesByDate.ts";
-import { calculateProductsTotalPrice } from "../../helpers/calculateProductPrice.ts";
+import { calculateProductsTotalPrice } from "../../helpers/calculate.ts";
 import InfiniteScroll from "react-infinite-scroll-component";
 import {IoIosArrowDown} from "react-icons/io";
 import {FaMoneyBill} from "react-icons/fa";
+import {groupSalesByDate} from "../../helpers/dashboard.ts";
 
 interface ButtonFilterSalesProps {
 	user: UserResource | null | undefined;

@@ -1,7 +1,7 @@
-import type { ChannelType } from '../../../types/channel.types.ts';
-import type { IOverviewData, IOverviewCategory } from '../../../types/dashboard.types.ts';
-import loading from '../../../components/loading.tsx';
-import {formatFraction, formatPercentage, formatPrice} from "../../../helpers/formatting.ts";
+import type { ChannelType } from '../../../../types/channel.types.ts';
+import type { IOverviewData, IOverviewCategory } from '../../../../types/dashboard.types.ts';
+import {formatFraction, formatPercentage, formatPrice} from "../../../../helpers/formatting.ts";
+import {Dispatch, SetStateAction} from "react";
 
 function GridContent(data: IOverviewData) {
     return (
@@ -55,13 +55,12 @@ interface IStaticticsDataProps {
         isLoading: boolean;
         channel: ChannelType;
         showStatisticsTable: boolean;
-        setShowStatisticsTable: React.Dispatch<React.SetStateAction<boolean>>;
+        setShowStatisticsTable: Dispatch<SetStateAction<boolean>>;
     }
 }
 
 function Statistics({ statisticsData }: IStaticticsDataProps) {
 
-    if (statisticsData.isLoading) return <loading.LoadingSpinner size={60} />
     if (!statisticsData.overviewData) return <div>No data found...</div>
 
     return (

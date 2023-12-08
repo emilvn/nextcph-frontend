@@ -2,7 +2,8 @@ import Api from "./Api.ts";
 import type { INewSale, ISale } from "../types/sales.types.ts";
 import axios from "axios";
 import { ChannelType } from "../types/channel.types.ts";
-import type { IOverviewData, ICategoryNames } from "../types/dashboard.types.ts";
+import type { IOverviewData } from "../types/dashboard.types.ts";
+import {ICategoryNames} from "../types/categories.types.ts";
 
 interface ISaleDataWithPagination {
 	data: ISale[];

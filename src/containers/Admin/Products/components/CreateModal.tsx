@@ -1,8 +1,8 @@
 import type {Dispatch, SetStateAction} from "react";
-import type {INewProduct, IProduct} from "../../../types/products.types.ts";
+import type {INewProduct, IProduct} from "../../../../types/products.types.ts";
 import ProductForm, {type IProductFormData} from "./ProductForm.tsx";
-import Modal from "../../../components/Modal.tsx";
-import type {ChannelType} from "../../../types/channel.types.ts";
+import Modal from "../../../../components/modal.tsx";
+import type {ChannelType} from "../../../../types/channel.types.ts";
 import type {ActionMeta, Options} from "react-select";
 import toast from "react-hot-toast";
 

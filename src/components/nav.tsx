@@ -9,7 +9,7 @@ import {Link, useLocation} from "react-router-dom";
 import {FaLock, FaUnlock} from "react-icons/fa";
 import {useState} from "react";
 import type {ChannelType} from "../types/channel.types.ts";
-import {channelDict} from "../helpers/channelDict.ts";
+import {dicts} from "../helpers/dicts.ts";
 
 interface NavLinkProps {
     href: string;
@@ -46,7 +46,7 @@ function NavBar({children, channel}: PropsWithChildren<{ channel: ChannelType|nu
                 </div>
                 <div className="mr-3">
                     {channel &&
-                        <h2 className="text-next-blue text-ml font-bold">{channelDict[channel]}</h2>}
+                        <h2 className="text-next-blue text-ml font-bold">{dicts[channel]}</h2>}
                 </div>
                 <div
                     className="transition-colors flex-shrink-0 h-full w-20 flex items-center justify-center bg-next-blue text-next-darker-orange hover:bg-next-darker-orange hover:text-next-blue cursor-pointer">

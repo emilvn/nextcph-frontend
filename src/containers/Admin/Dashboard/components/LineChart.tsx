@@ -1,11 +1,8 @@
-import { ChannelType } from "../../../types/channel.types.ts";
-import { ISale } from "../../../types/sales.types.ts";
-import Loading from "../../../components/loading.tsx";
+import { ChannelType } from "../../../../types/channel.types.ts";
+import { ISale } from "../../../../types/sales.types.ts";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { monthlySalesDataByDay } from "../../../helpers/setSalesDataByDay.ts";
-import { setChartData } from "../../../helpers/setLineChartData.ts";
-import { getDaysOfCurrentMonth } from "../../../helpers/getDaysOfCurrentMonth.ts";
+import {getDaysOfCurrentMonth, monthlySalesDataByDay, setChartData} from "../../../../helpers/dashboard.ts";
 
 interface ILineChartComponentProps {
     lineChartComponentData: {
@@ -19,8 +16,6 @@ interface ILineChartComponentProps {
 
 function LineChart({ lineChartComponentData }: ILineChartComponentProps) {
     ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
-
-    if (lineChartComponentData.isLoading) return (<Loading.LoadingPage />);
 
     const daysOfCurrentMonthArray = getDaysOfCurrentMonth(lineChartComponentData.month, lineChartComponentData.year);
     const monthlyData = monthlySalesDataByDay(lineChartComponentData.currentSales, daysOfCurrentMonthArray);

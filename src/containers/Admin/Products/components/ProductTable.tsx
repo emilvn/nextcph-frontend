@@ -1,6 +1,6 @@
-import type {INewProduct, IProduct, IUpdateProduct} from "../../../types/products.types.ts";
+import type {INewProduct, IProduct, IUpdateProduct} from "../../../../types/products.types.ts";
 import type {Dispatch, SetStateAction} from "react";
-import {formatPrice} from "../../../helpers/formatting.ts";
+import {formatPrice} from "../../../../helpers/formatting.ts";
 
 function ProductTableHeader() {
 	return (

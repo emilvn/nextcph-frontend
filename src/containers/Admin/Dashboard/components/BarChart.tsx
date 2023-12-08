@@ -8,9 +8,10 @@ import {
     Legend
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
-import type { ChannelType } from "../../../types/channel.types.ts";
-import type { IOverviewCategory } from "../../../types/dashboard.types.ts";
-import { setBarChartData } from "../../../helpers/setBarChartData.ts";
+import type { ChannelType } from "../../../../types/channel.types.ts";
+import type { IOverviewCategory } from "../../../../types/dashboard.types.ts";
+
+import {setBarChartData} from "../../../../helpers/dashboard.ts";
 
 interface IBarChartComponentProps {
     barChartComponentData: {

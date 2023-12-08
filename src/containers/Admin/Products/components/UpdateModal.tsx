@@ -1,7 +1,7 @@
-import type {INewProduct, IProduct, IUpdateProduct} from "../../../types/products.types.ts";
+import type {INewProduct, IProduct, IUpdateProduct} from "../../../../types/products.types.ts";
 import type {Dispatch, SetStateAction} from "react";
 import ProductForm, {type IProductFormData} from "./ProductForm.tsx";
-import Modal from "../../../components/Modal.tsx";
+import Modal from "../../../../components/modal.tsx";
 import type {IModalProps} from "./CreateModal.tsx";
 import toast from "react-hot-toast";
 

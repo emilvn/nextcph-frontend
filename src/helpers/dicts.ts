@@ -1,4 +1,4 @@
-export const channelDict = {
+export const dicts = {
     "HAIR_CARE": "FRISØR",
     "COSMETIC": "KOSMETIKER"
 }
