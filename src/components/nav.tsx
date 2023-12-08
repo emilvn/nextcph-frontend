@@ -4,21 +4,29 @@ import {
     SignInButton,
     UserButton,
 } from '@clerk/clerk-react';
-import {type PropsWithChildren} from "react";
-import {Link} from "react-router-dom";
+import type {PropsWithChildren, ReactNode} from "react";
+import {Link, useLocation} from "react-router-dom";
 import {FaLock, FaUnlock} from "react-icons/fa";
 import {useState} from "react";
 import type {ChannelType} from "../types/channel.types.ts";
 import {channelDict} from "../helpers/channelDict.ts";
 
-interface NavLinkProps extends PropsWithChildren {
+interface NavLinkProps {
     href: string;
+    children: ReactNode;
 }
 
 function NavLink({href, children}: NavLinkProps) {
+    const {pathname} = useLocation();
+    const isActive = pathname === href;
+
     return (
-        <Link to={href}
-              className="text-xs h-full flex p-4 items-center hover:bg-next-darker-orange hover:text-next-white text-next-darker-orange font-semibold transition-colors">
+        <Link
+            to={href}
+            className={`text-xs h-full flex p-4 items-center text-next-darker-orange font-semibold transition-colors 
+   						 hover:bg-next-darker-orange hover:text-next-white 
+   						 ${isActive ? 'border-[1.5px] border-next-darker-orange' : ''}`}
+        >
             {children}
         </Link>
     );
