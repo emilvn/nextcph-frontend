@@ -8,6 +8,7 @@ interface SelectChannelProps {
 	to:string
 }
 function SelectChannel({setChannel, to}: SelectChannelProps) {
+	window.scrollTo(0, 0);
 	return (
 		<PageLayout>
 			<div className="flex items-center bg-[url('/images/Admin.png')] w-full min-h-screen bg-cover bg-center justify-between">
