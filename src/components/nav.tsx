@@ -46,7 +46,7 @@ function NavBar({children, channel}: PropsWithChildren<{ channel: ChannelType | 
                 </div>
                 <div className="mr-3">
                     {channel &&
-                        <h2 className="text-next-darker-orange text-ml font-semibold">{channelDict[channel]}</h2>}
+                        <h2 className="text-next-blue text-ml font-bold">{channelDict[channel]}</h2>}
                 </div>
                 <div
                     className="transition-colors flex-shrink-0 h-full w-20 flex items-center justify-center bg-next-blue text-next-darker-orange hover:bg-next-darker-orange hover:text-next-blue cursor-pointer">
