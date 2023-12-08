@@ -10,6 +10,8 @@ function ProductTableHeader() {
 			<th className="text-left p-2">Mængde</th>
 			<th className="text-left p-2">Pris</th>
 			<th className="text-left p-2">Lager</th>
+			<th className="text-left p-2">Min. Lager</th>
+			<th className="text-left p-2">Max. Lager</th>
 			<th className="text-left p-2">Kategori</th>
 			<th></th>
 			<th></th>
@@ -35,7 +37,9 @@ function ProductRow(props: IProductRowProps) {
 			<td className="p-4">{productName}</td>
 			<td className="p-4">{productAmount ? productAmount : '1 stk'}</td>
 			<td className="p-4">{formatPrice(product.price)}</td>
-			<td className="p-4">{product.stock}</td>
+			<td className="p-4 text-center">{product.stock}</td>
+			<td className="p-4 text-center">{product.min_stock}</td>
+			<td className="p-4 text-center">{product.max_stock}</td>
 			<td className="p-4">
 				<ul>
 					{product.categories.map((category) => (

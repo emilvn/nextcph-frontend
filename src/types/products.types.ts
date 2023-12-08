@@ -6,6 +6,8 @@ interface IProduct {
 	name: string;
 	price: number;
 	stock: number;
+	min_stock: number;
+	max_stock: number;
 	channel: ChannelType;
 	categories: ICategory[];
 	createdAt: string;
