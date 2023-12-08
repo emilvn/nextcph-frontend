@@ -1,6 +1,6 @@
 import type {Dispatch, SetStateAction} from "react";
-import type {ChannelType} from "../../types/channel.types.ts";
-import PageLayout from "../../components/layout.tsx";
+import type {ChannelType} from "../types/channel.types.ts";
+import PageLayout from "../components/layout.tsx";
 import {Link} from "react-router-dom";
 
 interface SelectChannelProps {

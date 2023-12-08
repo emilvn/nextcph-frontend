@@ -9,7 +9,7 @@ import Dashboard from "./containers/Admin/Dashboard/Dashboard.tsx";
 import ProductOverview from "./containers/Admin/Products/ProductOverview.tsx";
 import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {ChannelType} from "./types/channel.types.ts";
-import SelectChannel from "./containers/User/SelectChannel.tsx";
+import SelectChannel from "./containers/SelectChannel.tsx";
 
 function App() {
     const localStorageChannel: ChannelType | null = localStorage.getItem("channel") ? JSON.parse(localStorage.getItem("channel")!) : null
