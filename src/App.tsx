@@ -12,13 +12,13 @@ import {ChannelType} from "./types/channel.types.ts";
 import SelectChannel from "./containers/User/SelectChannel.tsx";
 
 function App() {
-    const localStorageChannel:ChannelType|null = localStorage.getItem("channel") ? JSON.parse(localStorage.getItem("channel")!) : null
-    const { user, isLoaded, isSignedIn } = useUser();
-    const [channel, setChannel] = useState<ChannelType|null>(localStorageChannel);
+    const localStorageChannel: ChannelType | null = localStorage.getItem("channel") ? JSON.parse(localStorage.getItem("channel")!) : null
+    const {user, isLoaded, isSignedIn} = useUser();
+    const [channel, setChannel] = useState<ChannelType | null>(localStorageChannel);
 
     useEffect(() => {
         localStorage.setItem("channel", JSON.stringify(channel));
-    },[channel]);
+    }, [channel]);
 
     if (!isLoaded) return (<Loading.LoadingPage/>)
 
@@ -37,14 +37,15 @@ function App() {
 }
 
 interface RoutesProps {
-    channel: ChannelType|null;
-    setChannel: Dispatch<SetStateAction<ChannelType|null>>
+    channel: ChannelType | null;
+    setChannel: Dispatch<SetStateAction<ChannelType | null>>
 }
-function UserRoutes({channel, setChannel}:RoutesProps) {
+
+function UserRoutes({channel, setChannel}: RoutesProps) {
 
     return (
         <>
-            <NavBarUser/>
+            <NavBarUser channel={channel}/>
             <Routes>
                 <Route path="/*" element={<SelectChannel setChannel={setChannel} to={"/user/products"}/>}/>
                 {!!channel &&
@@ -58,13 +59,12 @@ function UserRoutes({channel, setChannel}:RoutesProps) {
     )
 }
 
-function AdminRoutes({channel, setChannel}:RoutesProps) {
-
+function AdminRoutes({channel, setChannel}: RoutesProps) {
     return (
         <>
-            <NavBarAdmin/>
+            <NavBarAdmin channel={channel}/>
             <Routes>
-                <Route path="/*" element={<SelectChannel setChannel={setChannel} to={"admin/dashboard"}/> }/>
+                <Route path="/*" element={<SelectChannel setChannel={setChannel} to={"admin/dashboard"}/>}/>
                 {!!channel &&
                     <>
                         <Route path="/admin/dashboard" element={<Dashboard channel={channel}/>}/>
