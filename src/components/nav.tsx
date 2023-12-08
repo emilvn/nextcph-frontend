@@ -32,7 +32,7 @@ function NavLink({href, children}: NavLinkProps) {
     );
 }
 
-function NavBar({children, channel}: PropsWithChildren<{ channel: ChannelType | null }>) {
+function NavBar({children, channel}: PropsWithChildren<{ channel: ChannelType|null}>) {
     const [locked, setLocked] = useState<boolean>(true);
     return (
         <>

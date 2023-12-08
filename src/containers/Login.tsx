@@ -5,7 +5,7 @@ import PageLayout from "../components/layout.tsx";
 function Login() {
     return (
         <>
-            <NavBar/>
+            <NavBar channel={null}/>
             <PageLayout>
                 <div className="flex items-center bg-[url('/images/Admin.png')] w-full min-h-screen bg-cover bg-center">
                     <div className="flex max-md:flex-col justify-center items-center max-md:h-[75vh] h-[50vh] w-full">
