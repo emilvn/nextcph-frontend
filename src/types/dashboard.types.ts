@@ -12,8 +12,4 @@ interface IOverviewCategory {
 	percentage: number;
 }
 
-interface ICategoryNames {
-	name: string;
-}
-
-export type { IOverviewData, IOverviewCategory, ICategoryNames }
+export type { IOverviewData, IOverviewCategory }

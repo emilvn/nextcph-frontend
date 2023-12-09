@@ -1,12 +1,12 @@
-import type {ChannelType} from "../../../types/channel.types.ts";
+import type {ChannelType} from "../../../../types/channel.types.ts";
 import {type SubmitHandler, useForm} from "react-hook-form";
-import type {IProduct} from "../../../types/products.types.ts";
+import type {IProduct} from "../../../../types/products.types.ts";
 import {type Dispatch, type SetStateAction, useEffect} from "react";
 import type {ActionMeta, Options} from "react-select";
 import Creatable from "react-select/creatable";
 import {FaCheck} from "react-icons/fa";
 import {IoCloseSharp} from "react-icons/io5";
-import {getCategories} from "../../../helpers/categories.ts";
+import {getCategories} from "../../../../helpers/categories.ts";
 
 interface IProductFormData {
 	name: string;
