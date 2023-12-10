@@ -4,6 +4,5 @@
 	"semi": false,
 	"bracketSpacing": true,
 	"jsxBracketSameLine": false,
-	"endOfLine": "lf",
 	"singleAttributePerLine": true
 }
