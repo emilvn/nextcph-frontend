@@ -1,11 +1,13 @@
-import type {ChannelType} from "./channel.types.ts";
-import type {ICategory} from "./categories.types.ts";
+import type { ChannelType } from "./channel.types.ts";
+import type { ICategory } from "./categories.types.ts";
 
 interface IProduct {
 	id: string;
 	name: string;
 	price: number;
 	stock: number;
+	min_stock: number;
+	max_stock: number;
 	channel: ChannelType;
 	categories: ICategory[];
 	createdAt: string;
@@ -43,4 +45,4 @@ interface ISaleProduct {
 	product_quantity: number;
 }
 
-export type {ISaleProduct, IUpdateProduct, INewProduct, IProduct};
+export type { ISaleProduct, IUpdateProduct, INewProduct, IProduct };

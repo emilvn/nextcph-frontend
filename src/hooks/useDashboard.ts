@@ -21,32 +21,32 @@ function useDashboard(channel: ChannelType) {
 
 	const api = new SaleApi();
 
-	useEffect(() => {
-		const fetchData = async () => {
-			try {
-				const monthlySales = await api.getByMonth(channel, year + "-" + month);
-				setMonthlySales(monthlySales);
-				const data = await api.getDashboardOverviewData(channel, year + "-" + month);
-				setOverviewData(data);
-			} catch (e: unknown) {
-				setMonthlySales([]);
-				if (e instanceof AxiosError) {
-					setOverviewData({
-						totalRevenue: 0,
-						totalSales: 0,
-						averageDailySales: 0,
-						averageDailyRevenue: 0,
-						categories: [],
-					});
-					console.error(e.response?.data || e.message);
-					if (e.response?.status !== 404) {
-						toast.error("Der er ingen salg for denne måned");
-					}
+	const loadDashboardData = async () => {
+		try {
+			const monthlySales = await api.getByMonth(channel, year + "-" + month);
+			const data = await api.getDashboardOverviewData(channel, year + "-" + month);
+			setMonthlySales(monthlySales);
+			setOverviewData(data);
+		} catch (e: unknown) {
+			setMonthlySales([]);
+			if (e instanceof AxiosError) {
+				setOverviewData({
+					totalRevenue: 0,
+					totalSales: 0,
+					averageDailySales: 0,
+					averageDailyRevenue: 0,
+					categories: [],
+				});
+				console.error(e.response?.data || e.message);
+				if (e.response?.status !== 404) {
+					toast.error("Der er ingen salg for denne måned");
 				}
 			}
-		};
+		}
+	};
 
-		fetchData().then(() => { setIsLoading(false) });
+	useEffect(() => {
+		loadDashboardData().then(() => { setIsLoading(false) });
 	}, [month, year]);
 
 

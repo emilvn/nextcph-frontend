@@ -9,6 +9,7 @@ class ProductApi extends Api<IProduct, INewProduct> {
 		super();
 		this.url = this.endpoint + "/products";
 	}
+
 	public async getByChannel(channel: ChannelType): Promise<IProduct[]> {
 		const response = await axios.get(this.url + "?channel=" + channel);
 		if (response.status !== 200 || !response.data) {
@@ -19,6 +20,14 @@ class ProductApi extends Api<IProduct, INewProduct> {
 
 	public async getById(id: string): Promise<IProduct> {
 		const response = await axios.get(this.url + "/" + id);
+		if (response.status !== 200 || !response.data) {
+			throw new Error("Failed to fetch");
+		}
+		return response.data;
+	}
+
+	public async getLowStock(channel: ChannelType): Promise<IProduct[]> {
+		const response = await axios.get(this.url + "/lowstock?channel=" + channel);
 		if (response.status !== 200 || !response.data) {
 			throw new Error("Failed to fetch");
 		}
