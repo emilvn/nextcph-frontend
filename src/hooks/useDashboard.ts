@@ -38,9 +38,6 @@ function useDashboard(channel: ChannelType) {
 					categories: [],
 				});
 				console.error(e.response?.data || e.message);
-				if (e.response?.status !== 404) {
-					toast.error("Der er ingen salg for denne måned");
-				}
 			}
 		}
 	};

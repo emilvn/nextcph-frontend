@@ -28,9 +28,6 @@ function useSales(channel: ChannelType) {
 		catch (e: unknown) {
 			if (e instanceof AxiosError) {
 				console.error(e.response?.data || e.message);
-				// If the error is that there are no sales, yet
-				// we don't want to show an error pop up
-				if (e.response?.status !== 404) toast.error("Kunne ikke hente salg");
 			}
 		}
 	}
