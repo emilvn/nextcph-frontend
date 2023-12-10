@@ -1,14 +1,14 @@
 interface ICategory {
-	category: {
-		id: string;
-		name: string;
-		createdAt: string;
-		updatedAt: string;
-	}
+    category: {
+        id: string
+        name: string
+        createdAt: string
+        updatedAt: string
+    }
 }
 
 interface ICategoryNames {
-	name: string;
+    name: string
 }
 
-export type {ICategory, ICategoryNames};
+export type { ICategory, ICategoryNames }

@@ -1,4 +1,4 @@
 export const dicts = {
-    "HAIR_CARE": "FRISØR",
-    "COSMETIC": "KOSMETIKER"
+    HAIR_CARE: "FRISØR",
+    COSMETIC: "KOSMETIKER"
 }

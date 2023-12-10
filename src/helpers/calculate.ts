@@ -1,5 +1,5 @@
 function calculateProductsTotalPrice(price: number, qty: number): number {
-    return price * qty;
+    return price * qty
 }
 
 export { calculateProductsTotalPrice }

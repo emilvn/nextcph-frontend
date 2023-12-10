@@ -1,18 +1,26 @@
-import { useState, useEffect } from "react";
-import LineChart from "./components/LineChart.tsx";
-import PageLayout from "../../../components/layout.tsx";
-import type { ChannelType } from "../../../types/channel.types.ts";
-import MonthPicker from "./components/MonthPicker.tsx";
-import useDashboard from "../../../hooks/useDashboard.ts";
-import { ISale } from "../../../types/sales.types.ts";
-import { BarChart } from "./components/BarChart.tsx";
-import Statistics from "./components/Statistics.tsx";
-import Loading from "../../../components/loading.tsx";
+import { useState, useEffect } from "react"
+import LineChart from "./components/LineChart.tsx"
+import PageLayout from "../../../components/layout.tsx"
+import type { ChannelType } from "../../../types/channel.types.ts"
+import MonthPicker from "./components/MonthPicker.tsx"
+import useDashboard from "../../../hooks/useDashboard.ts"
+import { ISale } from "../../../types/sales.types.ts"
+import { BarChart } from "./components/BarChart.tsx"
+import Statistics from "./components/Statistics.tsx"
+import Loading from "../../../components/loading.tsx"
 
 function Dashboard({ channel }: { channel: ChannelType }) {
-	const [currentSales, setCurrentSales] = useState<ISale[]>([]);
-    const [showStatisticsTable, setShowStatisticsTable] = useState(false);
-    const { monthlySales, overviewData, isLoading, setMonth, setYear, month, year } = useDashboard(channel);
+    const [currentSales, setCurrentSales] = useState<ISale[]>([])
+    const [showStatisticsTable, setShowStatisticsTable] = useState(false)
+    const {
+        monthlySales,
+        overviewData,
+        isLoading,
+        setMonth,
+        setYear,
+        month,
+        year
+    } = useDashboard(channel)
 
     const monthPickerStates = {
         month,
@@ -21,7 +29,7 @@ function Dashboard({ channel }: { channel: ChannelType }) {
         setMonth,
         setYear,
         setShowStatisticsTable
-    };
+    }
 
     const lineChartComponentData = {
         currentSales,
@@ -29,13 +37,13 @@ function Dashboard({ channel }: { channel: ChannelType }) {
         month,
         year,
         channel
-    };
+    }
 
     const barChartComponentData = {
         overviewCategories: overviewData.categories,
         isLoading,
-        channel,
-    };
+        channel
+    }
 
     const statisticsData = {
         overviewData,
@@ -43,16 +51,17 @@ function Dashboard({ channel }: { channel: ChannelType }) {
         channel,
         showStatisticsTable,
         setShowStatisticsTable
-    };
+    }
 
     useEffect(() => {
-        setCurrentSales(monthlySales);
-    }, [monthlySales]);
+        setCurrentSales(monthlySales)
+    }, [monthlySales])
 
-    if(isLoading
-        || statisticsData.isLoading
-        || barChartComponentData.isLoading
-        || lineChartComponentData.isLoading
+    if (
+        isLoading ||
+        statisticsData.isLoading ||
+        barChartComponentData.isLoading ||
+        lineChartComponentData.isLoading
     ) {
         return (
             <PageLayout>
@@ -60,8 +69,8 @@ function Dashboard({ channel }: { channel: ChannelType }) {
                     <Loading.LoadingSpinner size={60} />
                 </div>
             </PageLayout>
-		);
-	}
+        )
+    }
 
     return (
         <PageLayout>
@@ -70,15 +79,19 @@ function Dashboard({ channel }: { channel: ChannelType }) {
                 <Statistics statisticsData={statisticsData} />
                 <div className="flex">
                     <div className="w-full">
-                        <LineChart lineChartComponentData={lineChartComponentData} />
+                        <LineChart
+                            lineChartComponentData={lineChartComponentData}
+                        />
                     </div>
                     <div className="w-full">
-                        <BarChart barChartComponentData={barChartComponentData} />
+                        <BarChart
+                            barChartComponentData={barChartComponentData}
+                        />
                     </div>
                 </div>
             </div>
         </PageLayout>
-    );
+    )
 }
 
 export default Dashboard; 
