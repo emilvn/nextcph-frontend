@@ -1,26 +1,26 @@
-import Api from "./Api.ts"
-import type { INewSale, ISale } from "../types/sales.types.ts"
-import axios from "axios"
-import { ChannelType } from "../types/channel.types.ts"
-import type { IOverviewData } from "../types/dashboard.types.ts"
-import { ICategoryNames } from "../types/categories.types.ts"
+import Api from "./Api.ts";
+import type { INewSale, ISale } from "../types/sales.types.ts";
+import axios from "axios";
+import { ChannelType } from "../types/channel.types.ts";
+import type { IOverviewData } from "../types/dashboard.types.ts";
+import { ICategoryNames } from "../types/categories.types.ts";
 
 interface ISaleDataWithPagination {
-    data: ISale[]
+    data: ISale[];
     pagination: {
-        totalCount: number
-        totalPages: number
-        currentPage: number
-        pageSize: number
-    }
+        totalCount: number;
+        totalPages: number;
+        currentPage: number;
+        pageSize: number;
+    };
 }
 
 class SaleApi extends Api<ISale, INewSale> {
-    url: string
+    url: string;
 
     constructor() {
-        super()
-        this.url = this.endpoint + "/sales"
+        super();
+        this.url = this.endpoint + "/sales";
     }
 
     public async getByChannel(
@@ -32,11 +32,11 @@ class SaleApi extends Api<ISale, INewSale> {
             `${this.url}?channel=${channel}&page=${page}&pageSize=15${
                 user_id ? "&user_id=" + user_id : ""
             }`
-        )
+        );
         if (response.status !== 200 || !response.data) {
-            throw new Error("Failed to fetch")
+            throw new Error("Failed to fetch");
         }
-        return response.data
+        return response.data;
     }
 
     public async getByMonth(
@@ -45,37 +45,37 @@ class SaleApi extends Api<ISale, INewSale> {
     ): Promise<ISale[]> {
         const query: string = month
             ? "/month/?channel=" + channel + "&month=" + month
-            : "month/?channel=" + channel
-        const response = await axios.get(this.url + query)
-        console.log(response)
+            : "month/?channel=" + channel;
+        const response = await axios.get(this.url + query);
+        console.log(response);
         if (response.status !== 200 || !response.data) {
-            throw new Error("Failed to fetch")
+            throw new Error("Failed to fetch");
         }
-        return response.data
+        return response.data;
     }
 
     public async getById(id: string): Promise<ISale> {
-        const response = await axios.get(this.url + "/" + id)
+        const response = await axios.get(this.url + "/" + id);
         if (response.status !== 200 || !response.data) {
-            throw new Error("Failed to fetch")
+            throw new Error("Failed to fetch");
         }
-        return response.data
+        return response.data;
     }
 
     public async create(data: INewSale): Promise<ISale> {
-        const response = await axios.post(this.url, data)
+        const response = await axios.post(this.url, data);
         if (response.status !== 201 || !response.data) {
-            throw new Error("Failed to create")
+            throw new Error("Failed to create");
         }
-        return response.data
+        return response.data;
     }
 
     public async deleteById(id: string): Promise<ISale> {
-        const response = await axios.delete(this.url + "/" + id)
+        const response = await axios.delete(this.url + "/" + id);
         if (response.status !== 200) {
-            throw new Error("Failed to delete")
+            throw new Error("Failed to delete");
         }
-        return response.data
+        return response.data;
     }
 
     public async getDashboardOverviewData(
@@ -84,11 +84,11 @@ class SaleApi extends Api<ISale, INewSale> {
     ): Promise<IOverviewData> {
         const response = await axios.get(
             this.url + "/statistics?channel=" + channel + "&month=" + month
-        )
+        );
         if (response.status !== 200 || !response.data) {
-            throw new Error("Failed to fetch dashboard overview data")
+            throw new Error("Failed to fetch dashboard overview data");
         }
-        return response.data
+        return response.data;
     }
 
     public async getCategoryNames(
@@ -96,11 +96,11 @@ class SaleApi extends Api<ISale, INewSale> {
     ): Promise<ICategoryNames[]> {
         const response = await axios.get(
             this.url + "/categories?channel=" + channel
-        )
+        );
         if (response.status !== 200 || !response.data) {
-            throw new Error("Failed to fetch category names")
+            throw new Error("Failed to fetch category names");
         }
-        return response.data
+        return response.data;
     }
 }
 

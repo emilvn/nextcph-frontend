@@ -1,60 +1,48 @@
-import type { ChannelType } from "../../../../types/channel.types.ts"
-import { type SubmitHandler, useForm } from "react-hook-form"
-import type { IProduct } from "../../../../types/products.types.ts"
-import { type Dispatch, type SetStateAction, useEffect } from "react"
-import type { ActionMeta, Options } from "react-select"
-import Creatable from "react-select/creatable"
-import { FaCheck } from "react-icons/fa"
-import { IoCloseSharp } from "react-icons/io5"
-import { getCategories } from "../../../../helpers/categories.ts"
-
-interface IProductFormData {
-    name: string
-    amount: string
-    price: number
-    stock: number
-    min_stock: number
-    max_stock: number
-    channel: ChannelType
-    categories: string[]
-}
+import { type SubmitHandler, useForm } from "react-hook-form";
+import type { IProduct } from "../../../../types/products.types.ts";
+import { type Dispatch, type SetStateAction, useEffect } from "react";
+import type { ActionMeta, Options } from "react-select";
+import Creatable from "react-select/creatable";
+import { FaCheck } from "react-icons/fa";
+import { IoCloseSharp } from "react-icons/io5";
+import { getCategories } from "../../../../helpers/categories.ts";
+import type { IProductFormData } from "../types.ts";
 
 interface IProductFormProps {
-    onSubmit: SubmitHandler<IProductFormData>
-    products: IProduct[]
-    setIsOpenModal: Dispatch<SetStateAction<boolean>>
+    onSubmit: SubmitHandler<IProductFormData>;
+    products: IProduct[];
+    setIsOpenModal: Dispatch<SetStateAction<boolean>>;
     handleCategoryChange: (
         newValue: Options<{ value: string }>,
         actionMeta: ActionMeta<{ value: string }>
-    ) => void
-    title: string
-    selectedProduct?: IProduct | null
-    selectedCategories: string[]
-    setSelectedCategories: Dispatch<SetStateAction<string[]>>
+    ) => void;
+    title: string;
+    selectedProduct?: IProduct | null;
+    selectedCategories: string[];
+    setSelectedCategories: Dispatch<SetStateAction<string[]>>;
 }
-
 function ProductForm(props: IProductFormProps) {
     const { register, handleSubmit, setValue, reset } =
-        useForm<IProductFormData>()
+        useForm<IProductFormData>();
 
     useEffect(() => {
         if (props.selectedProduct) {
-            setValue("name", props.selectedProduct.name.split(", ")[0])
-            setValue("amount", props.selectedProduct.name.split(", ")[1])
-            setValue("price", props.selectedProduct.price)
-            setValue("stock", props.selectedProduct.stock)
-            setValue("min_stock", props.selectedProduct.min_stock)
-            setValue("max_stock", props.selectedProduct.max_stock)
+            setValue("name", props.selectedProduct.name.split(", ")[0]);
+            setValue("amount", props.selectedProduct.name.split(", ")[1]);
+            setValue("price", props.selectedProduct.price);
+            setValue("stock", props.selectedProduct.stock);
+            setValue("min_stock", props.selectedProduct.min_stock);
+            setValue("max_stock", props.selectedProduct.max_stock);
         }
-    }, [props.selectedProduct, setValue])
+    }, [props.selectedProduct, setValue]);
 
     const submitForm: SubmitHandler<IProductFormData> = async (data) => {
-        data.categories = props.selectedCategories
-        await props.onSubmit(data)
-        props.setIsOpenModal(false)
-        reset()
-        props.setSelectedCategories([])
-    }
+        data.categories = props.selectedCategories;
+        await props.onSubmit(data);
+        props.setIsOpenModal(false);
+        reset();
+        props.setSelectedCategories([]);
+    };
 
     return (
         <form
@@ -152,16 +140,15 @@ function ProductForm(props: IProductFormProps) {
                 <button
                     className="btn-blue px-4 py-2"
                     onClick={() => {
-                        props.setIsOpenModal(false)
-                        props.setSelectedCategories([])
+                        props.setIsOpenModal(false);
+                        props.setSelectedCategories([]);
                     }}
                 >
                     <IoCloseSharp size={25} />
                 </button>
             </div>
         </form>
-    )
+    );
 }
 
 export default ProductForm;
-export type {IProductFormData};

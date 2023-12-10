@@ -3,22 +3,22 @@ import {
     SignedOut,
     SignInButton,
     UserButton
-} from "@clerk/clerk-react"
-import type { PropsWithChildren, ReactNode } from "react"
-import { Link, useLocation } from "react-router-dom"
-import { FaLock, FaUnlock } from "react-icons/fa"
-import { useState } from "react"
-import type { ChannelType } from "../types/channel.types.ts"
-import { dicts } from "../helpers/dicts.ts"
+} from "@clerk/clerk-react";
+import type { PropsWithChildren, ReactNode } from "react";
+import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { FaLock, FaUnlock } from "react-icons/fa";
+import type { ChannelType } from "../types/channel.types.ts";
+import { channelDict } from "../helpers/dicts.ts";
 
 interface NavLinkProps {
-    href: string
-    children: ReactNode
+    href: string;
+    children: ReactNode;
 }
 
 function NavLink({ href, children }: NavLinkProps) {
-    const { pathname } = useLocation()
-    const isActive = pathname === href
+    const { pathname } = useLocation();
+    const isActive = pathname === href;
 
     return (
         <Link
@@ -29,14 +29,14 @@ function NavLink({ href, children }: NavLinkProps) {
         >
             {children}
         </Link>
-    )
+    );
 }
 
 function NavBar({
     children,
     channel
 }: PropsWithChildren<{ channel: ChannelType | null }>) {
-    const [locked, setLocked] = useState<boolean>(true)
+    const [locked, setLocked] = useState<boolean>(true);
     return (
         <>
             <nav className="z-20 fixed left-0 top-0 h-screen w-20 bg-next-white max-md:hidden"></nav>
@@ -48,7 +48,7 @@ function NavBar({
                 <div className="mr-3">
                     {channel && (
                         <h2 className="text-next-blue text-ml font-bold">
-                            {dicts[channel]}
+                            {channelDict[channel]}
                         </h2>
                     )}
                 </div>
@@ -72,7 +72,7 @@ function NavBar({
             </nav>
             <nav className="z-20 fixed right-0 top-20 h-screen w-20 bg-next-white max-md:hidden"></nav>
         </>
-    )
+    );
 }
 
 function NavBarAdmin({ channel }: { channel: ChannelType | null }) {
@@ -82,7 +82,7 @@ function NavBarAdmin({ channel }: { channel: ChannelType | null }) {
             <NavLink href="/admin/products">PRODUKTER</NavLink>
             <NavLink href="/">AFDELING</NavLink>
         </NavBar>
-    )
+    );
 }
 
 function NavBarUser({ channel }: { channel: ChannelType | null }) {
@@ -92,7 +92,7 @@ function NavBarUser({ channel }: { channel: ChannelType | null }) {
             <NavLink href="/user/history">HISTORIK</NavLink>
             <NavLink href="/">AFDELING</NavLink>
         </NavBar>
-    )
+    );
 }
 
-export {NavBarUser, NavBarAdmin, NavBar}
+export { NavBarUser, NavBarAdmin, NavBar };

@@ -1,35 +1,35 @@
-import type { IUpdateProduct } from "../../../../types/products.types.ts"
-import type { Dispatch, SetStateAction } from "react"
-import ProductForm, { type IProductFormData } from "./ProductForm.tsx"
-import Modal from "../../../../components/modal.tsx"
-import type { IModalProps } from "./CreateModal.tsx"
-import toast from "react-hot-toast"
-import { IProductState } from "../ProductOverview.tsx"
+import type { IUpdateProduct } from "../../../../types/products.types.ts";
+import type { Dispatch, SetStateAction } from "react";
+import ProductForm from "./ProductForm.tsx";
+import Modal from "../../../../components/modal.tsx";
+import toast from "react-hot-toast";
+import type { IModalProps, IProductFormData, IProductState } from "../types.ts";
 
 interface IUpdateModalProps extends IModalProps {
-    productState: IProductState
-    setIsOpen: Dispatch<SetStateAction<boolean>>
+    productState: IProductState;
+    setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
-
 function UpdateModal(props: IUpdateModalProps) {
     const handleUpdate = async (data: IProductFormData): Promise<void> => {
         if (!props.productState.selectedProduct) {
-            toast.error("Fejl ved redigering af produkt")
-            return
+            toast.error("Fejl ved redigering af produkt");
+            return;
         }
         const updatedProduct: IUpdateProduct = {
             id: props.productState.selectedProduct.id,
             name: `${data.name || ""}, ${data.amount || ""}`,
             price: Number(data.price) || 0,
             stock: Number(data.stock) || 0,
+            min_stock: Number(data.min_stock) || 0,
+            max_stock: Number(data.max_stock) || 0,
             channel: props.channel
-        }
-        void props.productState.update(updatedProduct)
-        props.setIsOpen(false)
-        props.categoryState.setSelectedCategories([])
-        props.productState.setSelectedProduct(null)
-        toast.success("Produktet er opdateret")
-    }
+        };
+        void props.productState.update(updatedProduct);
+        props.setIsOpen(false);
+        props.categoryState.setSelectedCategories([]);
+        props.productState.setSelectedProduct(null);
+        toast.success("Produktet er opdateret");
+    };
 
     return (
         <Modal>
@@ -46,8 +46,8 @@ function UpdateModal(props: IUpdateModalProps) {
                 setIsOpenModal={props.setIsOpen}
             />
         </Modal>
-    )
+    );
 }
 
-export default UpdateModal
-export type {IUpdateModalProps};
+export default UpdateModal;
+export type { IUpdateModalProps };

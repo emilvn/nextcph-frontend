@@ -1,32 +1,31 @@
-import { ReactNode } from "react"
-import { useState } from "react"
-import type { Dispatch, SetStateAction } from "react"
-import { FaArrowCircleLeft, FaArrowCircleRight } from "react-icons/fa"
+import type { Dispatch, SetStateAction } from "react";
+import { ReactNode, useState } from "react";
+import { FaArrowCircleLeft, FaArrowCircleRight } from "react-icons/fa";
 
-import { getMonthsArray } from "../../../../helpers/dashboard.ts"
+import { getMonthsArray } from "../../../../helpers/dashboard.ts";
 
 interface IMonthPickerStatesProps {
     monthPickerStates: {
-        month: number
-        year: number
-        showStatisticsTable: boolean
-        setMonth: Dispatch<SetStateAction<number>>
-        setYear: Dispatch<SetStateAction<number>>
-        setShowStatisticsTable: Dispatch<SetStateAction<boolean>>
-    }
+        month: number;
+        year: number;
+        showStatisticsTable: boolean;
+        setMonth: Dispatch<SetStateAction<number>>;
+        setYear: Dispatch<SetStateAction<number>>;
+        setShowStatisticsTable: Dispatch<SetStateAction<boolean>>;
+    };
 }
 
 interface IMonthPickerProps extends IMonthPickerStatesProps {
     modalState: {
-        isOpenMonthPicker: boolean
-        selectedYearInModal: number
-        setIsOpenMonthPicker: Dispatch<SetStateAction<boolean>>
-        setSelectedYearInModal: Dispatch<SetStateAction<number>>
-    }
+        isOpenMonthPicker: boolean;
+        selectedYearInModal: number;
+        setIsOpenMonthPicker: Dispatch<SetStateAction<boolean>>;
+        setSelectedYearInModal: Dispatch<SetStateAction<number>>;
+    };
 }
 
 interface IMonthPickerHeadProps extends IMonthPickerProps {
-    monthString: string
+    monthString: string;
 }
 
 function MonthPickerHeader({
@@ -52,11 +51,11 @@ function MonthPickerHeader({
                 </button>
             </div>
         </div>
-    )
+    );
 }
 
 interface IMonthPickerModalProps extends IMonthPickerProps {
-    months: string[]
+    months: string[];
 }
 
 function MonthPickerModal({
@@ -106,13 +105,13 @@ function MonthPickerModal({
                 </div>
             </div>
         </Modal>
-    )
+    );
 }
 
 interface IMonthProps extends IMonthPickerProps {
-    isActive: boolean
-    monthString: string
-    monthNumber: number
+    isActive: boolean;
+    monthString: string;
+    monthNumber: number;
 }
 
 function Month({
@@ -123,10 +122,10 @@ function Month({
     monthNumber
 }: IMonthProps) {
     function handleClick() {
-        monthPickerStates.setShowStatisticsTable(false)
-        modalState.setIsOpenMonthPicker(!modalState.isOpenMonthPicker)
-        monthPickerStates.setYear(modalState.selectedYearInModal)
-        monthPickerStates.setMonth(monthNumber)
+        monthPickerStates.setShowStatisticsTable(false);
+        modalState.setIsOpenMonthPicker(!modalState.isOpenMonthPicker);
+        monthPickerStates.setYear(modalState.selectedYearInModal);
+        monthPickerStates.setMonth(monthNumber);
     }
 
     return (
@@ -145,7 +144,7 @@ function Month({
                 </div>
             )}
         </>
-    )
+    );
 }
 
 function Modal({ children }: { children: ReactNode }) {
@@ -155,21 +154,21 @@ function Modal({ children }: { children: ReactNode }) {
                 {children}
             </div>
         </div>
-    )
+    );
 }
 
 function MonthPicker({ monthPickerStates }: IMonthPickerStatesProps) {
-    const [isOpenMonthPicker, setIsOpenMonthPicker] = useState(false)
+    const [isOpenMonthPicker, setIsOpenMonthPicker] = useState(false);
     const [selectedYearInModal, setSelectedYearInModal] = useState(
         monthPickerStates.year
-    )
+    );
     const modalState = {
         isOpenMonthPicker,
         selectedYearInModal,
         setIsOpenMonthPicker,
         setSelectedYearInModal
-    }
-    const months = getMonthsArray()
+    };
+    const months = getMonthsArray();
 
     return (
         <div className="flex flex-col items-start">
@@ -186,7 +185,7 @@ function MonthPicker({ monthPickerStates }: IMonthPickerStatesProps) {
                 />
             )}
         </div>
-    )
+    );
 }
 
 export default MonthPicker;

@@ -1,4 +1,4 @@
-import type { ReactNode } from "react"
+import type { ReactNode } from "react";
 
 function Modal({ children }: { children: ReactNode }) {
     return (
@@ -8,7 +8,7 @@ function Modal({ children }: { children: ReactNode }) {
                 {children}
             </div>
         </div>
-    )
+    );
 }
 
-export default Modal
+export default Modal;

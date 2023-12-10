@@ -1,6 +1,6 @@
-import { SignInButton, SignUpButton } from "@clerk/clerk-react"
-import { NavBar } from "../components/nav.tsx"
-import PageLayout from "../components/layout.tsx"
+import { SignInButton, SignUpButton } from "@clerk/clerk-react";
+import { NavBar } from "../components/nav.tsx";
+import PageLayout from "../components/layout.tsx";
 
 function Login() {
     return (
@@ -33,7 +33,7 @@ function Login() {
                 </div>
             </PageLayout>
         </>
-    )
+    );
 }
 
 export default Login;

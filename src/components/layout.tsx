@@ -1,5 +1,5 @@
-import type { PropsWithChildren } from "react"
-import StyledToaster from "./toaster.tsx"
+import type { PropsWithChildren } from "react";
+import StyledToaster from "./toaster.tsx";
 
 function Footer() {
     return (
@@ -29,7 +29,7 @@ function Footer() {
                 <a href="mailto:chbi0001@stud.kea.dk">chbi0001@stud.kea.dk</a>
             </div>
         </footer>
-    )
+    );
 }
 
 function PageLayout({ children }: PropsWithChildren) {
@@ -42,7 +42,7 @@ function PageLayout({ children }: PropsWithChildren) {
             <Footer />
             <StyledToaster />
         </>
-    )
+    );
 }
 
 export default PageLayout;

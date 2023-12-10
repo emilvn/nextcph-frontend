@@ -2,7 +2,7 @@ const LoadingPage = () => (
     <div className="absolute top-0 right-0 w-screen h-screen flex justify-center items-center">
         <LoadingSpinner size={60} />
     </div>
-)
+);
 
 const LoadingSpinner = (props: { size?: number }) => (
     <div role="status">
@@ -26,11 +26,11 @@ const LoadingSpinner = (props: { size?: number }) => (
         </svg>
         <span className="sr-only">Loading...</span>
     </div>
-)
+);
 
 const Loading = {
     LoadingPage,
     LoadingSpinner
-}
+};
 
 export default Loading;

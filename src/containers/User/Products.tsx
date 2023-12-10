@@ -1,29 +1,29 @@
-import PageLayout from "../../components/layout.tsx"
-import type { ChannelType } from "../../types/channel.types.ts"
-import useProducts from "../../hooks/useProducts.ts"
-import Loading from "../../components/loading.tsx"
-import type { INewSaleProduct, IProduct } from "../../types/products.types.ts"
-import { IoFilter, IoSearchOutline } from "react-icons/io5"
+import PageLayout from "../../components/layout.tsx";
+import type { ChannelType } from "../../types/channel.types.ts";
+import useProducts from "../../hooks/useProducts.ts";
+import Loading from "../../components/loading.tsx";
+import type { INewSaleProduct, IProduct } from "../../types/products.types.ts";
+import { IoFilter, IoSearchOutline } from "react-icons/io5";
 import {
     getCategories,
     getProductsWithCategory
-} from "../../helpers/categories.ts"
-import { FaMinus, FaPlus, FaShoppingCart } from "react-icons/fa"
+} from "../../helpers/categories.ts";
+import { FaMinus, FaPlus, FaShoppingCart } from "react-icons/fa";
 import {
     type Dispatch,
     type ReactNode,
     type SetStateAction,
     useEffect,
     useState
-} from "react"
-import { formatPrice } from "../../helpers/formatting.ts"
-import { IoIosArrowDown } from "react-icons/io"
-import SaleOverview from "./SaleOverview.tsx"
-import toast from "react-hot-toast"
+} from "react";
+import { formatPrice } from "../../helpers/formatting.ts";
+import { IoIosArrowDown } from "react-icons/io";
+import SaleOverview from "./SaleOverview.tsx";
+import toast from "react-hot-toast";
 
 interface searchProps {
-    setSearch: Dispatch<SetStateAction<string>>
-    onClick: () => void
+    setSearch: Dispatch<SetStateAction<string>>;
+    onClick: () => void;
 }
 
 function SearchBar(props: searchProps) {
@@ -45,7 +45,7 @@ function SearchBar(props: searchProps) {
                 <IoSearchOutline className="text-next-blue w-full text-2xl" />
             </div>
         </div>
-    )
+    );
 }
 
 function NavCategory({ category }: { category: string }) {
@@ -56,7 +56,7 @@ function NavCategory({ category }: { category: string }) {
         >
             {category}
         </a>
-    )
+    );
 }
 
 function CategoriesNav({ categories }: { categories: string[] }) {
@@ -69,16 +69,16 @@ function CategoriesNav({ categories }: { categories: string[] }) {
                 />
             ))}
         </div>
-    )
+    );
 }
 
 interface searchAndFilterProps {
-    categories: string[]
-    setSearch: Dispatch<SetStateAction<string>>
+    categories: string[];
+    setSearch: Dispatch<SetStateAction<string>>;
 }
 
 function SearchAndFilter(props: searchAndFilterProps) {
-    const [open, setOpen] = useState(false)
+    const [open, setOpen] = useState(false);
     return (
         <div className="z-0 flex flex-col items-center fixed bg-next-blue max-md:right-0 md:left-20 top-20 p-4 gap-8">
             <SearchBar
@@ -87,12 +87,12 @@ function SearchAndFilter(props: searchAndFilterProps) {
             />
             {open && <CategoriesNav categories={props.categories} />}
         </div>
-    )
+    );
 }
 
 interface ISaleButtonProps {
-    onClick: () => void
-    amount: number
+    onClick: () => void;
+    amount: number;
 }
 
 function SaleButton(props: ISaleButtonProps) {
@@ -107,7 +107,7 @@ function SaleButton(props: ISaleButtonProps) {
                 <span className="text-next-grey text-sm">({props.amount})</span>
             </button>
         </div>
-    )
+    );
 }
 
 function Header({ children }: { children: ReactNode }) {
@@ -115,22 +115,22 @@ function Header({ children }: { children: ReactNode }) {
         <div className="fixed md:left-20 md:right-20 top-20 z-20">
             {children}
         </div>
-    )
+    );
 }
 
 interface IProductProps {
-    product: IProduct | INewSaleProduct
-    add: (product: IProduct | INewSaleProduct) => void
-    remove: (product: IProduct | INewSaleProduct) => void
+    product: IProduct | INewSaleProduct;
+    add: (product: IProduct | INewSaleProduct) => void;
+    remove: (product: IProduct | INewSaleProduct) => void;
 }
 
 function Product(props: IProductProps) {
     function handleAddToSale() {
-        props.add(props.product)
+        props.add(props.product);
     }
 
     function handleRemoveFromSale() {
-        props.remove(props.product)
+        props.remove(props.product);
     }
 
     return (
@@ -166,19 +166,19 @@ function Product(props: IProductProps) {
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
 interface ICategoryProps {
-    category: string
-    children: ReactNode
+    category: string;
+    children: ReactNode;
 }
 
 function Category(props: ICategoryProps) {
-    const [open, setOpen] = useState(true)
+    const [open, setOpen] = useState(true);
 
     function toggleOpen() {
-        setOpen(!open)
+        setOpen(!open);
     }
 
     return (
@@ -205,64 +205,64 @@ function Category(props: ICategoryProps) {
                 {props.children}
             </div>
         </div>
-    )
+    );
 }
 
 function Products({ channel }: { channel: ChannelType }) {
-    const localStorageSale = localStorage.getItem("sale")
+    const localStorageSale = localStorage.getItem("sale");
     const initialSaleProducts = localStorageSale
         ? JSON.parse(localStorageSale)
-        : []
+        : [];
 
-    const { products, loadProducts, isLoading } = useProducts(channel)
+    const { products, loadProducts, isLoading } = useProducts(channel);
 
-    const [filteredProducts, setFilteredProducts] = useState<IProduct[]>([])
-    const [isOpenSales, setIsOpenSales] = useState(false)
-    const [search, setSearch] = useState("")
+    const [filteredProducts, setFilteredProducts] = useState<IProduct[]>([]);
+    const [isOpenSales, setIsOpenSales] = useState(false);
+    const [search, setSearch] = useState("");
     const [currentSaleProducts, setCurrentSaleProducts] =
-        useState<INewSaleProduct[]>(initialSaleProducts)
+        useState<INewSaleProduct[]>(initialSaleProducts);
 
     useEffect(() => {
         const filtered = products.filter((product) =>
             product.name.toLowerCase().includes(search.toLowerCase())
-        )
-        setFilteredProducts(filtered)
-    }, [products, search])
+        );
+        setFilteredProducts(filtered);
+    }, [products, search]);
 
     useEffect(() => {
-        loadProducts()
-        setFilteredProducts(products)
-    }, [isOpenSales])
+        loadProducts();
+        setFilteredProducts(products);
+    }, [isOpenSales]);
 
     useEffect(() => {
-        localStorage.setItem("sale", JSON.stringify(currentSaleProducts))
-    }, [currentSaleProducts])
+        localStorage.setItem("sale", JSON.stringify(currentSaleProducts));
+    }, [currentSaleProducts]);
 
     // Reset sale if channel is changed
     useEffect(() => {
         if (currentSaleProducts[0]?.channel !== channel) {
-            setCurrentSaleProducts([])
+            setCurrentSaleProducts([]);
         }
-    }, [])
+    }, []);
 
-    if (isLoading) return <Loading.LoadingPage />
+    if (isLoading) return <Loading.LoadingPage />;
     if (!products || products.length === 0)
-        return <PageLayout>No products found...</PageLayout>
+        return <PageLayout>No products found...</PageLayout>;
 
-    const categories = getCategories(filteredProducts)
+    const categories = getCategories(filteredProducts);
 
     function addToSale(product: IProduct | INewSaleProduct) {
         const productInSale = currentSaleProducts.find(
             (p) => p.id === product.id
-        )
+        );
         if (
             product.stock === 0 ||
             (!!productInSale && productInSale.quantity >= product.stock)
         ) {
-            toast.error("Der er ikke flere af dette produkt på lager")
+            toast.error("Der er ikke flere af dette produkt på lager");
         } else if (!!productInSale && productInSale.quantity < product.stock) {
-            productInSale.quantity++
-            toast.success(product.name + " tilføjet til salg")
+            productInSale.quantity++;
+            toast.success(product.name + " tilføjet til salg");
         } else {
             currentSaleProducts.push({
                 name: product.name,
@@ -271,25 +271,25 @@ function Products({ channel }: { channel: ChannelType }) {
                 quantity: 1,
                 channel: product.channel,
                 stock: product.stock
-            })
-            toast.success(product.name + " tilføjet til salg")
+            });
+            toast.success(product.name + " tilføjet til salg");
         }
-        setCurrentSaleProducts([...currentSaleProducts])
+        setCurrentSaleProducts([...currentSaleProducts]);
     }
 
     function removeFromSale(product: IProduct | INewSaleProduct) {
         const productInSale = currentSaleProducts.find(
             (p) => p.id === product.id
-        )
+        );
         if (productInSale) {
-            productInSale.quantity--
-            toast.success(product.name + " fjernet fra salg")
+            productInSale.quantity--;
+            toast.success(product.name + " fjernet fra salg");
             if (productInSale.quantity <= 0) {
-                const index = currentSaleProducts.indexOf(productInSale)
-                currentSaleProducts.splice(index, 1)
+                const index = currentSaleProducts.indexOf(productInSale);
+                currentSaleProducts.splice(index, 1);
             }
         }
-        setCurrentSaleProducts([...currentSaleProducts])
+        setCurrentSaleProducts([...currentSaleProducts]);
     }
 
     return (
@@ -342,7 +342,7 @@ function Products({ channel }: { channel: ChannelType }) {
                 </>
             )}
         </PageLayout>
-    )
+    );
 }
 
-export default Products
+export default Products;

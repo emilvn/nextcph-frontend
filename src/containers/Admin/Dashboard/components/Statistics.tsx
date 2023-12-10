@@ -1,14 +1,14 @@
-import type { ChannelType } from "../../../../types/channel.types.ts"
+import type { ChannelType } from "../../../../types/channel.types.ts";
 import type {
-    IOverviewData,
-    IOverviewCategory
-} from "../../../../types/dashboard.types.ts"
+    IOverviewCategory,
+    IOverviewData
+} from "../../../../types/dashboard.types.ts";
 import {
     formatFraction,
     formatPercentage,
     formatPrice
-} from "../../../../helpers/formatting.ts"
-import { Dispatch, SetStateAction } from "react"
+} from "../../../../helpers/formatting.ts";
+import { Dispatch, SetStateAction } from "react";
 
 function GridContent(data: IOverviewData) {
     return (
@@ -38,7 +38,7 @@ function GridContent(data: IOverviewData) {
                 </p>
             </div>
         </div>
-    )
+    );
 }
 
 function TableContent(categories: IOverviewCategory[]) {
@@ -75,21 +75,21 @@ function TableContent(categories: IOverviewCategory[]) {
                 )}
             </tbody>
         </table>
-    )
+    );
 }
 
 interface IStaticticsDataProps {
     statisticsData: {
-        overviewData: IOverviewData
-        isLoading: boolean
-        channel: ChannelType
-        showStatisticsTable: boolean
-        setShowStatisticsTable: Dispatch<SetStateAction<boolean>>
-    }
+        overviewData: IOverviewData;
+        isLoading: boolean;
+        channel: ChannelType;
+        showStatisticsTable: boolean;
+        setShowStatisticsTable: Dispatch<SetStateAction<boolean>>;
+    };
 }
 
 function Statistics({ statisticsData }: IStaticticsDataProps) {
-    if (!statisticsData.overviewData) return <div>No data found...</div>
+    if (!statisticsData.overviewData) return <div>No data found...</div>;
 
     return (
         <div className="bg-next-white p-4">
@@ -127,7 +127,7 @@ function Statistics({ statisticsData }: IStaticticsDataProps) {
                 </div>
             )}
         </div>
-    )
+    );
 }
 
 export default Statistics;

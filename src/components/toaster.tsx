@@ -1,4 +1,4 @@
-import { Toaster } from "react-hot-toast"
+import { Toaster } from "react-hot-toast";
 
 function StyledToaster() {
     return (
@@ -24,7 +24,7 @@ function StyledToaster() {
                 }
             }}
         />
-    )
+    );
 }
 
-export default StyledToaster
+export default StyledToaster;

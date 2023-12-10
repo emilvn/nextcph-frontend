@@ -1,40 +1,40 @@
 function convertToDanishDate(utcTimestamp: string): string {
-    const date = new Date(utcTimestamp)
+    const date = new Date(utcTimestamp);
 
     return date.toLocaleString("da-DK", {
         year: "numeric",
         month: "long",
         day: "2-digit"
-    })
+    });
 }
 
 function convertToDanishTime(utcTimestamp: string): string {
-    const date = new Date(utcTimestamp)
+    const date = new Date(utcTimestamp);
 
     return date
         .toLocaleString("da-DK", {
             hour: "2-digit",
             minute: "2-digit"
         })
-        .replace(".", ":")
+        .replace(".", ":");
 }
 
 function formatPrice(price: number): string {
     return new Intl.NumberFormat("da-DK", {
         style: "currency",
         currency: "DKK"
-    }).format(price)
+    }).format(price);
 }
 
 function formatFraction(number: number) {
     return number.toLocaleString("da-DK", {
         maximumFractionDigits: 1,
         minimumFractionDigits: 1
-    })
+    });
 }
 
 function formatPercentage(number: number) {
-    return formatFraction(number) + "%"
+    return formatFraction(number) + "%";
 }
 
 export {
@@ -43,4 +43,4 @@ export {
     formatPrice,
     formatPercentage,
     formatFraction
-}
+};

@@ -1,7 +1,7 @@
-import type { IOverviewCategory } from "../types/dashboard.types.ts"
-import { ChartOptions } from "chart.js"
-import { ISale } from "../types/sales.types.ts"
-import { convertToDanishDate } from "./formatting.ts"
+import type { IOverviewCategory } from "../types/dashboard.types.ts";
+import { ChartOptions } from "chart.js";
+import { ISale } from "../types/sales.types.ts";
+import { convertToDanishDate } from "./formatting.ts";
 
 function setBarChartData(overviewData: IOverviewCategory[]) {
     const barChartData = {
@@ -15,16 +15,16 @@ function setBarChartData(overviewData: IOverviewCategory[]) {
                 borderWidth: 1
             }
         ]
-    }
+    };
     const barChartOptions: ChartOptions<"bar"> = {
         responsive: true,
         plugins: {
             tooltip: {
                 callbacks: {
                     label: function (context) {
-                        const label = context.dataset.label || ""
-                        const value = context.parsed.y || 0
-                        return label + ": " + value.toFixed(1) + "%"
+                        const label = context.dataset.label || "";
+                        const value = context.parsed.y || 0;
+                        return label + ": " + value.toFixed(1) + "%";
                     }
                 }
             },
@@ -44,7 +44,7 @@ function setBarChartData(overviewData: IOverviewCategory[]) {
             y: {
                 ticks: {
                     callback: function (value) {
-                        if (value) return value.toString() + "%"
+                        if (value) return value.toString() + "%";
                     }
                 }
             },
@@ -54,12 +54,12 @@ function setBarChartData(overviewData: IOverviewCategory[]) {
                 }
             }
         }
-    }
+    };
 
-    return { barChartData, barChartOptions }
+    return { barChartData, barChartOptions };
 }
 
-export { setBarChartData }
+export { setBarChartData };
 
 function setChartData(
     daysOfCurrentMonthArray: number[],
@@ -77,7 +77,7 @@ function setChartData(
                 backgroundColor: "#F96B4C"
             }
         ]
-    }
+    };
     const lineChartOptions = {
         responsive: true,
         plugins: {
@@ -105,12 +105,12 @@ function setChartData(
                 }
             }
         }
-    }
+    };
 
-    return { lineChartData, lineChartOptions }
+    return { lineChartData, lineChartOptions };
 }
 
-export { setChartData }
+export { setChartData };
 
 function monthlySalesDataByDay(
     sales: ISale[],
@@ -119,55 +119,55 @@ function monthlySalesDataByDay(
     return daysOfCurrentMonthArray.map((day) => {
         const salesByDay = sales.filter(
             (sale) => new Date(sale.created_at).getDate() === day
-        )
+        );
 
         return salesByDay.reduce((acc, sale) => {
             const saleTotal = sale.products.reduce((total, product) => {
-                return total + product.product_quantity * product.product.price
-            }, 0)
-            return acc + saleTotal
-        }, 0)
-    })
+                return total + product.product_quantity * product.product.price;
+            }, 0);
+            return acc + saleTotal;
+        }, 0);
+    });
 }
 
-export { monthlySalesDataByDay }
+export { monthlySalesDataByDay };
 
 function groupSalesByDate({ sales }: { sales: ISale[] }): {
-    [key: string]: ISale[]
+    [key: string]: ISale[];
 } {
-    const groupedSales: { [key: string]: ISale[] } = {}
+    const groupedSales: { [key: string]: ISale[] } = {};
 
     sales.forEach((sale) => {
-        const date = convertToDanishDate(sale.created_at)
+        const date = convertToDanishDate(sale.created_at);
         if (!groupedSales[date]) {
-            groupedSales[date] = []
+            groupedSales[date] = [];
         }
-        groupedSales[date].push(sale)
-    })
+        groupedSales[date].push(sale);
+    });
 
-    return groupedSales
+    return groupedSales;
 }
 
-export { groupSalesByDate }
+export { groupSalesByDate };
 
 function getMonthsArray() {
     return Array.from({ length: 12 }, (_, i) => {
         const month = new Date(0, i + 1, 0).toLocaleDateString("da-DK", {
             month: "short"
-        })
-        return month.charAt(0).toUpperCase() + month.slice(1)
-    })
+        });
+        return month.charAt(0).toUpperCase() + month.slice(1);
+    });
 }
 
-export { getMonthsArray }
+export { getMonthsArray };
 
 function getDaysOfCurrentMonth(month: number, year: number): number[] {
     return Array.from(
         { length: new Date(year, month, 0).getDate() },
         (_, i) => {
-            return i + 1
+            return i + 1;
         }
-    )
+    );
 }
 
-export {getDaysOfCurrentMonth};
+export { getDaysOfCurrentMonth };

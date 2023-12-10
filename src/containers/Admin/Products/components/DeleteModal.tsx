@@ -1,27 +1,28 @@
-import type { Dispatch, SetStateAction } from "react"
-import Modal from "../../../../components/modal.tsx"
-import toast from "react-hot-toast"
-import { IProductState } from "../ProductOverview.tsx"
+import type { Dispatch, SetStateAction } from "react";
+import Modal from "../../../../components/modal.tsx";
+import toast from "react-hot-toast";
+
+import { IProductState } from "../types.ts";
 
 interface IDeleteModalProps {
-    productState: IProductState
-    setIsOpen: Dispatch<SetStateAction<boolean>>
+    productState: IProductState;
+    setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 function DeleteModal(props: IDeleteModalProps) {
     const closeDeleteConfirmation = () => {
-        props.productState.setProductToDelete(null)
-        props.setIsOpen(false)
-    }
+        props.productState.setProductToDelete(null);
+        props.setIsOpen(false);
+    };
     const confirmDelete = async () => {
         if (props.productState.productToDelete) {
-            void props.productState.destroy(props.productState.productToDelete)
-            closeDeleteConfirmation()
-            toast.success("Produktet er slettet")
+            void props.productState.destroy(props.productState.productToDelete);
+            closeDeleteConfirmation();
+            toast.success("Produktet er slettet");
         } else {
-            toast.error("Fejl ved sletning af produkt")
+            toast.error("Fejl ved sletning af produkt");
         }
-    }
+    };
 
     return (
         <Modal>
@@ -43,8 +44,8 @@ function DeleteModal(props: IDeleteModalProps) {
                 </button>
             </div>
         </Modal>
-    )
+    );
 }
 
-export default DeleteModal
-export type {IDeleteModalProps};
+export default DeleteModal;
+export type { IDeleteModalProps };

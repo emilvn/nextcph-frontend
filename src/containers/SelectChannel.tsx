@@ -1,15 +1,15 @@
-import type { Dispatch, SetStateAction } from "react"
-import type { ChannelType } from "../types/channel.types.ts"
-import PageLayout from "../components/layout.tsx"
-import { Link } from "react-router-dom"
+import type { Dispatch, SetStateAction } from "react";
+import type { ChannelType } from "../types/channel.types.ts";
+import PageLayout from "../components/layout.tsx";
+import { Link } from "react-router-dom";
 
 interface SelectChannelProps {
-    setChannel: Dispatch<SetStateAction<ChannelType | null>>
-    to: string
+    setChannel: Dispatch<SetStateAction<ChannelType | null>>;
+    to: string;
 }
 
 function SelectChannel({ setChannel, to }: SelectChannelProps) {
-    window.scrollTo(0, 0)
+    window.scrollTo(0, 0);
     return (
         <PageLayout>
             <div className="flex items-center bg-[url('/images/Admin.png')] w-full min-h-screen bg-cover bg-center justify-between">
@@ -33,7 +33,7 @@ function SelectChannel({ setChannel, to }: SelectChannelProps) {
                 </Link>
             </div>
         </PageLayout>
-    )
+    );
 }
 
 export default SelectChannel;

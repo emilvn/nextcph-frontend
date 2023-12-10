@@ -1,8 +1,8 @@
-import type { INewSaleProduct, IProduct } from "../../types/products.types.ts"
-import type { Dispatch, ReactNode, SetStateAction } from "react"
-import type { INewSale } from "../../types/sales.types.ts"
-import { useUser } from "@clerk/clerk-react"
-import toast from "react-hot-toast"
+import type { INewSaleProduct, IProduct } from "../../types/products.types.ts";
+import type { Dispatch, ReactNode, SetStateAction } from "react";
+import type { INewSale } from "../../types/sales.types.ts";
+import { useUser } from "@clerk/clerk-react";
+import toast from "react-hot-toast";
 import {
     FaArrowLeft,
     FaCheck,
@@ -10,10 +10,10 @@ import {
     FaPlus,
     FaShoppingCart,
     FaTrash
-} from "react-icons/fa"
-import { formatPrice } from "../../helpers/formatting.ts"
-import useSales from "../../hooks/useSales.ts"
-import type { ChannelType } from "../../types/channel.types.ts"
+} from "react-icons/fa";
+import { formatPrice } from "../../helpers/formatting.ts";
+import useSales from "../../hooks/useSales.ts";
+import type { ChannelType } from "../../types/channel.types.ts";
 
 function ProductList({ children }: { children: ReactNode }) {
     return (
@@ -27,13 +27,13 @@ function ProductList({ children }: { children: ReactNode }) {
             </thead>
             <tbody>{children}</tbody>
         </table>
-    )
+    );
 }
 
 interface IProductRowProps {
-    product: INewSaleProduct
-    increment: () => void
-    decrement: () => void
+    product: INewSaleProduct;
+    increment: () => void;
+    decrement: () => void;
 }
 
 function ProductRow(props: IProductRowProps) {
@@ -61,12 +61,12 @@ function ProductRow(props: IProductRowProps) {
                 </button>
             </td>
         </tr>
-    )
+    );
 }
 
 interface ISaleButtonsProps {
-    submit: () => Promise<void>
-    reset: () => void
+    submit: () => Promise<void>;
+    reset: () => void;
 }
 
 function SaleButtons(props: ISaleButtonsProps) {
@@ -85,46 +85,46 @@ function SaleButtons(props: ISaleButtonsProps) {
                 <FaTrash /> Ryd salg
             </button>
         </>
-    )
+    );
 }
 
 interface ISaleOverviewProps {
-    products: INewSaleProduct[]
-    setIsOpen: Dispatch<SetStateAction<boolean>>
-    setCurrentSaleProducts: Dispatch<SetStateAction<INewSaleProduct[]>>
-    incrementProduct: (product: IProduct | INewSaleProduct) => void
-    decrementProduct: (product: IProduct | INewSaleProduct) => void
-    channel: ChannelType
+    products: INewSaleProduct[];
+    setIsOpen: Dispatch<SetStateAction<boolean>>;
+    setCurrentSaleProducts: Dispatch<SetStateAction<INewSaleProduct[]>>;
+    incrementProduct: (product: IProduct | INewSaleProduct) => void;
+    decrementProduct: (product: IProduct | INewSaleProduct) => void;
+    channel: ChannelType;
 }
 
 function SaleOverview(props: ISaleOverviewProps) {
-    const { user } = useUser()
-    const { create } = useSales(props.channel)
+    const { user } = useUser();
+    const { create } = useSales(props.channel);
 
     const saleTotal = props.products.reduce(
         (acc, product) => acc + product.price * product.quantity,
         0
-    )
+    );
 
     async function finishSale() {
         if (!user || !user.id) {
-            toast.error("Du skal være logget ind for at oprette et salg")
-            return
+            toast.error("Du skal være logget ind for at oprette et salg");
+            return;
         }
         const sale: INewSale = {
             products: props.products,
             user_id: user.id
-        }
-        void create(sale)
+        };
+        void create(sale);
         setTimeout(() => {
-            props.setIsOpen(false)
-            props.setCurrentSaleProducts([])
-        }, 500)
+            props.setIsOpen(false);
+            props.setCurrentSaleProducts([]);
+        }, 500);
     }
 
     function resetSale() {
-        props.setCurrentSaleProducts([])
-        props.setIsOpen(false)
+        props.setCurrentSaleProducts([]);
+        props.setIsOpen(false);
     }
 
     return (
@@ -190,7 +190,7 @@ function SaleOverview(props: ISaleOverviewProps) {
                 )}
             </div>
         </>
-    )
+    );
 }
 
 export default SaleOverview;

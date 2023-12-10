@@ -1,45 +1,45 @@
-import PageLayout from "../../components/layout.tsx"
-import type { ChannelType } from "../../types/channel.types.ts"
-import useSales from "../../hooks/useSales.ts"
-import Loading from "../../components/loading.tsx"
-import type { ISale } from "../../types/sales.types.ts"
-import type { ISaleProduct } from "../../types/products.types.ts"
-import { useUser } from "@clerk/clerk-react"
-import type { UserResource } from "@clerk/types"
+import PageLayout from "../../components/layout.tsx";
+import type { ChannelType } from "../../types/channel.types.ts";
+import useSales from "../../hooks/useSales.ts";
+import Loading from "../../components/loading.tsx";
+import type { ISale } from "../../types/sales.types.ts";
+import type { ISaleProduct } from "../../types/products.types.ts";
+import { useUser } from "@clerk/clerk-react";
+import type { UserResource } from "@clerk/types";
 import {
-    useState,
     type Dispatch,
-    type SetStateAction,
     ReactNode,
-    useEffect
-} from "react"
-import { convertToDanishTime, formatPrice } from "../../helpers/formatting.ts"
-import { calculateProductsTotalPrice } from "../../helpers/calculate.ts"
-import InfiniteScroll from "react-infinite-scroll-component"
-import { IoIosArrowDown } from "react-icons/io"
-import { FaMoneyBill } from "react-icons/fa"
-import { groupSalesByDate } from "../../helpers/dashboard.ts"
+    type SetStateAction,
+    useEffect,
+    useState
+} from "react";
+import { convertToDanishTime, formatPrice } from "../../helpers/formatting.ts";
+import { calculateProductsTotalPrice } from "../../helpers/calculate.ts";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { IoIosArrowDown } from "react-icons/io";
+import { FaMoneyBill } from "react-icons/fa";
+import { groupSalesByDate } from "../../helpers/dashboard.ts";
 
 interface ButtonFilterSalesProps {
-    user: UserResource | null | undefined
-    setUserId: Dispatch<SetStateAction<string | undefined>>
+    user: UserResource | null | undefined;
+    setUserId: Dispatch<SetStateAction<string | undefined>>;
 }
 
 function ButtonFilterSales({ user, setUserId }: ButtonFilterSalesProps) {
-    const [isMySalesToggleClicked, setMySalesToggleClicked] = useState(false)
-    const [buttonText, setButtonText] = useState("Mine salg")
+    const [isMySalesToggleClicked, setMySalesToggleClicked] = useState(false);
+    const [buttonText, setButtonText] = useState("Mine salg");
 
-    if (!user) return <div>Bruger ikke fundet...</div>
+    if (!user) return <div>Bruger ikke fundet...</div>;
 
     function toggleMySales() {
         if (isMySalesToggleClicked) {
-            setUserId(undefined)
-            setButtonText("Mine salg")
+            setUserId(undefined);
+            setButtonText("Mine salg");
         } else {
-            setUserId(user?.id)
-            setButtonText("Alle salg")
+            setUserId(user?.id);
+            setButtonText("Alle salg");
         }
-        setMySalesToggleClicked(!isMySalesToggleClicked)
+        setMySalesToggleClicked(!isMySalesToggleClicked);
     }
 
     return (
@@ -49,15 +49,15 @@ function ButtonFilterSales({ user, setUserId }: ButtonFilterSalesProps) {
         >
             {buttonText}
         </button>
-    )
+    );
 }
 
 function GroupedSales({
     group,
     children
 }: {
-    group: string
-    children: ReactNode
+    group: string;
+    children: ReactNode;
 }) {
     return (
         <div className="bg-next-white">
@@ -66,13 +66,13 @@ function GroupedSales({
             </h2>
             <div className="flex-col gap-[1px] bg-white">{children}</div>
         </div>
-    )
+    );
 }
 
 function SaleList({ currentSales }: { currentSales: ISale[] }) {
     const groupedSales: { [key: string]: ISale[] } = groupSalesByDate({
         sales: currentSales
-    })
+    });
     return (
         <div className="flex flex-col gap-[1px] lg:w-1/2">
             {Object.entries(groupedSales).map(([group, salesInGroup]) => (
@@ -89,11 +89,11 @@ function SaleList({ currentSales }: { currentSales: ISale[] }) {
                 </GroupedSales>
             ))}
         </div>
-    )
+    );
 }
 
 function Sale({ sale }: { sale: ISale }) {
-    const [open, setOpen] = useState(false)
+    const [open, setOpen] = useState(false);
     const totalPrice = sale.products.reduce(
         (acc, product) =>
             acc +
@@ -102,7 +102,7 @@ function Sale({ sale }: { sale: ISale }) {
                 product.product_quantity
             ),
         0
-    )
+    );
 
     return (
         <div className="bg-next-white pb-4">
@@ -141,7 +141,7 @@ function Sale({ sale }: { sale: ISale }) {
                 </tbody>
             </table>
         </div>
-    )
+    );
 }
 
 function Product({ product }: { product: ISaleProduct }) {
@@ -154,7 +154,7 @@ function Product({ product }: { product: ISaleProduct }) {
                 {formatPrice(product.product.price * product.product_quantity)}
             </td>
         </tr>
-    )
+    );
 }
 
 function Header({ children }: { children: ReactNode }) {
@@ -165,7 +165,7 @@ function Header({ children }: { children: ReactNode }) {
             </h1>
             {children}
         </div>
-    )
+    );
 }
 
 function NoSales() {
@@ -174,27 +174,27 @@ function NoSales() {
             <FaMoneyBill className="text-8xl text-center" />
             <p className="text-center">Ingen salg endnu...</p>
         </div>
-    )
+    );
 }
 
 function SaleHistory({ channel }: { channel: ChannelType }) {
     const { sales, isLoading, setPage, hasMore, setUserId, userId } =
-        useSales(channel)
-    const { user } = useUser()
-    const [currentSales, setCurrentSales] = useState<ISale[]>([])
+        useSales(channel);
+    const { user } = useUser();
+    const [currentSales, setCurrentSales] = useState<ISale[]>([]);
 
     useEffect(() => {
         if (userId)
-            setCurrentSales(sales.filter((sale) => sale.user_id === userId))
-        else setCurrentSales(sales)
-    }, [sales, userId])
+            setCurrentSales(sales.filter((sale) => sale.user_id === userId));
+        else setCurrentSales(sales);
+    }, [sales, userId]);
 
-    if (isLoading) return <Loading.LoadingPage />
+    if (isLoading) return <Loading.LoadingPage />;
 
     function fetchNextPage() {
         setTimeout(() => {
-            setPage((prevPage) => prevPage + 1)
-        }, 1000)
+            setPage((prevPage) => prevPage + 1);
+        }, 1000);
     }
 
     return (
@@ -228,7 +228,7 @@ function SaleHistory({ channel }: { channel: ChannelType }) {
                 </InfiniteScroll>
             )}
         </PageLayout>
-    )
+    );
 }
 
 export default SaleHistory;
