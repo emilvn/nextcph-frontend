@@ -59,8 +59,6 @@ function setBarChartData(overviewData: IOverviewCategory[]) {
     return { barChartData, barChartOptions };
 }
 
-export { setBarChartData };
-
 function setChartData(
     daysOfCurrentMonthArray: number[],
     monthlyData: number[]
@@ -110,8 +108,6 @@ function setChartData(
     return { lineChartData, lineChartOptions };
 }
 
-export { setChartData };
-
 function monthlySalesDataByDay(
     sales: ISale[],
     daysOfCurrentMonthArray: number[]
@@ -130,8 +126,6 @@ function monthlySalesDataByDay(
     });
 }
 
-export { monthlySalesDataByDay };
-
 function groupSalesByDate({ sales }: { sales: ISale[] }): {
     [key: string]: ISale[];
 } {
@@ -148,8 +142,6 @@ function groupSalesByDate({ sales }: { sales: ISale[] }): {
     return groupedSales;
 }
 
-export { groupSalesByDate };
-
 function getMonthsArray() {
     return Array.from({ length: 12 }, (_, i) => {
         const month = new Date(0, i + 1, 0).toLocaleDateString("da-DK", {
@@ -158,8 +150,6 @@ function getMonthsArray() {
         return month.charAt(0).toUpperCase() + month.slice(1);
     });
 }
-
-export { getMonthsArray };
 
 function getDaysOfCurrentMonth(month: number, year: number): number[] {
     return Array.from(
@@ -170,4 +160,11 @@ function getDaysOfCurrentMonth(month: number, year: number): number[] {
     );
 }
 
-export { getDaysOfCurrentMonth };
+export {
+    getDaysOfCurrentMonth,
+    setBarChartData,
+    setChartData,
+    getMonthsArray,
+    monthlySalesDataByDay,
+    groupSalesByDate
+};

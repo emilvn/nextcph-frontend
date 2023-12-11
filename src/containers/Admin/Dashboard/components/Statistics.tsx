@@ -8,9 +8,9 @@ import {
     formatPercentage,
     formatPrice
 } from "../../../../helpers/formatting.ts";
-import { Dispatch, SetStateAction } from "react";
+import type { Dispatch, SetStateAction } from "react";
 
-function GridContent(data: IOverviewData) {
+function GridContent({ data }: { data: IOverviewData }) {
     return (
         <div className="grid grid-cols-4 gap-4 mb-4">
             <div className="bg-gray-200 p-4 border border-next-white rounded">
@@ -41,7 +41,7 @@ function GridContent(data: IOverviewData) {
     );
 }
 
-function TableContent(categories: IOverviewCategory[]) {
+function TableContent({ categories }: { categories: IOverviewCategory[] }) {
     return (
         <table className="min-w-full">
             <thead>
@@ -98,32 +98,30 @@ function Statistics({ statisticsData }: IStaticticsDataProps) {
                     <h2 className="text-lg text-center font-bold mb-4">
                         Månedlige Salg
                     </h2>
-                    <div>
-                        <div>
-                            {GridContent(statisticsData.overviewData)}
-                            {statisticsData.overviewData.categories &&
-                                statisticsData.overviewData.categories.length >
-                                    0 && (
-                                    <button
-                                        className="btn-white mt-4 w-full"
-                                        onClick={() =>
-                                            statisticsData.setShowStatisticsTable(
-                                                !statisticsData.showStatisticsTable
-                                            )
-                                        }
-                                    >
-                                        {statisticsData.showStatisticsTable
-                                            ? "Skjul tabel"
-                                            : "Vis tabel"}
-                                    </button>
-                                )}
-                            {statisticsData.showStatisticsTable &&
-                                statisticsData.overviewData.categories &&
-                                TableContent(
-                                    statisticsData.overviewData.categories
-                                )}
-                        </div>
-                    </div>
+                    <GridContent data={statisticsData.overviewData} />
+                    {statisticsData.overviewData.totalSales > 0 && (
+                        <>
+                            <button
+                                className="btn-white mt-4 w-full"
+                                onClick={() =>
+                                    statisticsData.setShowStatisticsTable(
+                                        !statisticsData.showStatisticsTable
+                                    )
+                                }
+                            >
+                                {statisticsData.showStatisticsTable
+                                    ? "Skjul tabel"
+                                    : "Vis tabel"}
+                            </button>
+                            {statisticsData.showStatisticsTable && (
+                                <TableContent
+                                    categories={
+                                        statisticsData.overviewData.categories
+                                    }
+                                />
+                            )}
+                        </>
+                    )}
                 </div>
             )}
         </div>

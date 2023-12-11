@@ -3,7 +3,6 @@ import type { INewSale, ISale } from "../types/sales.types.ts";
 import axios from "axios";
 import { ChannelType } from "../types/channel.types.ts";
 import type { IOverviewData } from "../types/dashboard.types.ts";
-import { ICategoryNames } from "../types/categories.types.ts";
 
 interface ISaleDataWithPagination {
     data: ISale[];
@@ -33,8 +32,18 @@ class SaleApi extends Api<ISale, INewSale> {
                 user_id ? "&user_id=" + user_id : ""
             }`
         );
-        if (response.status !== 200 || !response.data) {
+        if (response.status >= 400) {
             throw new Error("Failed to fetch");
+        } else if (response.status === 204) {
+            return {
+                data: [],
+                pagination: {
+                    totalCount: 0,
+                    totalPages: 0,
+                    currentPage: 0,
+                    pageSize: 0
+                }
+            };
         }
         return response.data;
     }
@@ -47,15 +56,17 @@ class SaleApi extends Api<ISale, INewSale> {
             ? "/month/?channel=" + channel + "&month=" + month
             : "month/?channel=" + channel;
         const response = await axios.get(this.url + query);
-        if (response.status !== 200 || !response.data) {
+        if (response.status >= 400) {
             throw new Error("Failed to fetch");
+        } else if (response.status === 204) {
+            return [];
         }
         return response.data;
     }
 
     public async getById(id: string): Promise<ISale> {
         const response = await axios.get(this.url + "/" + id);
-        if (response.status !== 200 || !response.data) {
+        if (response.status >= 400 || !response.data) {
             throw new Error("Failed to fetch");
         }
         return response.data;
@@ -84,20 +95,8 @@ class SaleApi extends Api<ISale, INewSale> {
         const response = await axios.get(
             this.url + "/statistics?channel=" + channel + "&month=" + month
         );
-        if (response.status !== 200 || !response.data) {
+        if (response.status >= 400 || !response.data) {
             throw new Error("Failed to fetch dashboard overview data");
-        }
-        return response.data;
-    }
-
-    public async getCategoryNames(
-        channel: ChannelType
-    ): Promise<ICategoryNames[]> {
-        const response = await axios.get(
-            this.url + "/categories?channel=" + channel
-        );
-        if (response.status !== 200 || !response.data) {
-            throw new Error("Failed to fetch category names");
         }
         return response.data;
     }
