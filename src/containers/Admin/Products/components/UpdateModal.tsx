@@ -23,7 +23,8 @@ function UpdateModal(props: IUpdateModalProps) {
             stock: Number(data.stock) || 0,
             min_stock: Number(data.min_stock) || 0,
             max_stock: Number(data.max_stock) || 0,
-            channel: props.channel
+            channel: props.channel,
+            categories: props.categoryState.selectedCategories
         };
         void props.productState.update(updatedProduct);
         props.setIsOpen(false);

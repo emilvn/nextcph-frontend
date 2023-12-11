@@ -31,6 +31,7 @@ interface IUpdateProduct {
     min_stock?: number;
     max_stock?: number;
     channel?: ChannelType;
+    categories?: string[];
 }
 
 export interface INewSaleProduct {

@@ -111,26 +111,22 @@ function ProductForm(props: IProductFormProps) {
                     </div>
                 </div>
             </div>
-            {props.title !== "Redigér Produkt" && (
-                <>
-                    <label>Kategorier</label>
-                    <Creatable
-                        isMulti={true}
-                        onChange={props.handleCategoryChange}
-                        value={props.selectedCategories?.map((category) => ({
-                            value: category,
-                            label: category
-                        }))}
-                        options={getCategories(props.products).map(
-                            (categoryName, index) => ({
-                                value: categoryName,
-                                label: categoryName,
-                                key: index
-                            })
-                        )}
-                    />
-                </>
-            )}
+            <label>Kategorier</label>
+            <Creatable
+                isMulti={true}
+                onChange={props.handleCategoryChange}
+                value={props.selectedCategories?.map((category) => ({
+                    value: category,
+                    label: category
+                }))}
+                options={getCategories(props.products).map(
+                    (categoryName, index) => ({
+                        value: categoryName,
+                        label: categoryName,
+                        key: index
+                    })
+                )}
+            />
             <div className="flex justify-around mt-10">
                 <button
                     className="btn-orange px-4 py-2"
