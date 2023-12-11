@@ -1,11 +1,12 @@
 import type { IOverviewCategory } from "../types/dashboard.types.ts";
-import { ChartOptions } from "chart.js";
+import { ChartData, ChartOptions } from "chart.js";
 import { ISale } from "../types/sales.types.ts";
 import { convertToDanishDate } from "./formatting.ts";
 
 function setBarChartData(overviewData: IOverviewCategory[]) {
-    const barChartData = {
-        labels: overviewData.map((category) => category.name),
+    const categoryNames = overviewData.map((category) => category.name);
+    const barChartData: ChartData<"bar"> = {
+        labels: categoryNames,
         datasets: [
             {
                 label: "Omsætning pr. kategori i %",
@@ -55,13 +56,18 @@ function setBarChartData(overviewData: IOverviewCategory[]) {
             y: {
                 ticks: {
                     callback: function (value) {
-                        if (value) return value.toString() + "%";
+                        return value.toString() + "%";
                     }
                 }
             },
             x: {
                 ticks: {
-                    color: "#010E2B"
+                    color: "#010E2B",
+                    callback: function (_value, index) {
+                        const category = categoryNames[index];
+                        if (category.length <= 10) return category;
+                        else return category.substring(0, 7) + "...";
+                    }
                 }
             }
         }
