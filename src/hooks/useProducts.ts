@@ -91,6 +91,7 @@ function useProducts(channel: ChannelType) {
         try {
             const newProduct = await api.create(product);
             const newProducts = [...products, newProduct];
+            sortProducts(newProducts, sortBy);
             setProducts(newProducts);
             toast.success("Produktet er oprettet");
         } catch (e: unknown) {
@@ -103,6 +104,7 @@ function useProducts(channel: ChannelType) {
             const updatedProduct = await api.update(product);
             const index = products.findIndex((p) => p.id === updatedProduct.id);
             products[index] = updatedProduct;
+            sortProducts(products, sortBy);
             setProducts([...products]);
             toast.success("Produktet er opdateret");
         } catch (e: unknown) {
