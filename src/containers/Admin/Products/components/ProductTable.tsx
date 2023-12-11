@@ -16,6 +16,7 @@ interface ITableHeadingProps {
     sortByOptions: ISortByOption;
     children: SortBy;
 }
+
 function TableHeading(props: ITableHeadingProps) {
     const [ascending, setAscending] = useState<boolean>(false);
 
@@ -46,6 +47,7 @@ interface IProductTableHeaderProps {
         setSortByOptions: Dispatch<SetStateAction<ISortByOption>>;
     };
 }
+
 function ProductTableHeader({ sortState, children }: IProductTableHeaderProps) {
     const { sortByOptions, setSortByOptions } = sortState;
 
@@ -143,6 +145,7 @@ interface IProductTableProps {
     setSelectedCategories: Dispatch<SetStateAction<string[]>>;
     openCreateButton: ReactNode;
 }
+
 function ProductTable(props: IProductTableProps) {
     const { modalStates, productState, setSelectedCategories } = props;
 

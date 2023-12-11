@@ -12,8 +12,8 @@ import StyledToaster from "../../../components/toaster.tsx";
 import type {
     HandleCategoryChange,
     ICategoryState,
-    IProductState,
-    IModalStates
+    IModalStates,
+    IProductState
 } from "./types.ts";
 
 function ProductOverview({ channel }: { channel: ChannelType }) {

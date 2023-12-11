@@ -9,6 +9,7 @@ interface IUpdateModalProps extends IModalProps {
     productState: IProductState;
     setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
+
 function UpdateModal(props: IUpdateModalProps) {
     const handleUpdate = async (data: IProductFormData): Promise<void> => {
         if (!props.productState.selectedProduct) {

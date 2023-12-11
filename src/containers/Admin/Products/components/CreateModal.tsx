@@ -13,6 +13,7 @@ interface ICreateModalProps extends IModalProps {
     create: (product: INewProduct) => Promise<void>;
     products: IProduct[];
 }
+
 function CreateModal(props: ICreateModalProps) {
     const handleSubmit = async (data: IProductFormData): Promise<void> => {
         const newProduct: INewProduct = {

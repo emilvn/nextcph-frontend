@@ -21,6 +21,7 @@ interface IProductFormProps {
     selectedCategories: string[];
     setSelectedCategories: Dispatch<SetStateAction<string[]>>;
 }
+
 function ProductForm(props: IProductFormProps) {
     const { register, handleSubmit, setValue, reset } =
         useForm<IProductFormData>();
