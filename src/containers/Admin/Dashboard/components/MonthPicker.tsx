@@ -92,11 +92,9 @@ function MonthPickerModal({
                             monthPickerStates={monthPickerStates}
                             modalState={modalState}
                             isActive={
-                                !!(
-                                    monthPickerStates.month === index + 1 &&
-                                    monthPickerStates.year ===
-                                        modalState.selectedYearInModal
-                                )
+                                monthPickerStates.month === index + 1 &&
+                                monthPickerStates.year ===
+                                    modalState.selectedYearInModal
                             }
                             monthNumber={index + 1}
                             monthString={monthString}

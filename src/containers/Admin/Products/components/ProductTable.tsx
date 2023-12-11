@@ -68,7 +68,7 @@ function ProductTableHeader({ sortState, children }: IProductTableHeaderProps) {
                     </TableHeading>
                 ))}
                 <th
-                    className="border-next-blue border-x-2"
+                    className="border-next-blue border-x-2 p-2"
                     colSpan={2}
                 >
                     {children}
@@ -100,9 +100,7 @@ function ProductRow(props: IProductRowProps) {
             <td className="p-4">{formatPrice(props.product.price)}</td>
             <td
                 className={`p-4 border-l-2 text-center font-semibold ${
-                    stock < min_stock || stock > max_stock
-                        ? "text-red-700"
-                        : "text-green-600"
+                    stock < min_stock || stock > max_stock ? "text-red-700" : ""
                 }`}
             >
                 {stock}
