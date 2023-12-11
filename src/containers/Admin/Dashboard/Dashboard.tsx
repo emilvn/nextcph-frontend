@@ -52,8 +52,8 @@ function Dashboard({ channel }: { channel: ChannelType }) {
   return (
     <PageLayout>
       <div className="bg-next-white">
-        <LowStock channel={channel} />
         <MonthPicker monthPickerStates={monthPickerStates} />
+        <LowStock channel={channel} />
         <Statistics statisticsData={statisticsData} />
         <div className="flex">
           <div className="w-full">
