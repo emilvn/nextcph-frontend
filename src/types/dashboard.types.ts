@@ -1,6 +1,7 @@
 interface IOverviewData {
     totalRevenue: number;
     totalSales: number;
+    totalProductsSold: number;
     averageDailySales: number;
     averageDailyRevenue: number;
     categories: IOverviewCategory[];

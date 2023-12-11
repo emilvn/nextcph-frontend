@@ -8,35 +8,47 @@ import {
     formatPercentage,
     formatPrice
 } from "../../../../helpers/formatting.ts";
-import type { Dispatch, SetStateAction } from "react";
+import type { Dispatch, ReactNode, SetStateAction } from "react";
+
+function GridBox({ children }: { children: ReactNode }) {
+    return (
+        <div className="bg-gray-200 p-4 border border-next-white rounded w-full">
+            {children}
+        </div>
+    );
+}
 
 function GridContent({ data }: { data: IOverviewData }) {
     return (
-        <div className="grid grid-cols-4 gap-4 mb-4">
-            <div className="bg-gray-200 p-4 border border-next-white rounded">
+        <div className="flex gap-2 justify-between">
+            <GridBox>
                 <p className="text-gray-800">Total omsætning</p>
                 <p className="text-lg font-bold">
                     {formatPrice(data.totalRevenue)}
                 </p>
-            </div>
-            <div className="bg-gray-200 p-4 border border-next-white rounded">
+            </GridBox>
+            <GridBox>
                 <p className="text-gray-800">Totale antal salg</p>
                 <p className="text-lg font-bold">{data.totalSales}</p>
-            </div>
-            <div className="bg-gray-200 p-4 border border-next-white rounded">
+            </GridBox>
+            <GridBox>
+                <p className="text-gray-800">Antal produkter solgt</p>
+                <p className="text-lg font-bold">{data.totalProductsSold}</p>
+            </GridBox>
+            <GridBox>
                 <p className="text-gray-800">Gennemsnitlig daglig omsætning</p>
                 <p className="text-lg font-bold">
                     {formatPrice(data.averageDailyRevenue)}
                 </p>
-            </div>
-            <div className="bg-gray-200 p-4 border border-next-white rounded">
+            </GridBox>
+            <GridBox>
                 <p className="text-gray-800">
                     Gennemsnitligt dagligt antal salg
                 </p>
                 <p className="text-lg font-bold">
                     {formatFraction(data.averageDailySales)}
                 </p>
-            </div>
+            </GridBox>
         </div>
     );
 }
@@ -80,7 +92,7 @@ function TableContent({ categories }: { categories: IOverviewCategory[] }) {
     );
 }
 
-interface IStaticticsDataProps {
+interface IStatisticsDataProps {
     statisticsData: {
         overviewData: IOverviewData;
         isLoading: boolean;
@@ -90,7 +102,7 @@ interface IStaticticsDataProps {
     };
 }
 
-function Statistics({ statisticsData }: IStaticticsDataProps) {
+function Statistics({ statisticsData }: IStatisticsDataProps) {
     if (!statisticsData.overviewData) return <div>No data found...</div>;
 
     return (
