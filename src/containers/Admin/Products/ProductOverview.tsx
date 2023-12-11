@@ -43,7 +43,10 @@ function ProductOverview({ channel }: { channel: ChannelType }) {
             setSelectedCategories(
                 newValue.map((option: { value: string }) => option.value)
             );
-        } else if (actionMeta.action === "remove-value") {
+        } else if (
+            actionMeta.action === "remove-value" ||
+            actionMeta.action === "clear"
+        ) {
             setSelectedCategories(
                 newValue.map((option: { value: string }) => option.value)
             );
