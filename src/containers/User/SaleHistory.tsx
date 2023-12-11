@@ -1,7 +1,7 @@
 import PageLayout from "../../components/layout.tsx";
 import type { ChannelType } from "../../types/channel.types.ts";
 import useSales from "../../hooks/useSales.ts";
-import Loading from "../../components/loading.tsx";
+import { LoadingPage, LoadingSpinner } from "../../components/loading.tsx";
 import type { ISale } from "../../types/sales.types.ts";
 import type { ISaleProduct } from "../../types/products.types.ts";
 import { useUser } from "@clerk/clerk-react";
@@ -189,7 +189,7 @@ function SaleHistory({ channel }: { channel: ChannelType }) {
         else setCurrentSales(sales);
     }, [sales, userId]);
 
-    if (isLoading) return <Loading.LoadingPage />;
+    if (isLoading) return <LoadingPage />;
 
     function fetchNextPage() {
         setTimeout(() => {
@@ -220,7 +220,7 @@ function SaleHistory({ channel }: { channel: ChannelType }) {
                     }
                     loader={
                         <div className="flex justify-center items-center p-4 lg:w-1/2">
-                            <Loading.LoadingSpinner size={48} />
+                            <LoadingSpinner size={48} />
                         </div>
                     }
                 >

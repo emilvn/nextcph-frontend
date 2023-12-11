@@ -1,13 +1,9 @@
 import { useEffect, useState } from "react";
-import type {
-    INewProduct,
-    IProduct,
-    IUpdateProduct
-} from "../types/products.types.ts";
+import type { INewProduct, IProduct } from "../types/products.types.ts";
 import ProductApi from "../utils/ProductApi.ts";
 import type { ChannelType } from "../types/channel.types.ts";
-import { AxiosError } from "axios";
 import toast from "react-hot-toast";
+import handleError from "../utils/errors.ts";
 
 enum SortBy {
     name = "name",
@@ -79,9 +75,7 @@ function useProducts(channel: ChannelType) {
                 setIsLoading(false);
             })
             .catch((e: unknown) => {
-                if (e instanceof AxiosError)
-                    console.error(e.response?.data || e.message);
-                toast.error("Kunne ikke hente produkter");
+                handleError(e, "Kunne ikke hente produkter");
             });
     };
 
@@ -100,13 +94,11 @@ function useProducts(channel: ChannelType) {
             setProducts(newProducts);
             toast.success("Produktet er oprettet");
         } catch (e: unknown) {
-            if (e instanceof AxiosError)
-                console.error(e.response?.data || e.message);
-            toast.error("Kunne ikke oprette produkt");
+            handleError(e, "Kunne ikke oprette produkt");
         }
     };
 
-    const update = async (product: IUpdateProduct) => {
+    const update = async (product: INewProduct) => {
         try {
             const updatedProduct = await api.update(product);
             const index = products.findIndex((p) => p.id === updatedProduct.id);
@@ -114,9 +106,7 @@ function useProducts(channel: ChannelType) {
             setProducts([...products]);
             toast.success("Produktet er opdateret");
         } catch (e: unknown) {
-            if (e instanceof AxiosError)
-                console.error(e.response?.data || e.message);
-            toast.error("Kunne ikke opdatere produkt");
+            handleError(e, "Kunne ikke opdatere produkt");
         }
     };
 
@@ -128,9 +118,7 @@ function useProducts(channel: ChannelType) {
             setProducts([...products]);
             toast.success("Produktet er slettet");
         } catch (e: unknown) {
-            if (e instanceof AxiosError)
-                console.error(e.response?.data || e.message);
-            toast.error("Kunne ikke slette produkt");
+            handleError(e, "Kunne ikke slette produkt");
         }
     };
 

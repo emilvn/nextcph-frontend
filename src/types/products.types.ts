@@ -19,19 +19,10 @@ interface INewProduct {
     name: string;
     price: number;
     stock: number;
+    min_stock: number;
+    max_stock: number;
     channel: ChannelType;
     categories: string[];
-}
-
-interface IUpdateProduct {
-    id?: string;
-    name?: string;
-    price?: number;
-    stock?: number;
-    min_stock?: number;
-    max_stock?: number;
-    channel?: ChannelType;
-    categories?: string[];
 }
 
 export interface INewSaleProduct {
@@ -48,4 +39,4 @@ interface ISaleProduct {
     product_quantity: number;
 }
 
-export type { ISaleProduct, IUpdateProduct, INewProduct, IProduct };
+export type { ISaleProduct, INewProduct, IProduct };

@@ -1,4 +1,4 @@
-import type { IUpdateProduct } from "../../../../types/products.types.ts";
+import type { INewProduct } from "../../../../types/products.types.ts";
 import type { Dispatch, SetStateAction } from "react";
 import ProductForm from "./ProductForm.tsx";
 import Modal from "../../../../components/modal.tsx";
@@ -16,7 +16,7 @@ function UpdateModal(props: IUpdateModalProps) {
             toast.error("Fejl ved redigering af produkt");
             return;
         }
-        const updatedProduct: IUpdateProduct = {
+        const updatedProduct: INewProduct = {
             id: props.productState.selectedProduct.id,
             name: `${data.name || ""}, ${data.amount || ""}`,
             price: Number(data.price) || 0,

@@ -76,6 +76,7 @@ function ProductForm(props: IProductFormProps) {
                         <input
                             className="border border-gray-300 p-2 w-full"
                             type="number"
+                            step="0.01"
                             {...register("price", { required: true })}
                             placeholder="Pris i DKK..."
                         />

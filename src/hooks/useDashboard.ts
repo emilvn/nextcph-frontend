@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import type { ChannelType } from "../types/channel.types.ts";
-import { AxiosError } from "axios";
 import type { IOverviewData } from "../types/dashboard.types.ts";
 import SaleApi from "../utils/SaleApi.ts";
-import toast from "react-hot-toast";
 import type { ISale } from "../types/sales.types.ts";
+import handleError from "../utils/errors.ts";
 
 function useDashboard(channel: ChannelType) {
     const [overviewData, setOverviewData] = useState<IOverviewData>({
@@ -36,19 +35,14 @@ function useDashboard(channel: ChannelType) {
                 setOverviewData(data);
             } catch (e: unknown) {
                 setMonthlySales([]);
-                if (e instanceof AxiosError) {
-                    setOverviewData({
-                        totalRevenue: 0,
-                        totalSales: 0,
-                        averageDailySales: 0,
-                        averageDailyRevenue: 0,
-                        categories: []
-                    });
-                    console.error(e.response?.data || e.message);
-                    if (e.response?.status !== 404) {
-                        toast.error("Der er ingen salg for denne måned");
-                    }
-                }
+                setOverviewData({
+                    totalRevenue: 0,
+                    totalSales: 0,
+                    averageDailySales: 0,
+                    averageDailyRevenue: 0,
+                    categories: []
+                });
+                handleError(e, "Kunne ikke hente dashboard data");
             }
         };
 

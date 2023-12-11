@@ -7,7 +7,7 @@ import useDashboard from "../../../hooks/useDashboard.ts";
 import { ISale } from "../../../types/sales.types.ts";
 import { BarChart } from "./components/BarChart.tsx";
 import Statistics from "./components/Statistics.tsx";
-import Loading from "../../../components/loading.tsx";
+import { LoadingSpinner } from "../../../components/loading.tsx";
 
 function Dashboard({ channel }: { channel: ChannelType }) {
     const [currentSales, setCurrentSales] = useState<ISale[]>([]);
@@ -66,7 +66,7 @@ function Dashboard({ channel }: { channel: ChannelType }) {
         return (
             <PageLayout>
                 <div className="flex w-full justify-center items-center h-80">
-                    <Loading.LoadingSpinner size={60} />
+                    <LoadingSpinner size={60} />
                 </div>
             </PageLayout>
         );

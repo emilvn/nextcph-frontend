@@ -1,10 +1,6 @@
 import Api from "./Api.ts";
 import axios from "axios";
-import {
-    INewProduct,
-    IProduct,
-    IUpdateProduct
-} from "../types/products.types.ts";
+import { INewProduct, IProduct } from "../types/products.types.ts";
 import { ChannelType } from "../types/channel.types.ts";
 
 class ProductApi extends Api<IProduct, INewProduct> {
@@ -39,7 +35,7 @@ class ProductApi extends Api<IProduct, INewProduct> {
         return response.data;
     }
 
-    public async update(data: IUpdateProduct): Promise<IProduct> {
+    public async update(data: INewProduct): Promise<IProduct> {
         const response = await axios.put(this.url + "/" + data.id, data);
         if (response.status !== 200 || !response.data) {
             throw new Error("Failed to update");

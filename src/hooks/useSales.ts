@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import type { INewSale, ISale } from "../types/sales.types.ts";
 import type { ChannelType } from "../types/channel.types.ts";
 import SaleApi from "../utils/SaleApi.ts";
-import { AxiosError } from "axios";
 import toast from "react-hot-toast";
+import handleError from "../utils/errors.ts";
 
 function useSales(channel: ChannelType) {
     const [sales, setSales] = useState<ISale[]>([]);
@@ -35,14 +35,7 @@ function useSales(channel: ChannelType) {
                     setHasMore(false);
                 }
             } catch (e: unknown) {
-                if (e instanceof AxiosError) {
-                    console.error(e.response?.data || e.message);
-
-                    // If the error is that there are no sales, yet
-                    // we don't want to show an error pop up
-                    if (e.response?.status !== 404)
-                        toast.error("Kunne ikke hente salg");
-                }
+                handleError(e, "Kunne ikke hente salg");
             }
         }
 
@@ -56,10 +49,7 @@ function useSales(channel: ChannelType) {
             setSales(newSales);
             toast.success("Salg oprettet");
         } catch (e: unknown) {
-            if (e instanceof AxiosError) {
-                console.error(e.response?.data || e.message);
-            }
-            toast.error("Kunne ikke oprette salg");
+            handleError(e, "Kunne ikke oprette salg");
         }
     };
 
@@ -70,7 +60,7 @@ function useSales(channel: ChannelType) {
             sales.splice(index, 1);
             setSales([...sales]);
         } catch (e) {
-            console.error(e);
+            handleError(e, "Kunne ikke slette salg");
         }
     };
 

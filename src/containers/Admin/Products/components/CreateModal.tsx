@@ -19,6 +19,8 @@ function CreateModal(props: ICreateModalProps) {
             name: `${data.name || ""}, ${data.amount || ""}`,
             price: Number(data.price) || 0,
             stock: Number(data.stock) || 0,
+            min_stock: Number(data.min_stock) || 0,
+            max_stock: Number(data.max_stock) || 0,
             channel: props.channel,
             categories: data.categories
         };

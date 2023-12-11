@@ -2,7 +2,7 @@ import { useUser } from "@clerk/clerk-react";
 import Login from "./containers/Login.tsx";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { NavBarAdmin, NavBarUser } from "./components/nav.tsx";
-import Loading from "./components/loading.tsx";
+import { LoadingPage } from "./components/loading.tsx";
 import Products from "./containers/User/Products.tsx";
 import SaleHistory from "./containers/User/SaleHistory.tsx";
 import Dashboard from "./containers/Admin/Dashboard/Dashboard.tsx";
@@ -26,7 +26,7 @@ function App() {
         localStorage.setItem("channel", JSON.stringify(channel));
     }, [channel]);
 
-    if (!isLoaded) return <Loading.LoadingPage />;
+    if (!isLoaded) return <LoadingPage />;
 
     if (!isSignedIn) return <Login />;
 

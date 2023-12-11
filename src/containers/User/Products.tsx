@@ -1,7 +1,7 @@
 import PageLayout from "../../components/layout.tsx";
 import type { ChannelType } from "../../types/channel.types.ts";
 import useProducts from "../../hooks/useProducts.ts";
-import Loading from "../../components/loading.tsx";
+import { LoadingPage } from "../../components/loading.tsx";
 import type { INewSaleProduct, IProduct } from "../../types/products.types.ts";
 import { IoFilter, IoSearchOutline } from "react-icons/io5";
 import {
@@ -245,7 +245,7 @@ function Products({ channel }: { channel: ChannelType }) {
         }
     }, []);
 
-    if (isLoading) return <Loading.LoadingPage />;
+    if (isLoading) return <LoadingPage />;
     if (!products || products.length === 0)
         return <PageLayout>No products found...</PageLayout>;
 

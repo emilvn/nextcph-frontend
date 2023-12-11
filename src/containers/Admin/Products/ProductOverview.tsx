@@ -2,7 +2,7 @@ import type { ChannelType } from "../../../types/channel.types.ts";
 import type { IProduct } from "../../../types/products.types.ts";
 import PageLayout from "../../../components/layout.tsx";
 import useProducts from "../../../hooks/useProducts.ts";
-import loading from "../../../components/loading.tsx";
+import { LoadingPage } from "../../../components/loading.tsx";
 import { useState } from "react";
 import UpdateModal from "./components/UpdateModal.tsx";
 import CreateModal from "./components/CreateModal.tsx";
@@ -43,6 +43,10 @@ function ProductOverview({ channel }: { channel: ChannelType }) {
             setSelectedCategories(
                 newValue.map((option: { value: string }) => option.value)
             );
+        } else if (actionMeta.action === "remove-value") {
+            setSelectedCategories(
+                newValue.map((option: { value: string }) => option.value)
+            );
         }
     };
 
@@ -74,7 +78,7 @@ function ProductOverview({ channel }: { channel: ChannelType }) {
 
     return (
         <PageLayout>
-            {isLoading && <loading.LoadingSpinner />}
+            {isLoading && <LoadingPage />}
             {!isLoading && (
                 <ProductTable
                     productState={productState}

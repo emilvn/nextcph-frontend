@@ -28,9 +28,4 @@ const LoadingSpinner = (props: { size?: number }) => (
     </div>
 );
 
-const Loading = {
-    LoadingPage,
-    LoadingSpinner
-};
-
-export default Loading;
+export { LoadingPage, LoadingSpinner };
