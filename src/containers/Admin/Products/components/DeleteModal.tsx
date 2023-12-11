@@ -18,7 +18,6 @@ function DeleteModal(props: IDeleteModalProps) {
         if (props.productState.productToDelete) {
             void props.productState.destroy(props.productState.productToDelete);
             closeDeleteConfirmation();
-            toast.success("Produktet er slettet");
         } else {
             toast.error("Fejl ved sletning af produkt");
         }

@@ -98,6 +98,7 @@ function useProducts(channel: ChannelType) {
             const newProduct = await api.create(product);
             const newProducts = [...products, newProduct];
             setProducts(newProducts);
+            toast.success("Produktet er oprettet");
         } catch (e: unknown) {
             if (e instanceof AxiosError)
                 console.error(e.response?.data || e.message);
@@ -111,6 +112,7 @@ function useProducts(channel: ChannelType) {
             const index = products.findIndex((p) => p.id === updatedProduct.id);
             products[index] = updatedProduct;
             setProducts([...products]);
+            toast.success("Produktet er opdateret");
         } catch (e: unknown) {
             if (e instanceof AxiosError)
                 console.error(e.response?.data || e.message);
@@ -124,6 +126,7 @@ function useProducts(channel: ChannelType) {
             const index = products.findIndex((p) => p.id === product.id);
             products.splice(index, 1);
             setProducts([...products]);
+            toast.success("Produktet er slettet");
         } catch (e: unknown) {
             if (e instanceof AxiosError)
                 console.error(e.response?.data || e.message);

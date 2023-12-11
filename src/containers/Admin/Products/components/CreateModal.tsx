@@ -5,7 +5,6 @@ import type {
 } from "../../../../types/products.types.ts";
 import ProductForm from "./ProductForm.tsx";
 import Modal from "../../../../components/modal.tsx";
-import toast from "react-hot-toast";
 import type { IModalProps, IProductFormData } from "../types.ts";
 
 interface ICreateModalProps extends IModalProps {
@@ -25,7 +24,6 @@ function CreateModal(props: ICreateModalProps) {
         };
         void props.create(newProduct);
         props.setIsOpen(false);
-        toast.success("Produkt oprettet");
         props.categoryState.setSelectedCategories([]);
     };
 

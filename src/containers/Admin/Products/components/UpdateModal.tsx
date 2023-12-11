@@ -30,7 +30,6 @@ function UpdateModal(props: IUpdateModalProps) {
         props.setIsOpen(false);
         props.categoryState.setSelectedCategories([]);
         props.productState.setSelectedProduct(null);
-        toast.success("Produktet er opdateret");
     };
 
     return (
