@@ -14,8 +14,7 @@ function setBarChartData(overviewData: IOverviewCategory[]) {
                     (category) => category.percentageOfTotalRevenue
                 ),
                 backgroundColor: "#F96B4C",
-                borderColor: "#010E2B",
-                borderWidth: 1
+                borderWidth: 0
             },
             {
                 label: "Antal produkter solgt pr. kategori i %",
@@ -23,8 +22,7 @@ function setBarChartData(overviewData: IOverviewCategory[]) {
                     (category) => category.percentageOfTotalProductsSold
                 ),
                 backgroundColor: "#010E2B",
-                borderColor: "#F96B4C",
-                borderWidth: 1
+                borderWidth: 0
             }
         ]
     };
