@@ -47,7 +47,6 @@ class SaleApi extends Api<ISale, INewSale> {
             ? "/month/?channel=" + channel + "&month=" + month
             : "month/?channel=" + channel;
         const response = await axios.get(this.url + query);
-        console.log(response);
         if (response.status !== 200 || !response.data) {
             throw new Error("Failed to fetch");
         }
