@@ -9,9 +9,20 @@ function setBarChartData(overviewData: IOverviewCategory[]) {
         datasets: [
             {
                 label: "Omsætning pr. kategori i %",
-                data: overviewData.map((category) => category.percentage),
+                data: overviewData.map(
+                    (category) => category.percentageOfTotalRevenue
+                ),
                 backgroundColor: "#F96B4C",
                 borderColor: "#010E2B",
+                borderWidth: 1
+            },
+            {
+                label: "Antal produkter solgt pr. kategori i %",
+                data: overviewData.map(
+                    (category) => category.percentageOfTotalProductsSold
+                ),
+                backgroundColor: "#010E2B",
+                borderColor: "#F96B4C",
                 borderWidth: 1
             }
         ]
@@ -76,7 +87,8 @@ function setChartData(
             }
         ]
     };
-    const lineChartOptions = {
+
+    const lineChartOptions: ChartOptions<"line"> = {
         responsive: true,
         plugins: {
             legend: {
@@ -93,8 +105,12 @@ function setChartData(
         },
         scales: {
             y: {
+                min: 0,
                 ticks: {
-                    color: "#010E2B"
+                    color: "#010E2B",
+                    callback: function (value) {
+                        if (value) return value.toString() + "kr.";
+                    }
                 }
             },
             x: {

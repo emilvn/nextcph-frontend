@@ -68,7 +68,9 @@ function TableContent({ categories }: { categories: IOverviewCategory[] }) {
                                 {formatPrice(category.total)}
                             </td>
                             <td className="border border-gray-300 p-2 text-center">
-                                {formatPercentage(category.percentage)}
+                                {formatPercentage(
+                                    category.percentageOfTotalRevenue
+                                )}
                             </td>
                         </tr>
                     )

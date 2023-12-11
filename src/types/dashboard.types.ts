@@ -9,7 +9,9 @@ interface IOverviewData {
 interface IOverviewCategory {
     name: string;
     total: number;
-    percentage: number;
+    quantity: number;
+    percentageOfTotalRevenue: number;
+    percentageOfTotalProductsSold: number;
 }
 
 export type { IOverviewData, IOverviewCategory };

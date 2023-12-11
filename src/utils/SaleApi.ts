@@ -98,6 +98,7 @@ class SaleApi extends Api<ISale, INewSale> {
         if (response.status >= 400 || !response.data) {
             throw new Error("Failed to fetch dashboard overview data");
         }
+        console.log(response.data);
         return response.data;
     }
 }
