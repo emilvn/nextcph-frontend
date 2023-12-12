@@ -1,7 +1,9 @@
 import type { ChannelType } from "../../../../types/channel.types.ts";
+import { useState } from "react";
 import { LoadingPage } from "../../../../components/loading.tsx";
 import type { IProduct } from "../../../../types/products.types.ts";
 import { FaExclamationCircle } from "react-icons/fa";
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import useProducts from "../../../../hooks/useProducts.ts";
 
 function LowStockProduct({ product }: { product: IProduct }) {
@@ -46,7 +48,20 @@ function TableContent({ products }: { products: IProduct[] }) {
     );
 }
 
+function Header({ showTable, setShowTable }: { showTable: boolean, setShowTable: React.Dispatch<React.SetStateAction<boolean>> }) {
+    return (
+        <div onClick={() => setShowTable(!showTable)} className="text-2xl text-red-700 font-bold mb-4 flex justify-center items-center cursor-pointer">
+            <FaExclamationCircle />
+            <h2 className="mx-2">Lav lagerbeholdning</h2>
+            <FaExclamationCircle className="mr-2" />
+            {showTable && (<IoIosArrowDown />)}
+            {!showTable && (<IoIosArrowUp />)}
+        </div>
+    );
+}
+
 function LowStock({ channel }: { channel: ChannelType }) {
+    const [showTable, setShowTable] = useState<boolean>(true);
     const { products: lowStockProducts, isLoading } = useProducts(channel, {
         lowStock: true
     });
@@ -58,16 +73,12 @@ function LowStock({ channel }: { channel: ChannelType }) {
             {lowStockProducts.length > 0 && (
                 <div className="bg-next-white p-4">
                     <div className="border border-gray-300 p-4">
-                        <div className=" text-2xl text-red-700 font-bold mb-4 flex justify-center items-center">
-                            <FaExclamationCircle />
-                            <h2 className="mx-2">Lav lagerbeholdning</h2>
-                            <FaExclamationCircle />
-                        </div>
-                        <div>
+                        <Header showTable={showTable} setShowTable={setShowTable} />
+                        {showTable && (
                             <div>
                                 <TableContent products={lowStockProducts} />
                             </div>
-                        </div>
+                        )}
                     </div>
                 </div>
             )}

@@ -1,30 +1,11 @@
 import type { Dispatch, SetStateAction } from "react";
 import { ReactNode, useState } from "react";
 import { FaArrowCircleLeft, FaArrowCircleRight } from "react-icons/fa";
-
+import type { IMonthPicker, IMonthPickerStates } from "../types";
 import { getMonthsArray } from "../../../../helpers/dashboard.ts";
 
-interface IMonthPickerStatesProps {
-    monthPickerStates: {
-        month: number;
-        year: number;
-        showStatisticsTable: boolean;
-        setMonth: Dispatch<SetStateAction<number>>;
-        setYear: Dispatch<SetStateAction<number>>;
-        setShowStatisticsTable: Dispatch<SetStateAction<boolean>>;
-    };
-}
 
-interface IMonthPickerProps extends IMonthPickerStatesProps {
-    modalState: {
-        isOpenMonthPicker: boolean;
-        selectedYearInModal: number;
-        setIsOpenMonthPicker: Dispatch<SetStateAction<boolean>>;
-        setSelectedYearInModal: Dispatch<SetStateAction<number>>;
-    };
-}
-
-interface IMonthPickerHeadProps extends IMonthPickerProps {
+interface IMonthPickerHeadProps extends IMonthPicker {
     monthString: string;
 }
 
@@ -93,7 +74,7 @@ function MonthPickerModal({ modalState, children }: IMonthPickerModalProps) {
     );
 }
 
-interface IMonthProps extends IMonthPickerProps {
+interface IMonthProps extends IMonthPicker {
     isActive: boolean;
     monthString: string;
     monthNumber: number;
@@ -141,7 +122,7 @@ function Modal({ children }: { children: ReactNode }) {
     );
 }
 
-function MonthPicker({ monthPickerStates }: IMonthPickerStatesProps) {
+function MonthPicker({ monthPickerStates }: IMonthPickerStates) {
     const [isOpenMonthPicker, setIsOpenMonthPicker] = useState(false);
     const [selectedYearInModal, setSelectedYearInModal] = useState(
         monthPickerStates.year
@@ -171,7 +152,7 @@ function MonthPicker({ monthPickerStates }: IMonthPickerStatesProps) {
                             isActive={
                                 monthPickerStates.month === index + 1 &&
                                 monthPickerStates.year ===
-                                    modalState.selectedYearInModal
+                                modalState.selectedYearInModal
                             }
                             monthNumber={index + 1}
                             monthString={monthString}
