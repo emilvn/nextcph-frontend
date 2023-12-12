@@ -1,11 +1,7 @@
 import type { ChannelType } from "../../../types/channel.types.ts";
 import type { ActionMeta, Options } from "react-select";
 import { Dispatch, SetStateAction } from "react";
-import type {
-    INewProduct,
-    IProduct,
-    IUpdateProduct
-} from "../../../types/products.types.ts";
+import type { INewProduct, IProduct } from "../../../types/products.types.ts";
 import { ISortByOption } from "../../../hooks/useProducts.ts";
 
 export type HandleCategoryChange = (
@@ -31,7 +27,7 @@ interface IModalStates {
 interface IProductState {
     products: IProduct[];
     create: (product: INewProduct) => Promise<void>;
-    update: (product: IUpdateProduct) => Promise<void>;
+    update: (product: INewProduct) => Promise<void>;
     destroy: (product: IProduct) => Promise<void>;
     selectedProduct: IProduct | null;
     setSelectedProduct: Dispatch<SetStateAction<IProduct | null>>;

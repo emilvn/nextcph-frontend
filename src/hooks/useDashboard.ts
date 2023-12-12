@@ -9,6 +9,7 @@ function useDashboard(channel: ChannelType) {
     const [overviewData, setOverviewData] = useState<IOverviewData>({
         totalRevenue: 0,
         totalSales: 0,
+        totalProductsSold: 0,
         averageDailySales: 0,
         averageDailyRevenue: 0,
         categories: []
@@ -20,28 +21,37 @@ function useDashboard(channel: ChannelType) {
 
     const api = new SaleApi();
 
-	const loadDashboardData = async () => {
-		try {
-			const monthlySales = await api.getByMonth(channel, year + "-" + month);
-			const data = await api.getDashboardOverviewData(channel, year + "-" + month);
-			setMonthlySales(monthlySales);
-			setOverviewData(data);
-		} catch (e: unknown) {
-			setMonthlySales([]);
-			setOverviewData({
-				totalRevenue: 0,
-				totalSales: 0,
-				averageDailySales: 0,
-				averageDailyRevenue: 0,
-				categories: [],
-			});
+    const loadDashboardData = async () => {
+        try {
+            const monthlySales = await api.getByMonth(
+                channel,
+                year + "-" + month
+            );
+            const data = await api.getDashboardOverviewData(
+                channel,
+                year + "-" + month
+            );
+            setMonthlySales(monthlySales);
+            setOverviewData(data);
+        } catch (e: unknown) {
+            setMonthlySales([]);
+            setOverviewData({
+                totalRevenue: 0,
+                totalSales: 0,
+                totalProductsSold: 0,
+                averageDailySales: 0,
+                averageDailyRevenue: 0,
+                categories: []
+            });
             handleError(e, "Kunne ikke hente dashboard data");
-		}
-	};
+        }
+    };
 
-	useEffect(() => {
-		loadDashboardData().then(() => { setIsLoading(false) });
-	}, [month, year]);
+    useEffect(() => {
+        loadDashboardData().then(() => {
+            setIsLoading(false);
+        });
+    }, [month, year]);
 
     return {
         overviewData,
