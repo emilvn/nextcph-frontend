@@ -19,8 +19,10 @@ class ProductApi extends Api<IProduct, INewProduct> {
         const response = await axios.get(
             this.url + "?channel=" + channel + lowStockQuery
         );
-        if (response.status !== 200 || !response.data) {
+        if (response.status >= 400) {
             throw new Error("Failed to fetch");
+        } else if (response.status === 204) {
+            return [];
         }
         return response.data;
     }
