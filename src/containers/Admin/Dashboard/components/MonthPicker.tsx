@@ -54,15 +54,17 @@ function MonthPickerHeader({
     );
 }
 
-interface IMonthPickerModalProps extends IMonthPickerProps {
-    months: string[];
+interface IMonthPickerModalProps {
+    modalState: {
+        isOpenMonthPicker: boolean;
+        selectedYearInModal: number;
+        setIsOpenMonthPicker: Dispatch<SetStateAction<boolean>>;
+        setSelectedYearInModal: Dispatch<SetStateAction<number>>;
+    };
+    children: ReactNode;
 }
 
-function MonthPickerModal({
-    monthPickerStates,
-    modalState,
-    months
-}: IMonthPickerModalProps) {
+function MonthPickerModal({ modalState, children }: IMonthPickerModalProps) {
     return (
         <Modal>
             <div className="w-60 h-60 flex flex-col items-center justify-center text-next-darker-orange bg-next-blue shadow-lg">
@@ -85,22 +87,7 @@ function MonthPickerModal({
                         className="ml-2 hover:cursor-pointer"
                     />
                 </div>
-                <div className="grid grid-cols-3 gap-4">
-                    {months.map((monthString, index) => (
-                        <Month
-                            key={index}
-                            monthPickerStates={monthPickerStates}
-                            modalState={modalState}
-                            isActive={
-                                monthPickerStates.month === index + 1 &&
-                                monthPickerStates.year ===
-                                    modalState.selectedYearInModal
-                            }
-                            monthNumber={index + 1}
-                            monthString={monthString}
-                        />
-                    ))}
-                </div>
+                <div className="grid grid-cols-3 gap-4">{children}</div>
             </div>
         </Modal>
     );
@@ -125,7 +112,6 @@ function Month({
         monthPickerStates.setYear(modalState.selectedYearInModal);
         monthPickerStates.setMonth(monthNumber);
     }
-
     return (
         <>
             {isActive && (
@@ -176,11 +162,22 @@ function MonthPicker({ monthPickerStates }: IMonthPickerStatesProps) {
                 monthString={months[monthPickerStates.month - 1]}
             />
             {isOpenMonthPicker && (
-                <MonthPickerModal
-                    monthPickerStates={monthPickerStates}
-                    modalState={modalState}
-                    months={months}
-                />
+                <MonthPickerModal modalState={modalState}>
+                    {months.map((monthString, index) => (
+                        <Month
+                            key={index}
+                            monthPickerStates={monthPickerStates}
+                            modalState={modalState}
+                            isActive={
+                                monthPickerStates.month === index + 1 &&
+                                monthPickerStates.year ===
+                                    modalState.selectedYearInModal
+                            }
+                            monthNumber={index + 1}
+                            monthString={monthString}
+                        />
+                    ))}
+                </MonthPickerModal>
             )}
         </div>
     );
