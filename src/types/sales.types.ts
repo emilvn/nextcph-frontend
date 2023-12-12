@@ -16,12 +16,13 @@ interface ISale {
 
 interface ISaleDataWithPagination {
     data: ISale[];
-    pagination: {
-        totalCount: number;
-        totalPages: number;
-        currentPage: number;
-        pageSize: number;
-    };
+    pagination: IPagination;
+}
+interface IPagination {
+    totalCount: number;
+    totalPages: number;
+    currentPage: number;
+    pageSize: number;
 }
 
 export type { INewSale, ISale, ISaleDataWithPagination };
