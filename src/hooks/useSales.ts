@@ -2,17 +2,17 @@ import { useEffect, useState } from "react";
 import type { INewSale, ISale } from "../types/sales.types.ts";
 import type { ChannelType } from "../types/channel.types.ts";
 import SaleApi from "../utils/SaleApi.ts";
-import { AxiosError } from "axios";
 import toast from "react-hot-toast";
+import handleError from "../utils/errors.ts";
 
 function useSales(channel: ChannelType) {
-	const [sales, setSales] = useState<ISale[]>([]);
-	const [isLoading, setIsLoading] = useState(true);
-	const [page, setPage] = useState(1);
-	const [userId, setUserId] = useState<string | undefined>(undefined);
-	const [hasMore, setHasMore] = useState(true);
+    const [sales, setSales] = useState<ISale[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [page, setPage] = useState(1);
+    const [userId, setUserId] = useState<string | undefined>(undefined);
+    const [hasMore, setHasMore] = useState(true);
 
-	const api = new SaleApi();
+    const api = new SaleApi();
 
 	const loadSales = async () => {
 		try {
@@ -26,9 +26,7 @@ function useSales(channel: ChannelType) {
 			}
 		}
 		catch (e: unknown) {
-			if (e instanceof AxiosError) {
-				console.error(e.response?.data || e.message);
-			}
+            handleError(e, "Kunne ikke hente salg");
 		}
 	}
 
@@ -36,32 +34,38 @@ function useSales(channel: ChannelType) {
 		loadSales().then(() => setIsLoading(false));
 	}, [page, userId]);
 
-	const create = async (sale: INewSale) => {
-		try {
-			const newSale = await api.create(sale);
-			const newSales = [...sales, newSale];
-			setSales(newSales);
-			toast.success("Salg oprettet");
-		} catch (e: unknown) {
-			if (e instanceof AxiosError) {
-				console.error(e.response?.data || e.message);
-			}
-			toast.error("Kunne ikke oprette salg");
-		}
-	}
+    const create = async (sale: INewSale) => {
+        try {
+            const newSale = await api.create(sale);
+            const newSales = [...sales, newSale];
+            setSales(newSales);
+            toast.success("Salg oprettet");
+        } catch (e: unknown) {
+            handleError(e, "Kunne ikke oprette salg");
+        }
+    };
 
-	const destroy = async (sale: ISale) => {
-		try {
-			await api.deleteById(sale.id);
-			const index = sales.findIndex((s) => s.id === sale.id);
-			sales.splice(index, 1);
-			setSales([...sales]);
-		} catch (e) {
-			console.error(e);
-		}
-	}
+    const destroy = async (sale: ISale) => {
+        try {
+            await api.deleteById(sale.id);
+            const index = sales.findIndex((s) => s.id === sale.id);
+            sales.splice(index, 1);
+            setSales([...sales]);
+        } catch (e) {
+            handleError(e, "Kunne ikke slette salg");
+        }
+    };
 
-	return { sales, isLoading, create, destroy, setPage, hasMore, setUserId, userId };
+    return {
+        sales,
+        isLoading,
+        create,
+        destroy,
+        setPage,
+        hasMore,
+        setUserId,
+        userId
+    };
 }
 
 export default useSales;

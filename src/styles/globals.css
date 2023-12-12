@@ -2,21 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
-body{
+body {
     @apply scroll-smooth bg-next-white text-next-blue overscroll-none
 }
 
-@layer components{
-    .btn{
+@layer components {
+    .btn {
         @apply transition-colors font-semibold cursor-pointer border-[1.5px] p-2
     }
-    .btn-blue{
+
+    .btn-blue {
         @apply btn bg-next-blue text-next-darker-orange border-next-darker-orange hover:bg-next-darker-orange hover:text-next-blue
     }
-    .btn-orange{
+
+    .btn-orange {
         @apply btn bg-next-darker-orange text-next-blue border-next-blue hover:bg-next-blue hover:text-next-darker-orange
     }
-    .btn-white{
+
+    .btn-white {
         @apply btn bg-next-white border-next-blue text-next-blue hover:bg-next-blue hover:text-next-white
     }
 }

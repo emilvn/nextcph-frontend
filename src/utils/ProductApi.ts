@@ -1,30 +1,31 @@
 import Api from "./Api.ts";
 import axios from "axios";
-import { INewProduct, IProduct, IUpdateProduct } from "../types/products.types.ts";
+import { INewProduct, IProduct } from "../types/products.types.ts";
 import { ChannelType } from "../types/channel.types.ts";
 
 class ProductApi extends Api<IProduct, INewProduct> {
-	url: string;
-	constructor() {
-		super();
-		this.url = this.endpoint + "/products";
-	}
+    url: string;
 
-	public async getByChannel(channel: ChannelType): Promise<IProduct[]> {
-		const response = await axios.get(this.url + "?channel=" + channel);
-		if (response.status !== 200 || !response.data) {
-			throw new Error("Failed to fetch");
-		}
-		return response.data;
-	}
+    constructor() {
+        super();
+        this.url = this.endpoint + "/products";
+    }
 
-	public async getById(id: string): Promise<IProduct> {
-		const response = await axios.get(this.url + "/" + id);
-		if (response.status !== 200 || !response.data) {
-			throw new Error("Failed to fetch");
-		}
-		return response.data;
-	}
+    public async getByChannel(channel: ChannelType): Promise<IProduct[]> {
+        const response = await axios.get(this.url + "?channel=" + channel);
+        if (response.status !== 200 || !response.data) {
+            throw new Error("Failed to fetch");
+        }
+        return response.data;
+    }
+
+    public async getById(id: string): Promise<IProduct> {
+        const response = await axios.get(this.url + "/" + id);
+        if (response.status !== 200 || !response.data) {
+            throw new Error("Failed to fetch");
+        }
+        return response.data;
+    }
 
 	public async getLowStock(channel: ChannelType): Promise<IProduct[]> {
 		const response = await axios.get(this.url + "/lowstock?channel=" + channel);
@@ -42,20 +43,21 @@ class ProductApi extends Api<IProduct, INewProduct> {
 		return response.data;
 	}
 
-	public async update(data: IUpdateProduct): Promise<IProduct> {
-		const response = await axios.put(this.url + "/" + data.id, data);
-		if (response.status !== 200 || !response.data) {
-			throw new Error("Failed to update");
-		}
-		return response.data;
-	}
+    public async update(data: INewProduct): Promise<IProduct> {
+        const response = await axios.put(this.url + "/" + data.id, data);
+        if (response.status !== 200 || !response.data) {
+            throw new Error("Failed to update");
+        }
+        return response.data;
+    }
 
-	public async deleteById(id: string): Promise<IProduct> {
-		const response = await axios.delete(this.url + "/" + id);
-		if (response.status !== 200) {
-			throw new Error("Failed to delete");
-		}
-		return response.data;
-	}
+    public async deleteById(id: string): Promise<IProduct> {
+        const response = await axios.delete(this.url + "/" + id);
+        if (response.status !== 200) {
+            throw new Error("Failed to delete");
+        }
+        return response.data;
+    }
 }
+
 export default ProductApi;
