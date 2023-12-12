@@ -14,4 +14,14 @@ interface ISale {
     updated_at: string;
 }
 
-export type { INewSale, ISale };
+interface ISaleDataWithPagination {
+    data: ISale[];
+    pagination: {
+        totalCount: number;
+        totalPages: number;
+        currentPage: number;
+        pageSize: number;
+    };
+}
+
+export type { INewSale, ISale, ISaleDataWithPagination };
