@@ -11,8 +11,14 @@ class ProductApi extends Api<IProduct, INewProduct> {
         this.url = this.endpoint + "/products";
     }
 
-    public async getByChannel(channel: ChannelType): Promise<IProduct[]> {
-        const response = await axios.get(this.url + "?channel=" + channel);
+    public async getByChannel(
+        channel: ChannelType,
+        lowStock?: boolean
+    ): Promise<IProduct[]> {
+        const lowStockQuery = lowStock ? "&low_stock=true" : "";
+        const response = await axios.get(
+            this.url + "?channel=" + channel + lowStockQuery
+        );
         if (response.status !== 200 || !response.data) {
             throw new Error("Failed to fetch");
         }
@@ -27,21 +33,23 @@ class ProductApi extends Api<IProduct, INewProduct> {
         return response.data;
     }
 
-	public async getLowStock(channel: ChannelType): Promise<IProduct[]> {
-		const response = await axios.get(this.url + "/lowstock?channel=" + channel);
-		if (response.status !== 200 || !response.data) {
-			throw new Error("Failed to fetch");
-		}
-		return response.data;
-	}
+    public async getLowStock(channel: ChannelType): Promise<IProduct[]> {
+        const response = await axios.get(
+            this.url + "/lowstock?channel=" + channel
+        );
+        if (response.status !== 200 || !response.data) {
+            throw new Error("Failed to fetch");
+        }
+        return response.data;
+    }
 
-	public async create(data: INewProduct): Promise<IProduct> {
-		const response = await axios.post(this.url, data);
-		if (response.status !== 201 || !response.data) {
-			throw new Error("Failed to create");
-		}
-		return response.data;
-	}
+    public async create(data: INewProduct): Promise<IProduct> {
+        const response = await axios.post(this.url, data);
+        if (response.status !== 201 || !response.data) {
+            throw new Error("Failed to create");
+        }
+        return response.data;
+    }
 
     public async update(data: INewProduct): Promise<IProduct> {
         const response = await axios.put(this.url + "/" + data.id, data);

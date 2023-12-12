@@ -1,8 +1,8 @@
 import type { ChannelType } from "../../../../types/channel.types.ts";
-import useLowStockProducts from "../../../../hooks/useLowStock.ts";
 import { LoadingPage } from "../../../../components/loading.tsx";
 import type { IProduct } from "../../../../types/products.types.ts";
 import { FaExclamationCircle } from "react-icons/fa";
+import useProducts from "../../../../hooks/useProducts.ts";
 
 function LowStockProduct({ product }: { product: IProduct }) {
     return (
@@ -47,11 +47,12 @@ function TableContent({ products }: { products: IProduct[] }) {
 }
 
 function LowStock({ channel }: { channel: ChannelType }) {
-    const { lowStockProducts, isLoading } = useLowStockProducts(channel);
+    const { products: lowStockProducts, isLoading } = useProducts(channel, {
+        lowStock: true
+    });
 
     if (isLoading) return <LoadingPage />;
 
-    console.log(lowStockProducts);
     return (
         <>
             {lowStockProducts.length > 0 && (

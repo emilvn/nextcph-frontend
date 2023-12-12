@@ -55,7 +55,10 @@ function sortProducts(products: IProduct[], sortBy: ISortByOption) {
     });
 }
 
-function useProducts(channel: ChannelType) {
+interface useProductsOptions {
+    lowStock?: boolean;
+}
+function useProducts(channel: ChannelType, options?: useProductsOptions) {
     const [products, setProducts] = useState<IProduct[]>([]);
 
     const [isLoading, setIsLoading] = useState(true);
@@ -68,7 +71,7 @@ function useProducts(channel: ChannelType) {
 
     const loadProducts = () => {
         setIsLoading(true);
-        api.getByChannel(channel)
+        api.getByChannel(channel, options?.lowStock)
             .then((products) => {
                 sortProducts(products, sortBy);
                 setProducts(products);
