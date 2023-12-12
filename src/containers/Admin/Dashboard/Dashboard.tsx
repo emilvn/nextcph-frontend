@@ -8,7 +8,7 @@ import { ISale } from "../../../types/sales.types.ts";
 import { BarChart } from "./components/BarChart.tsx";
 import Statistics from "./components/Statistics.tsx";
 import { LoadingSpinner } from "../../../components/loading.tsx";
-import LowStock from "./LowStock.tsx";
+import LowStock from "./components/LowStock.tsx";
 
 function Dashboard({ channel }: { channel: ChannelType }) {
     const [currentSales, setCurrentSales] = useState<ISale[]>([]);

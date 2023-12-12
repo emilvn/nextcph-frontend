@@ -1,7 +1,7 @@
-import type { ChannelType } from "../../../types/channel.types";
-import useLowStockProducts from "../../../hooks/useLowStock";
-import { LoadingPage } from "../../../components/loading";
-import type { IProduct } from "../../../types/products.types";
+import type { ChannelType } from "../../../../types/channel.types.ts";
+import useLowStockProducts from "../../../../hooks/useLowStock.ts";
+import { LoadingPage } from "../../../../components/loading.tsx";
+import type { IProduct } from "../../../../types/products.types.ts";
 import { FaExclamationCircle } from "react-icons/fa";
 
 function LowStockProduct({ product }: { product: IProduct }) {
