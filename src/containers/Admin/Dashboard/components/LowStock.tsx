@@ -75,9 +75,7 @@ function LowStock({ channel }: { channel: ChannelType }) {
                     <div className="border border-gray-300 p-4">
                         <Header showTable={showTable} setShowTable={setShowTable} />
                         {showTable && (
-                            <div>
-                                <TableContent products={lowStockProducts} />
-                            </div>
+                            <TableContent products={lowStockProducts} />
                         )}
                     </div>
                 </div>
