@@ -13,6 +13,18 @@
 
 https://nextcph.vercel.app
 
+### Logins
+To test the deployed application you can use the following logins:
+
+- Admin account login
+  - Email: admin@admin.com
+  - Password: Database#123
+
+- User account login
+  - Email: user@user.com
+  - Password: Database#123
+
+
 ### Installation
 
 1. Clone the repository
