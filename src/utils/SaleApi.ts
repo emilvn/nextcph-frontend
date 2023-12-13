@@ -1,18 +1,12 @@
 import Api from "./Api.ts";
-import type { INewSale, ISale } from "../types/sales.types.ts";
+import type {
+    INewSale,
+    ISale,
+    ISaleDataWithPagination
+} from "../types/sales.types.ts";
 import axios from "axios";
 import { ChannelType } from "../types/channel.types.ts";
 import type { IOverviewData } from "../types/dashboard.types.ts";
-
-interface ISaleDataWithPagination {
-    data: ISale[];
-    pagination: {
-        totalCount: number;
-        totalPages: number;
-        currentPage: number;
-        pageSize: number;
-    };
-}
 
 class SaleApi extends Api<ISale, INewSale> {
     url: string;
