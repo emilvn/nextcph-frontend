@@ -58,10 +58,15 @@ class SaleApi extends Api<ISale, INewSale> {
         return response.data;
     }
 
-    public async getById(id: string): Promise<ISale> {
-        const response = await axios.get(this.url + "/" + id);
+    public async getDashboardOverviewData(
+        channel: ChannelType,
+        month: string
+    ): Promise<IOverviewData> {
+        const response = await axios.get(
+            this.url + "/statistics?channel=" + channel + "&month=" + month
+        );
         if (response.status >= 400 || !response.data) {
-            throw new Error("Failed to fetch");
+            throw new Error("Failed to fetch dashboard overview data");
         }
         return response.data;
     }
@@ -78,19 +83,6 @@ class SaleApi extends Api<ISale, INewSale> {
         const response = await axios.delete(this.url + "/" + id);
         if (response.status !== 200) {
             throw new Error("Failed to delete");
-        }
-        return response.data;
-    }
-
-    public async getDashboardOverviewData(
-        channel: ChannelType,
-        month: string
-    ): Promise<IOverviewData> {
-        const response = await axios.get(
-            this.url + "/statistics?channel=" + channel + "&month=" + month
-        );
-        if (response.status >= 400 || !response.data) {
-            throw new Error("Failed to fetch dashboard overview data");
         }
         return response.data;
     }

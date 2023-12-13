@@ -1,5 +1,5 @@
 import type { ChannelType } from "../../../../types/channel.types.ts";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { LoadingPage } from "../../../../components/loading.tsx";
 import type { IProduct } from "../../../../types/products.types.ts";
 import { FaExclamationCircle } from "react-icons/fa";
@@ -48,7 +48,11 @@ function TableContent({ products }: { products: IProduct[] }) {
     );
 }
 
-function Header({ showTable, setShowTable }: { showTable: boolean, setShowTable: React.Dispatch<React.SetStateAction<boolean>> }) {
+interface IHeaderProps {
+    showTable: boolean;
+    setShowTable: Dispatch<SetStateAction<boolean>>;
+}
+function Header({ showTable, setShowTable }: IHeaderProps) {
     return (
         <div onClick={() => setShowTable(!showTable)} className="text-2xl text-red-700 font-bold mb-4 flex justify-center items-center cursor-pointer">
             <FaExclamationCircle />
